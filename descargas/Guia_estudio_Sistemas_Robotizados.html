@@ -22,8 +22,8 @@
 }
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
   color-scheme:dark;
-  --bg:#1a120c; --surface:#241a12; --fg:#f6e7da; --muted:#c09c84; --line:#3c2a1d;
-  --accent:#f0893f; --accent-soft:#3a2415; --warn:#ffad7a; --warn-soft:#3d2719;
+  --bg:#0a0705; --surface:#120d09; --fg:#f6e7da; --muted:#c09c84; --line:#2b1e15;
+  --accent:#f0893f; --accent-soft:#24160c; --warn:#ffad7a; --warn-soft:#3d2719;
   --c0:#f0893f; --c0s:#3a2415; --c1:#f5a05a; --c1s:#3b2616; --c2:#ef8a4a; --c2s:#37231a;
   --c3:#ffb27a; --c3s:#3c2a1c; --c4:#e07a3c; --c4s:#34210f; --c5:#f7c060; --c5s:#3b2d13;
   --c6:#f29a52; --c6s:#372315; --c7:#c79a7a; --c7s:#2c2119; --c8:#f57f3a; --c8s:#3a2214;
@@ -224,6 +224,10 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
   <a href="#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
+  <div class="grp">Interactivo</div>
+  <a href="#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
+  <a href="#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
+  <a href="#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <div class="grp">Referencia</div>
   <a href="#formulario" style="--tc:var(--c7)">Formulario</a>
   <a href="#glosario" style="--tc:var(--c7)">Glosario</a>
@@ -1345,6 +1349,509 @@ print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
   </ul>
   <h3>Recursos en red</h3>
   <p>Para los ejercicios de cada tema, usa las tablas de «Exámenes de cursos anteriores» y los ejercicios de práctica de esta guía. Las dos referencias de libro de arriba cubren la teoría con más detalle.</p>
+</section>
+
+<section class="sec" id="diapositivas" style="--tc:var(--c0)">
+  <div class="sh"><span class="badge" aria-hidden="true">D</span><div class="shx"><p class="kick">Repaso visual</p><h2>Diapositivas</h2></div></div>
+  <p>Cada diapositiva resume un concepto y, cuando hace falta, lo explica <b>paso a paso</b>. Úsalas para repasar la víspera del examen: una diapositiva por concepto, con la fórmula y el procedimiento.</p>
+  <style>
+  @media print{.dslide{display:block!important;min-height:0;break-inside:avoid}.dk-nav,.dk-top{display:none}}
+  .dk{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:18px 18px 14px;margin:14px 0;outline:none}
+  .dk-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.85rem;color:var(--muted,#6b5a4d);margin-bottom:8px}
+  .dslide{display:none;min-height:14rem}
+  .dslide.on{display:block}
+  .dslide h3{margin-top:4px}
+  .dslide ol{padding-left:1.3rem}
+  .dslide li{margin:.35rem 0}
+  .dk-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .dk-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .dk-dot{width:12px;height:12px;border-radius:50%;border:1px solid var(--accent);background:transparent;padding:0;cursor:pointer}
+  .dk-dot.on{background:var(--accent)}
+  .ix,.qx,.sx,.dx{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0}
+  .ix-ctl,.qx-ctl,.sx-ctl,.dx-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 16px;margin:8px 0}
+  .ix-ctl label,.qx-ctl label,.sx-ctl label,.dx-ctl label{display:flex;flex-direction:column;gap:4px;font-size:.9rem}
+  .ix-ctl input[type=number],.qx-ctl input[type=number],.sx-ctl input[type=number],.dx-ctl input[type=number],.rx-chk input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);max-width:100%}
+  .ix-svg,.sx-svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  .ix-out,.qx-out,.sx-out,.dx-out{font-size:.92rem;min-width:0;overflow-wrap:anywhere}
+  .ix-out ol,.qx-out ol,.sx-out ol,.dx-out ol{padding-left:1.3rem}
+  .ix-out li,.qx-out li,.sx-out li,.dx-out li{margin:.3rem 0}
+  .rx-ej{border-left:4px solid var(--accent);padding:4px 0 4px 14px;margin:18px 0}
+  .rx-ej ol{padding-left:1.3rem}
+  .rx-ej li{margin:.6rem 0}
+  .rx-chk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0;font-size:.92rem}
+  .rx-chk input{width:9rem}
+  .rx-res{font-weight:600}
+  .rx-res.ok{color:#2f7d32}
+  .rx-res.ko{color:#b3261e}
+  .dx-svg{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+  </style>
+
+  <div class="dk" id="dk" tabindex="0" aria-label="Diapositivas de repaso">
+    <div class="dk-top"><span id="dk-cont">1 / 11</span><span>Usa las flechas ← → o los botones</span></div>
+
+    <div class="dslide on">
+      <p class="kick">01 · Robot</p>
+      <h3>Cadena cinemática</h3>
+      <ul>
+        <li>Un robot es una cadena de <b>eslabones</b> unidos por <b>articulaciones</b>.</li>
+        <li>Articulación de <b>rotación</b> (R): gira un ángulo θ. Articulación <b>prismática</b> (P): se desliza una distancia d.</li>
+        <li>El <b>extremo</b> es la herramienta. Su posición y orientación dependen de todas las articulaciones.</li>
+      </ul>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">02 · Matemáticas</p>
+      <h3>Matriz de transformación homogénea</h3>
+      <div class="formula">T = [ R  p ; 0  1 ]   (R: 3×3 rotación, p: 3×1 posición)</div>
+      <p><b>Paso a paso para componer dos movimientos:</b></p>
+      <ol>
+        <li>Escribe cada movimiento como una matriz 4×4.</li>
+        <li>Multiplica en el orden en que ocurren, de izquierda a derecha según el sistema de referencia.</li>
+        <li>La columna de posición del producto final es la posición del extremo.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">03 · Denavit-Hartenberg</p>
+      <h3>Cómo rellenar la tabla DH</h3>
+      <ol>
+        <li><b>Numera</b> los eslabones de la base (0) al extremo (n).</li>
+        <li>Coloca el eje <i>z</i> de cada articulación: el eje de giro o de deslizamiento.</li>
+        <li>Coloca <i>x</i> como la perpendicular común entre <i>z</i><sub>i−1</sub> y <i>z</i><sub>i</sub>.</li>
+        <li>Para cada eslabón, anota θ, d, a y α, y multiplica <b>Aᵢ = Rz(θ) · Tz(d) · Tx(a) · Rx(α)</b>.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">04 · Cinemática directa</p>
+      <h3>Robot plano 2R: de ángulos a posición</h3>
+      <div class="formula">x = l₁ cos θ₁ + l₂ cos(θ₁ + θ₂)
+y = l₁ sen θ₁ + l₂ sen(θ₁ + θ₂)</div>
+      <ol>
+        <li>Calcula la posición del codo: (l₁ cos θ₁, l₁ sen θ₁).</li>
+        <li>Suma el segundo eslabón, que gira un ángulo total θ₁ + θ₂.</li>
+        <li>Resultado: una única posición para unos ángulos dados.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">05 · Cinemática inversa</p>
+      <h3>De posición a ángulos (2R), paso a paso</h3>
+      <ol>
+        <li>Calcula r² = x² + y².</li>
+        <li>cos θ₂ = (r² − l₁² − l₂²) / (2 l₁ l₂). Si |cos θ₂| &gt; 1, el punto está fuera de alcance.</li>
+        <li>θ₂ = ± arccos(cos θ₂). El signo elige el codo: θ₂ &gt; 0 codo arriba, θ₂ &lt; 0 codo abajo (convención de esta guía).</li>
+        <li>θ₁ = atan2(y, x) − atan2(l₂ sen θ₂, l₁ + l₂ cos θ₂).</li>
+      </ol>
+      <p>Prueba estos pasos en el diagrama interactivo de la sección siguiente.</p>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">06 · Velocidades</p>
+      <h3>Jacobiana: de velocidades articulares a velocidad del extremo</h3>
+      <div class="formula">v = J(q) · q̇</div>
+      <ol>
+        <li>Deriva x e y respecto a θ₁ y θ₂. Cada derivada es un elemento de J.</li>
+        <li>Para el 2R: J = [ −l₁ sen θ₁ − l₂ sen θ₁₂ , −l₂ sen θ₁₂ ; l₁ cos θ₁ + l₂ cos θ₁₂ , l₂ cos θ₁₂ ], con θ₁₂ = θ₁ + θ₂.</li>
+        <li>Multiplica J por q̇ para obtener v. Para invertir el problema, usa J⁻¹ si existe.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">07 · Singularidades</p>
+      <h3>Cuándo falla la Jacobiana</h3>
+      <ol>
+        <li>Una configuración es <b>singular</b> si det J = 0.</li>
+        <li>Para el 2R plano: det J = l₁ l₂ sen θ₂.</li>
+        <li>Singular cuando θ₂ = 0° o θ₂ = 180°: el brazo está estirado o doblado del todo, y se pierde una dirección de movimiento.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">08 · Orientación</p>
+      <h3>Cuaterniones para girar un vector</h3>
+      <div class="formula">q = (cos θ/2, sen θ/2 · n)     v′ = q · (0, v) · q*</div>
+      <ol>
+        <li>Toma el eje unitario n y el ángulo θ.</li>
+        <li>Construye q = (w, x, y, z) con w = cos(θ/2) y (x, y, z) = sen(θ/2) · n.</li>
+        <li>Conjugado: q* = (w, −x, −y, −z).</li>
+        <li>Calcula q · (0, v) · q* y toma la parte vectorial: es el vector girado.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">09 · Trayectorias</p>
+      <h3>Spline cúbico entre dos puntos, paso a paso</h3>
+      <div class="formula">q(t) = a + b·t + c·t² + d·t³   con t desde el inicio del tramo, T = duración</div>
+      <ol>
+        <li>Impón las cuatro condiciones: q(0) = q₀, q(T) = q_T, q̇(0) = v₀, q̇(T) = v_T.</li>
+        <li>a = q₀ y b = v₀.</li>
+        <li>Llama Δ = q_T − q₀. Entonces c = 3Δ/T² − (2v₀ + v_T)/T y d = −2Δ/T³ + (v₀ + v_T)/T².</li>
+        <li>Si hay que imponer una velocidad máxima en un instante, usa q̈ = 0 ahí y despeja.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">10 · Dinámica</p>
+      <h3>Modelo dinámico y par estático</h3>
+      <ol>
+        <li>Lagrange: escribe la energía cinética K y la potencial U, y calcula L = K − U.</li>
+        <li>Obtén τ = M(q) q̈ + C(q, q̇) q̇ + G(q) derivando L.</li>
+        <li>Par estático (robot parado): τ = Jᵀ F, con F la fuerza en el extremo.</li>
+      </ol>
+    </div>
+
+    <div class="dslide">
+      <p class="kick">11 · Examen</p>
+      <h3>Plan para resolver un ejercicio de examen</h3>
+      <ol>
+        <li>Lee el enunciado dos veces. Anota los datos y las incógnitas.</li>
+        <li>Dibuja la configuración y etiqueta los ángulos.</li>
+        <li>Elige la herramienta: DH, cinemática inversa, Jacobiana, spline o cuaterniones.</li>
+        <li>Calcula sin redondear hasta el final. Comprueba la unidad y el signo del resultado.</li>
+        <li>Compara con la solución de referencia y anota los errores en tu autoevaluación.</li>
+      </ol>
+    </div>
+
+    <div class="dk-nav">
+      <button class="btn" id="dk-prev" type="button">← Anterior</button>
+      <div class="dk-dots" id="dk-dots" aria-hidden="false"></div>
+      <button class="btn" id="dk-next" type="button">Siguiente →</button>
+    </div>
+  </div>
+
+  <script data-w="dk">
+  (function(){
+    var deck=document.getElementById('dk'); if(!deck) return;
+    var sl=deck.querySelectorAll('.dslide'), n=sl.length, i=0;
+    var dots=document.getElementById('dk-dots'), cont=document.getElementById('dk-cont');
+    sl.forEach(function(_,k){
+      var b=document.createElement('button'); b.type='button'; b.className='dk-dot';
+      b.setAttribute('aria-label','Diapositiva '+(k+1)); b.onclick=function(){go(k)};
+      dots.appendChild(b);
+    });
+    function go(k){
+      i=(k+n)%n;
+      sl.forEach(function(s,j){ s.classList.toggle('on', j===i); });
+      dots.querySelectorAll('.dk-dot').forEach(function(d,j){ d.classList.toggle('on', j===i); });
+      cont.textContent=(i+1)+' / '+n;
+    }
+    document.getElementById('dk-prev').onclick=function(){go(i-1)};
+    document.getElementById('dk-next').onclick=function(){go(i+1)};
+    deck.addEventListener('keydown',function(e){
+      if(e.key==='ArrowRight'){ go(i+1); e.preventDefault(); }
+      if(e.key==='ArrowLeft'){ go(i-1); e.preventDefault(); }
+    });
+    go(0);
+  })();
+  </script>
+</section>
+
+<section class="sec" id="interactivos" style="--tc:var(--c4)">
+  <div class="sh"><span class="badge" aria-hidden="true">I</span><div class="shx"><p class="kick">Diagramas interactivos</p><h2>Entiende los conceptos moviendo los controles</h2></div></div>
+  <p>Mueve los controles y lee los pasos. Cada cuadro muestra los números de <b>tu</b> configuración, así que puedes comprobar a mano lo que calcula el diagrama. Todos usan longitudes unitarias en el 2R, como en los ejercicios de la guía.</p>
+
+  <h3>1 · Cinemática inversa del 2R: elige el punto</h3>
+  <div class="ix" id="ik-w">
+    <div class="ix-ctl">
+      <label>x (m)<input id="ik-x" type="range" min="-2" max="2" step="0.01" value="1"><span id="ik-xv">1,00</span></label>
+      <label>y (m)<input id="ik-y" type="range" min="-2" max="2" step="0.01" value="1"><span id="ik-yv">1,00</span></label>
+    </div>
+    <svg id="ik-svg" class="ix-svg" viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Brazo 2R con las dos soluciones de codo"></svg>
+    <div class="ix-out" id="ik-out"></div>
+  </div>
+
+  <h3>2 · Cuaterniones: gira un vector</h3>
+  <div class="qx" id="qx-w">
+    <div class="qx-ctl">
+      <label>Ángulo θ (°)<input id="qx-a" type="range" min="0" max="360" step="1" value="90"><span id="qx-av">90</span></label>
+      <label>Eje n<select id="qx-e" style="font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)"><option value="z" selected>z (0,0,1)</option><option value="x">x (1,0,0)</option><option value="y">y (0,1,0)</option></select></label>
+      <label>v = (vx, vy, vz)<span style="display:flex;gap:4px"><input id="qx-vx" type="number" step="0.1" value="1"><input id="qx-vy" type="number" step="0.1" value="0"><input id="qx-vz" type="number" step="0.1" value="0"></span></label>
+    </div>
+    <div class="qx-out" id="qx-out"></div>
+  </div>
+
+  <h3>3 · Spline cúbico: dibuja la trayectoria</h3>
+  <div class="sx" id="sx-w">
+    <div class="sx-ctl">
+      <label>q₀ (rad)<input id="sx-q0" type="number" step="0.1" value="0"></label>
+      <label>q_T (rad)<input id="sx-qT" type="number" step="0.1" value="2"></label>
+      <label>v₀ (rad/s)<input id="sx-v0" type="number" step="0.1" value="0"></label>
+      <label>v_T (rad/s)<input id="sx-vT" type="number" step="0.1" value="0"></label>
+      <label>T (s)<input id="sx-T" type="number" step="0.1" min="0.1" value="1"></label>
+    </div>
+    <svg id="sx-svg" class="sx-svg" viewBox="0 0 400 220" role="img" aria-label="Gráfica de q(t) y de su velocidad"></svg>
+    <div class="sx-out" id="sx-out"></div>
+  </div>
+
+  <h3>4 · Singularidad del 2R: mueve el codo</h3>
+  <div class="dx" id="dx-w">
+    <div class="dx-ctl">
+      <label>θ₁ (°)<input id="dx-t1" type="range" min="-180" max="180" step="1" value="30"><span id="dx-t1v">30</span></label>
+      <label>θ₂ (°)<input id="dx-t2" type="range" min="-180" max="180" step="1" value="30"><span id="dx-t2v">30</span></label>
+    </div>
+    <svg id="dx-svg" class="dx-svg" viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Brazo 2R en la configuración elegida"></svg>
+    <div class="dx-out" id="dx-out"></div>
+  </div>
+
+  <script data-w="ix">
+  (function(){
+    var box=document.getElementById('ik-w'); if(!box) return;
+    var NS='http://www.w3.org/2000/svg', svg=document.getElementById('ik-svg'), G=null;
+    var X=document.getElementById('ik-x'), Y=document.getElementById('ik-y');
+    function f(v){ return v.toFixed(3).replace('.',','); }
+    function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); G.appendChild(e); return e; }
+    function draw(){
+      var x=parseFloat(X.value), y=parseFloat(Y.value);
+      document.getElementById('ik-xv').textContent=x.toFixed(2).replace('.',',');
+      document.getElementById('ik-yv').textContent=y.toFixed(2).replace('.',',');
+      svg.innerHTML=''; G=document.createElementNS(NS,'g'); G.setAttribute('transform','scale(1,-1)'); svg.appendChild(G);
+      // ejes y alcance
+      el('line',{x1:-2.2,y1:0,x2:2.2,y2:0,stroke:'var(--line)','stroke-width':0.02});
+      el('line',{x1:0,y1:-2.2,x2:0,y2:2.2,stroke:'var(--line)','stroke-width':0.02});
+      el('circle',{cx:0,cy:0,r:2,fill:'none',stroke:'var(--line)','stroke-width':0.02,'stroke-dasharray':'0.08 0.08'});
+      var out=document.getElementById('ik-out'), r2=x*x+y*y, r=Math.sqrt(r2);
+      if(r>2.0001){ out.innerHTML='<p><b>Fuera de alcance:</b> r = '+f(r)+' m es mayor que l₁ + l₂ = 2 m. No hay solución. Mueve el punto hacia el origen.</p>'; return; }
+      var c2=(r2-2)/2, ok=true; if(c2<-1||c2>1){ ok=false; c2=Math.max(-1,Math.min(1,c2)); }
+      var a2=Math.acos(c2);
+      var html='<ol><li><b>r² = x² + y²</b> = '+f(x)+'² + '+f(y)+'² = '+f(r2)+'.</li>'
+        +'<li><b>cos θ₂ = (r² − l₁² − l₂²)/(2 l₁ l₂)</b> = ('+f(r2)+' − 2)/2 = '+f(c2)+'.</li>'
+        +'<li><b>θ₂ = ± arccos('+f(c2)+')</b> = ±'+f(a2)+' rad = ±'+f(a2*180/Math.PI)+'°.</li></ol>';
+      var sols=[{n:'codo arriba (θ₂ > 0)',s:1,col:'var(--accent)',dash:''},{n:'codo abajo (θ₂ < 0)',s:-1,col:'#7a7a7a',dash:'0.1 0.07'}];
+      html+='<p><b>4 · θ₁ = atan2(y, x) − atan2(l₂ sen θ₂, l₁ + l₂ cos θ₂)</b> para cada solución:</p><ul>';
+      sols.forEach(function(o){
+        var t2=o.s*a2, t1=Math.atan2(y,x)-Math.atan2(Math.sin(t2),1+Math.cos(t2));
+        var ex=Math.cos(t1), ey=Math.sin(t1), tx=ex+Math.cos(t1+t2), ty=ey+Math.sin(t1+t2);
+        el('polyline',{points:'0,0 '+ex+','+ey+' '+tx+','+ty,fill:'none',stroke:o.col,'stroke-width':0.06,'stroke-linecap':'round','stroke-dasharray':o.dash});
+        el('circle',{cx:ex,cy:ey,r:0.07,fill:o.col});
+        html+='<li><b>'+o.n+'</b>: θ₁ = atan2('+f(y)+', '+f(x)+') − atan2('+f(Math.sin(t2))+', '+f(1+Math.cos(t2))+') = '+f(t1)+' rad = '+f(t1*180/Math.PI)+'°; θ₂ = '+f(t2)+' rad = '+f(t2*180/Math.PI)+'°.</li>';
+      });
+      html+='</ul>';
+      if(!ok) html+='<p><b>Ojo:</b> el punto está en el borde del alcance; las dos soluciones coinciden.</p>';
+      html+='<p>El punto se marca con un círculo en el extremo. El codo arriba es la línea continua y el codo abajo la discontinua.</p>';
+      out.innerHTML=html;
+    }
+    X.addEventListener('input',draw); Y.addEventListener('input',draw);
+    draw();
+  })();
+  </script>
+
+  <script data-w="qx">
+  (function(){
+    var box=document.getElementById('qx-w'); if(!box) return;
+    var A=document.getElementById('qx-a'), E=document.getElementById('qx-e');
+    var V=['qx-vx','qx-vy','qx-vz'].map(function(id){return document.getElementById(id)});
+    function f(v){ return (Math.abs(v)<5e-10?0:v).toFixed(3).replace('.',','); }
+    function mul(p,q){
+      return [p[0]*q[0]-p[1]*q[1]-p[2]*q[2]-p[3]*q[3],
+              p[0]*q[1]+p[1]*q[0]+p[2]*q[3]-p[3]*q[2],
+              p[0]*q[2]-p[1]*q[3]+p[2]*q[0]+p[3]*q[1],
+              p[0]*q[3]+p[1]*q[2]-p[2]*q[1]+p[3]*q[0]];
+    }
+    function draw(){
+      var th=parseFloat(A.value)*Math.PI/180;
+      document.getElementById('qx-av').textContent=A.value;
+      var n=E.value==='x'?[1,0,0]:(E.value==='y'?[0,1,0]:[0,0,1]);
+      var v=V.map(function(e){return parseFloat(e.value)||0;});
+      var s=Math.sin(th/2), c=Math.cos(th/2);
+      var q=[c,s*n[0],s*n[1],s*n[2]], qc=[q[0],-q[1],-q[2],-q[3]];
+      var p=mul(q,[0,v[0],v[1],v[2]]), r=mul(p,qc);
+      var vr=[r[1],r[2],r[3]];
+      // Rodrigues como comprobación
+      var nv=n[0]*v[0]+n[1]*v[1]+n[2]*v[2];
+      var cr=[n[1]*v[2]-n[2]*v[1], n[2]*v[0]-n[0]*v[2], n[0]*v[1]-n[1]*v[0]];
+      var rod=[0,1,2].map(function(k){return v[k]*Math.cos(th)+cr[k]*Math.sin(th)+n[k]*nv*(1-Math.cos(th));});
+      var err=Math.max(Math.abs(rod[0]-vr[0]),Math.abs(rod[1]-vr[1]),Math.abs(rod[2]-vr[2]));
+      document.getElementById('qx-out').innerHTML='<ol>'
+        +'<li><b>Cuaternión</b>: w = cos(θ/2) = cos('+f(th*180/Math.PI/2)+'°) = '+f(c)+'; (x, y, z) = sen(θ/2)·n = '+f(s)+'·('+n.map(f).join(', ')+') = ('+[0,1,2].map(function(k){return f(s*n[k])}).join(', ')+').</li>'
+        +'<li><b>Conjugado</b>: q* = ('+f(qc[0])+', '+f(qc[1])+', '+f(qc[2])+', '+f(qc[3])+').</li>'
+        +'<li><b>Producto q · (0, v)</b>: = ('+p.map(f).join(', ')+').</li>'
+        +'<li><b>Resultado (q · (0, v)) · q*</b>: parte vectorial = ('+vr.map(f).join(', ')+').</li>'
+        +'<li><b>Comprobación (Rodrigues)</b>: v cos θ + (n × v) sen θ + n (n · v)(1 − cos θ) = ('+rod.map(f).join(', ')+'). Diferencia máxima: '+err.toExponential(1).replace('.',',')+'.</li>'
+        +'</ol><p>Lectura: el vector gira alrededor del eje n. Con θ = 0° no cambia, y con θ = 360° vuelve a su posición.</p>';
+    }
+    A.addEventListener('input',draw); E.addEventListener('change',draw); V.forEach(function(e){e.addEventListener('input',draw)});
+    draw();
+  })();
+  </script>
+
+  <script data-w="sx">
+  (function(){
+    var box=document.getElementById('sx-w'); if(!box) return;
+    var ids=['sx-q0','sx-qT','sx-v0','sx-vT','sx-T'];
+    var g=function(id){return parseFloat(document.getElementById(id).value.replace(',','.'))};
+    function f(v){ return (Math.abs(v)<5e-10?0:v).toFixed(3).replace('.',','); }
+    function draw(){
+      var q0=g('sx-q0'), qT=g('sx-qT'), v0=g('sx-v0'), vT=g('sx-vT'), T=g('sx-T');
+      var out=document.getElementById('sx-out'), svg=document.getElementById('sx-svg');
+      if(!(T>0)||isNaN(q0+qT+v0+vT)){ out.innerHTML='<p>Introduce valores numéricos y un T mayor que cero.</p>'; svg.innerHTML=''; return; }
+      var D=qT-q0, a=q0, b=v0, c=3*D/(T*T)-(2*v0+vT)/T, d=-2*D/(T*T*T)+(v0+vT)/(T*T);
+      var q=function(t){return a+b*t+c*t*t+d*t*t*t}, qd=function(t){return b+2*c*t+3*d*t*t};
+      var N=200, ts=[], qs=[], vs=[], vmax=0, tmax=0;
+      for(var k=0;k<=N;k++){ var t=T*k/N; ts.push(t); qs.push(q(t)); vs.push(qd(t)); if(Math.abs(qd(t))>Math.abs(vmax)){vmax=qd(t); tmax=t;} }
+      var all=qs.concat(vs), lo=Math.min.apply(null,all), hi=Math.max.apply(null,all); if(hi-lo<1e-6){hi=lo+1;}
+      function X(t){return 30+ (t/T)*350}
+      function Y(v){return 200 - (v-lo)/(hi-lo)*180}
+      var pq=ts.map(function(t,k){return X(t)+','+Y(qs[k])}).join(' '), pv=ts.map(function(t,k){return X(t)+','+Y(vs[k])}).join(' ');
+      svg.innerHTML='<line x1="30" y1="200" x2="380" y2="200" stroke="var(--line)"/><line x1="30" y1="10" x2="30" y2="200" stroke="var(--line)"/>'
+        +'<polyline points="'+pq+'" fill="none" stroke="var(--accent)" stroke-width="2.5"/>'
+        +'<polyline points="'+pv+'" fill="none" stroke="#7a7a7a" stroke-width="2" stroke-dasharray="5 4"/>'
+        +'<text x="36" y="22" font-size="11" fill="var(--accent)">q(t)</text><text x="70" y="22" font-size="11" fill="#7a7a7a">q̇(t)</text>';
+      var sobrepasa = (Math.max.apply(null,qs)>Math.max(q0,qT)+1e-9)||(Math.min.apply(null,qs)<Math.min(q0,qT)-1e-9);
+      out.innerHTML='<ol>'
+        +'<li><b>Condiciones</b>: q(0) = '+f(q0)+', q('+f(T)+') = '+f(qT)+', q̇(0) = '+f(v0)+', q̇('+f(T)+') = '+f(vT)+'.</li>'
+        +'<li><b>a = q₀ = '+f(a)+'</b> y <b>b = v₀ = '+f(b)+'</b>.</li>'
+        +'<li><b>Δ = q_T − q₀ = '+f(D)+'</b>.</li>'
+        +'<li><b>c = 3Δ/T² − (2v₀ + v_T)/T</b> = '+f(c)+'.</li>'
+        +'<li><b>d = −2Δ/T³ + (v₀ + v_T)/T²</b> = '+f(d)+'.</li>'
+        +'<li><b>Polinomio</b>: q(t) = '+f(a)+' + '+f(b)+'·t + '+f(c)+'·t² + '+f(d)+'·t³.</li>'
+        +'<li><b>Velocidad máxima en [0, T]</b>: |q̇| = '+f(Math.abs(vmax))+' en t ≈ '+f(tmax)+' s.</li>'
+        +'</ol>'+(sobrepasa?'<p><b>Ojo:</b> la curva se sale del intervalo [q₀, q_T]. Es normal en un spline, pero revísalo si el enunciado pide no pasar de un valor.</p>':'');
+    }
+    ids.forEach(function(id){document.getElementById(id).addEventListener('input',draw)});
+    draw();
+  })();
+  </script>
+
+  <script data-w="dx">
+  (function(){
+    var box=document.getElementById('dx-w'); if(!box) return;
+    var svg=document.getElementById('dx-svg'), NS='http://www.w3.org/2000/svg', G=null;
+    var T1=document.getElementById('dx-t1'), T2=document.getElementById('dx-t2');
+    function f(v){ return (Math.abs(v)<5e-10?0:v).toFixed(3).replace('.',','); }
+    function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); G.appendChild(e); return e; }
+    function draw(){
+      var t1=parseFloat(T1.value)*Math.PI/180, t2=parseFloat(T2.value)*Math.PI/180;
+      document.getElementById('dx-t1v').textContent=T1.value; document.getElementById('dx-t2v').textContent=T2.value;
+      var s1=Math.sin(t1), c1=Math.cos(t1), s12=Math.sin(t1+t2), c12=Math.cos(t1+t2);
+      var J=[[-s1-s12,-s12],[c1+c12,c12]], det=J[0][0]*J[1][1]-J[0][1]*J[1][0];
+      svg.innerHTML=''; G=document.createElementNS(NS,'g'); G.setAttribute('transform','scale(1,-1)'); svg.appendChild(G);
+      el('circle',{cx:0,cy:0,r:2,fill:'none',stroke:'var(--line)','stroke-width':0.02,'stroke-dasharray':'0.08 0.08'});
+      var ex=c1, ey=s1, tx=ex+c12, ty=ey+s12;
+      el('polyline',{points:'0,0 '+ex+','+ey+' '+tx+','+ty,fill:'none',stroke:'var(--accent)','stroke-width':0.07,'stroke-linecap':'round'});
+      el('circle',{cx:0,cy:0,r:0.09,fill:'var(--fg)'}); el('circle',{cx:ex,cy:ey,r:0.08,fill:'var(--fg)'}); el('circle',{cx:tx,cy:ty,r:0.08,fill:'#b3261e'});
+      var sing=Math.abs(det)<1e-6;
+      document.getElementById('dx-out').innerHTML='<ol>'
+        +'<li><b>Jacobiana</b> (l₁ = l₂ = 1): J = [[−sen θ₁ − sen θ₁₂, −sen θ₁₂], [cos θ₁ + cos θ₁₂, cos θ₁₂]], con θ₁₂ = θ₁ + θ₂.</li>'
+        +'<li><b>Valores</b>: J = [[ '+f(J[0][0])+', '+f(J[0][1])+' ], [ '+f(J[1][0])+', '+f(J[1][1])+' ]].</li>'
+        +'<li><b>Determinante</b>: det J = J₁₁·J₂₂ − J₁₂·J₂₁ = '+f(det)+'. Coincide con sen θ₂ = '+f(Math.sin(t2))+'.</li>'
+        +'<li><b>Lectura</b>: '+(sing?'<b>configuración singular</b>: el extremo pierde una dirección de movimiento.':'configuración regular: la Jacobiana es invertible.')+'</li>'
+        +'</ol><p>Pulsa θ₂ = 0° o 180° para ver el brazo estirado o doblado: son las singularidades del 2R.</p>';
+    }
+    T1.addEventListener('input',draw); T2.addEventListener('input',draw);
+    draw();
+  })();
+  </script>
+</section>
+
+<section class="sec" id="resolver" style="--tc:var(--c8)">
+  <div class="sh"><span class="badge" aria-hidden="true">R</span><div class="shx"><p class="kick">Resolver exámenes</p><h2>Ejercicios de examen paso a paso</h2></div></div>
+  <p>Cada ejercicio va en pasos. Antes de mirar el resultado, escribe tu valor en el campo y pulsa <b>Comprobar</b>. Las tolerancias son las de cálculo con 3 o 4 cifras. Si no coincide, repasa el paso anterior.</p>
+  <p class="muted">Estos ejercicios usan datos que he comprobado con código. Otros exámenes de la guía tienen solución escrita, pero aún no están en esta forma interactiva.</p>
+
+  <div class="rx-ej">
+    <h3>Ejercicio G · Instantes en que el extremo pasa por dos puntos de una recta</h3>
+    <p><b>Datos:</b> el extremo se mueve sobre la recta y = x, desde B(0,4; 0,4) hasta C(1,4; 1,4). Los puntos de paso son A₁ (a 0,5 m de B) y A₂ (a 0,3 m de C). La coordenada x(t) sigue un spline cúbico con velocidad nula en los extremos. Duración T = 1 s.</p>
+    <ol>
+      <li><p><b>Paso 1: distancia en x de A₁.</b> Si A₁ está a 0,5 m de B sobre la recta y = x, sus diferencias Δx = Δy cumplen 2·Δx² = 0,5², luego Δx = 0,5/√2 = 0,3536 m. Entonces x(A₁) = 0,4 + 0,3536.</p>
+        <div class="rx-chk" data-t="0.7536" data-tol="0.0015" data-label="x de A₁">
+          <label>x de A₁ (m): <input inputmode="decimal" placeholder="p. ej. 0,75"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 2: distancia en x de A₂.</b> Igual que antes, pero desde C: Δx = 0,3/√2 = 0,2121 m, luego x(A₂) = 1,4 − 0,2121.</p>
+        <div class="rx-chk" data-t="1.1879" data-tol="0.0015" data-label="x de A₂">
+          <label>x de A₂ (m): <input inputmode="decimal" placeholder="p. ej. 1,19"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 3: el spline.</b> Con x(0) = 0,4, x(1) = 1,4 y velocidad nula en los dos extremos: a = 0,4, b = 0, c = 3, d = −2. Luego x(t) = 0,4 + 3t² − 2t³.</p></li>
+      <li><p><b>Paso 4: instante en A₁.</b> Resuelve 0,4 + 3t² − 2t³ = 0,7536 en el intervalo [0, 1]. Hay tres raíces (≈ −0,312, 0,401 y 1,411), pero solo 0,401 está en [0, 1].</p>
+        <div class="rx-chk" data-t="0.401" data-tol="0.002" data-label="t en A₁">
+          <label>t en A₁ (s): <input inputmode="decimal" placeholder="p. ej. 0,40"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 5: instante en A₂.</b> Resuelve 0,4 + 3t² − 2t³ = 1,1879 en [0, 1]. La raíz válida es 0,703 s.</p>
+        <div class="rx-chk" data-t="0.703" data-tol="0.002" data-label="t en A₂">
+          <label>t en A₂ (s): <input inputmode="decimal" placeholder="p. ej. 0,70"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 6: ángulo θ₂ en A₁ con codo arriba.</b> r² = 2 · 0,7536² = 1,1360. cos θ₂ = (r² − 2)/2 = −0,4320. Como θ₂ &gt; 0 en codo arriba, θ₂ = arccos(−0,4320) = 115,6°.</p>
+        <div class="rx-chk" data-t="115.6" data-tol="0.2" data-label="θ₂ en A₁ (°)">
+          <label>θ₂ en A₁ (°): <input inputmode="decimal" placeholder="p. ej. 115,6"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+    </ol>
+  </div>
+
+  <div class="rx-ej">
+    <h3>Ejercicio J · Spline cúbico seguido de interpolador lineal (febrero de 2020)</h3>
+    <p><b>Datos:</b> la articulación 1 sigue un spline cúbico en el tramo [0, 2] s. La articulación 2 sigue un interpolador lineal en el tramo [2, 3] s. Las expresiones son:</p>
+    <div class="formula">q₁(t) = ((6 + √33)/2)·t² − ((23 + 4√33)/20)·t³   para t en [0, 2]
+q₂(t) = (2,8 + 0,4√33) − (1,8 + 0,4√33)·(t − 2)   para t en [2, 3]</div>
+    <ol>
+      <li><p><b>Paso 1: valor de q₁ en t = 2.</b> Sustituye t = 2 en el primer tramo: q₁(2) = ((6 + √33)/2)·4 − ((23 + 4√33)/20)·8.</p>
+        <div class="rx-chk" data-t="5.098" data-tol="0.002" data-label="q₁(2)">
+          <label>q₁(2) (rad): <input inputmode="decimal" placeholder="p. ej. 5,10"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 2: valor de q₂ en t = 2.</b> En el segundo tramo, t − 2 = 0, así que q₂(2) = 2,8 + 0,4√33.</p>
+        <div class="rx-chk" data-t="5.098" data-tol="0.002" data-label="q₂(2)">
+          <label>q₂(2) (rad): <input inputmode="decimal" placeholder="p. ej. 5,10"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 3: continuidad.</b> Los dos valores coinciden, así que el movimiento de la articulación es continuo en t = 2 s. Es una comprobación habitual al unir tramos.</p></li>
+    </ol>
+  </div>
+
+  <div class="rx-ej">
+    <h3>Ejercicio K · Velocidad, mínimo y aceleración con velocidades articulares iguales (junio de 2019)</h3>
+    <p><b>Datos:</b> θ₁ = θ₂ = t. Con esas velocidades articulares, el cuadrado de la rapidez del extremo es |v|² = 5 + 4 cos t (resultado de la solución de referencia).</p>
+    <ol>
+      <li><p><b>Paso 1: instante en que |v| = 2.</b> Iguala 5 + 4 cos t = 4, luego cos t = −1/4 y t = arccos(−0,25).</p>
+        <div class="rx-chk" data-t="1.8235" data-tol="0.001" data-label="t con |v| = 2">
+          <label>t (s): <input inputmode="decimal" placeholder="p. ej. 1,82"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 2: rapidez mínima.</b> cos t = −1 da el mínimo de 5 + 4 cos t, que es 1. Entonces |v|min = √1 = 1 m/s, para t = π.</p>
+        <div class="rx-chk" data-t="1" data-tol="0.001" data-label="|v| mínimo">
+          <label>|v| mínimo (m/s): <input inputmode="decimal" placeholder="p. ej. 1,00"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 3: aceleración en el instante del paso 1.</b> Usa las componentes a(t) = (−cos t − 4 cos 2t, −(8 cos t + 1) sen t). Evalúa en t = 1,8235 s. La componente x vale 3,75 m/s².</p>
+        <div class="rx-chk" data-t="3.75" data-tol="0.01" data-label="a_x">
+          <label>a_x (m/s²): <input inputmode="decimal" placeholder="p. ej. 3,75"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 4: componente y de la aceleración.</b> Con los mismos datos, a_y = 0,968 m/s².</p>
+        <div class="rx-chk" data-t="0.968" data-tol="0.002" data-label="a_y">
+          <label>a_y (m/s²): <input inputmode="decimal" placeholder="p. ej. 0,97"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+    </ol>
+  </div>
+
+  <div class="rx-ej">
+    <h3>Ejercicio E · Jacobiana de un robot de 2 articulaciones (parcial de 2021)</h3>
+    <p><b>Datos:</b> x = cos θ₁ (1 + cos θ₂), y = sen θ₁ (1 + cos θ₂), z = −sen θ₂. Configuración: θ₁ = 45°, θ₂ = −65,53°.</p>
+    <ol>
+      <li><p><b>Paso 1: derivadas de x.</b> ∂x/∂θ₁ = −sen θ₁ (1 + cos θ₂) y ∂x/∂θ₂ = −cos θ₁ · sen θ₂. Ese segundo término es el elemento J₁₂.</p>
+        <div class="rx-chk" data-t="0.6436" data-tol="0.001" data-label="J₁₂">
+          <label>J₁₂ = ∂x/∂θ₂: <input inputmode="decimal" placeholder="p. ej. 0,64"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 2: derivada de z respecto a θ₂.</b> ∂z/∂θ₂ = −cos θ₂ = −cos(−65,53°) = −0,4142. Es el elemento J₃₂.</p>
+        <div class="rx-chk" data-t="-0.4142" data-tol="0.001" data-label="J₃₂">
+          <label>J₃₂ = ∂z/∂θ₂: <input inputmode="decimal" placeholder="p. ej. −0,41"></label><button class="btn" type="button">Comprobar</button><span class="rx-res"></span>
+        </div></li>
+      <li><p><b>Paso 3: la matriz completa.</b> Con J₁₁ = −1, J₂₁ = 1, J₃₁ = 0, J₁₂ = 0,6436, J₂₂ = 0,6436 y J₃₂ = −0,4142, la Jacobiana es 3×2. Para las velocidades, resuelve v = J · q̇ con las velocidades dadas en el enunciado.</p></li>
+    </ol>
+  </div>
+
+  <script data-w="rx">
+  (function(){
+    function parse(s){ return parseFloat(String(s).replace(',','.')); }
+    document.querySelectorAll('.rx-chk').forEach(function(box){
+      var t=parseFloat(box.getAttribute('data-t')), tol=parseFloat(box.getAttribute('data-tol'));
+      var inp=box.querySelector('input'), btn=box.querySelector('button'), res=box.querySelector('.rx-res');
+      function check(){
+        var v=parse(inp.value);
+        res.className='rx-res';
+        if(isNaN(v)){ res.textContent='Escribe un valor.'; return; }
+        if(Math.abs(v-t)<=tol){ res.textContent='Correcto ✓'; res.classList.add('ok'); }
+        else { res.textContent='No coincide. Repasa el paso anterior.'; res.classList.add('ko'); }
+      }
+      btn.addEventListener('click',check);
+      inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+    });
+  })();
+  </script>
 </section>
 
 </main>

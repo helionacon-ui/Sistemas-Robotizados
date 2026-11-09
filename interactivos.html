@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="es">
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#b9561a">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sistemas Robotizados · Diagramas interactivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#fbf5ef; --surface:#ffffff; --fg:#2b1a0e; --muted:#7a5a46; --line:#ecd9c7;
+  --accent:#b9561a; --accent-soft:#fbe6d6; --warn:#7a3510; --warn-soft:#f6dccb;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --c0:#b9561a; --c0s:#fbe6d6; --c1:#e0701f; --c1s:#fdeedf; --c2:#c8641a; --c2s:#fbe8d8;
+  --c3:#f08a3c; --c3s:#fef0e3; --c4:#a8481a; --c4s:#f7e3d6; --c5:#e9a23b; --c5s:#fdf3e0;
+  --c6:#d9772b; --c6s:#fbeadb; --c7:#7a4a2b; --c7s:#f1e5da; --c8:#c25a10; --c8s:#fae5d4;
+  --shadow:0 1px 2px rgba(80,40,10,.06),0 8px 26px rgba(80,40,10,.07);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0a0705; --surface:#120d09; --fg:#f6e7da; --muted:#c09c84; --line:#2b1e15;
+  --accent:#f0893f; --accent-soft:#24160c; --warn:#ffad7a; --warn-soft:#3d2719;
+  --c0:#f0893f; --c0s:#3a2415; --c1:#f5a05a; --c1s:#3b2616; --c2:#ef8a4a; --c2s:#37231a;
+  --c3:#ffb27a; --c3s:#3c2a1c; --c4:#e07a3c; --c4s:#34210f; --c5:#f7c060; --c5s:#3b2d13;
+  --c6:#f29a52; --c6s:#372315; --c7:#c79a7a; --c7s:#2c2119; --c8:#f57f3a; --c8s:#3a2214;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.3); } }
+
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.65;padding:0 16px 64px}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display)}
+code,pre{font-family:var(--mono)}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;font-size:13.5px;line-height:1.5}
+
+/* portada */
+header.hero{background:linear-gradient(135deg,var(--accent-soft),var(--bg) 72%);border-bottom:1px solid var(--line);margin:0 -16px 36px}
+.hero-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center;padding:48px 16px 44px}
+@media (max-width:760px){.hero-in{grid-template-columns:minmax(0,1fr);padding-block:32px 28px}.hero-art{display:none}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+header.hero h1{font-size:clamp(38px,6.4vw,64px);line-height:1.02;margin:10px 0 4px;letter-spacing:-.01em;font-weight:700}
+header.hero h1 span{color:var(--accent)}
+header.hero .sub{font-family:var(--display);font-size:clamp(20px,2.6vw,26px);font-weight:500;color:var(--muted);margin:0 0 14px}
+.fecha{font:13px/1.45 system-ui,sans-serif;color:var(--muted);margin:6px 0 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 18px;max-width:640px}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stats div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+.stats b{display:block;font-family:var(--display);font-size:28px;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stats span{font-size:12.5px;color:var(--muted);line-height:1.3;display:block}
+.cta{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-block;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;font-weight:600;font-size:14px}
+.btn:hover,.btn:focus-visible{border-color:var(--accent);outline:none}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.zart{width:100%;height:auto;max-width:300px}
+.art-cap{font-size:13px;color:var(--muted);text-align:center;margin:6px 0 0}
+
+/* rejilla */
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);gap:0}.toc{display:none}}
+main{min-width:0;display:flex;flex-direction:column;gap:28px}
+.toc{position:sticky;top:0;align-self:start;padding-top:8px;max-height:100vh;overflow:auto}
+.toc .grp{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:18px 0 6px}
+.toc a{display:block;color:var(--muted);text-decoration:none;font-size:14px;padding:4px 0 4px 10px;border-left:2px solid var(--line)}
+.toc a:hover,.toc a:focus-visible{color:var(--fg);border-left-color:var(--tc,var(--accent));outline:none}
+
+/* secciones */
+section.sec{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px 32px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-width:0;scroll-margin-top:16px}
+section.sec::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--tc,var(--accent))}
+@media (max-width:640px){section.sec{padding:6px 18px 22px;border-radius:14px}}
+.sh{display:flex;gap:16px;align-items:center;margin:24px 0 10px}
+.badge{flex:none;min-width:58px;height:58px;padding:0 10px;border-radius:16px;background:var(--tc,var(--accent));color:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:22px;box-shadow:0 4px 14px color-mix(in srgb,var(--tc,var(--accent)) 35%,transparent)}
+.shx{min-width:0}
+.kick{margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--tc,var(--accent))}
+h2{font-size:28px;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h3{font-size:20px;margin:28px 0 8px;font-weight:500;text-wrap:balance}
+h4{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:22px 0 6px;font-weight:500}
+p,li{max-width:70ch}
+.muted{color:var(--muted)}
+.ojo{color:var(--warn);font-weight:600}
+
+/* cajas */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:16px 0}
+.box.key{border-left:4px solid var(--accent)}
+.box.trap{border-left:4px solid var(--warn)}
+.box > :first-child{margin-top:0}.box > :last-child{margin-bottom:0}
+.zero{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:16px 0}
+.zero > :first-child{margin-top:0}.zero > :last-child{margin-bottom:0}
+.zero .ft{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin:2px 6px 2px 0}
+.pill{font-family:var(--mono);font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.formula{font-family:var(--mono);font-size:14.5px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;white-space:pre-wrap}
+
+/* mapa */
+.map{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.map a{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);text-decoration:none;font-size:14px}
+.map a:hover,.map a:focus-visible{border-color:var(--accent);outline:none}
+.map a b{color:var(--accent);font-family:var(--mono);font-weight:500;margin-right:4px}
+.map span{color:var(--muted);font-family:var(--mono)}
+
+/* tarjetas */
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:12px 0}
+.fcards .box{margin:0;border-top:3px solid var(--tc,var(--accent))}
+.fcards ul,.fcards ol{padding-left:18px;margin:0}
+.fcards li{margin:4px 0}
+
+/* tablas */
+.tw{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+td.c,th.c{text-align:center}
+
+/* evaluación */
+.pesos{display:flex;gap:14px;margin:10px 0 6px}
+@media (max-width:640px){.pesos{flex-direction:column}}
+.peso{flex:1;background:linear-gradient(160deg,var(--c1),var(--c4));color:#fff;border-radius:12px;padding:18px;text-align:center}
+.peso .porc{font-family:var(--display);font-size:38px;font-weight:700;line-height:1}
+.peso .lbl{font-size:13px;margin-top:6px;opacity:.95}
+
+/* checklists */
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.check label{cursor:pointer}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:8px 0 4px;max-width:420px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+
+/* desplegables */
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:14px 0}
+details>summary{cursor:pointer;padding:12px 18px;font-weight:600;list-style:none;display:flex;gap:10px;align-items:baseline}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--mono);color:var(--accent);width:1ch}
+details[open]>summary::before{content:"−"}
+details .inner{padding:0 20px 16px;border-top:1px solid var(--line)}
+details .inner > :first-child{margin-top:12px}
+
+/* filtros de examen */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chips button{font:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);color:var(--accent);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.ex-row[hidden]{display:none}
+
+/* simulador */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin:16px 0}
+.sim .ctrl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px;margin-bottom:8px}
+.sim .ctrl label{display:flex;gap:8px;align-items:center}
+.sim input[type=range]{width:170px;max-width:55vw;accent-color:var(--accent)}
+.sim input[type=number]{width:90px;font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.sim output{font-family:var(--mono);font-size:13px;min-width:6ch}
+.sim button{font:inherit;font-size:14px;padding:6px 14px;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:var(--surface);cursor:pointer}
+.sim svg{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:var(--bg);border-radius:8px}
+.readout{font-family:var(--mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;white-space:pre-wrap}
+
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:14px}
+.busq{width:100%;max-width:520px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);margin:8px 0}
+.exb{border-top:1px solid var(--line);padding:10px 0}
+.exb[hidden],details.yr[hidden]{display:none}
+details.yr{margin:10px 0}
+ul.start{padding-left:20px}ul.start li{margin:6px 0}
+</style>
+
+</head>
+<body>
+
+<div class="gsearch" style="max-width:1100px;margin:12px auto 0;padding:0 16px"><input id="q-global" type="search" placeholder="Buscar en toda la guía…" aria-label="Buscar en toda la guía" style="width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)"><div id="q-res" hidden class="qres"></div></div><style>#q-res[hidden],#q-res.qres[hidden]{display:none!important}#q-res.qres{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:6px}#q-res a{color:var(--accent)}</style>
+<div class="wrap">
+<nav class="toc" aria-label="Índice">
+  <div class="grp">Empezar</div>
+  <a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a>
+  <a href="index.html#examen" style="--tc:var(--c0)">El examen y cómo estudiar</a>
+  <a href="index.html#mapa" style="--tc:var(--c0)">Mapa del temario</a>
+  <div class="grp">Teoría</div>
+  <a href="t1.html#t1" style="--tc:var(--c1)">T1 Introducción</a>
+  <a href="t2.html#t2" style="--tc:var(--c2)">T2 Morfología</a>
+  <a href="t3.html#t3" style="--tc:var(--c3)">T3 Herramientas matemáticas</a>
+  <a href="t4.html#t4" style="--tc:var(--c4)">T4 Cinemática</a>
+  <a href="t5.html#t5" style="--tc:var(--c5)">T5 Dinámica</a>
+  <a href="t6.html#t6" style="--tc:var(--c6)">T6 Control</a>
+  <div class="grp">Prácticas</div>
+  <a href="practicas.html#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
+  <div class="grp">Problemas</div>
+  <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
+  <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
+  <div class="grp">Interactivo</div>
+  <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
+  <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
+  <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
+  <div class="grp">Referencia</div>
+  <a href="formulario.html#formulario" style="--tc:var(--c7)">Formulario</a>
+  <a href="glosario.html#glosario" style="--tc:var(--c7)">Glosario</a>
+  <a href="plan.html#plan" style="--tc:var(--c7)">Plan de estudio</a>
+  <a href="bibliografia.html#bibliografia" style="--tc:var(--c7)">Bibliografía</a>
+</nav>
+<main>
+<section class="sec" id="interactivos" style="--tc:var(--c4)">
+  <div class="sh"><span class="badge" aria-hidden="true">I</span><div class="shx"><p class="kick">Diagramas interactivos</p><h2>Entiende los conceptos moviendo los controles</h2></div></div>
+  <p>Mueve los controles y lee los pasos. Cada cuadro muestra los números de <b>tu</b> configuración, así que puedes comprobar a mano lo que calcula el diagrama. Todos usan longitudes unitarias en el 2R, como en los ejercicios de la guía.</p>
+
+  <h3>1 · Cinemática inversa del 2R: elige el punto</h3>
+  <div class="ix" id="ik-w">
+    <div class="ix-ctl">
+      <label>x (m)<input id="ik-x" type="range" min="-2" max="2" step="0.01" value="1"><span id="ik-xv">1,00</span></label>
+      <label>y (m)<input id="ik-y" type="range" min="-2" max="2" step="0.01" value="1"><span id="ik-yv">1,00</span></label>
+    </div>
+    <svg id="ik-svg" class="ix-svg" viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Brazo 2R con las dos soluciones de codo"></svg>
+    <div class="ix-out" id="ik-out"></div>
+  </div>
+
+  <h3>2 · Cuaterniones: gira un vector</h3>
+  <div class="qx" id="qx-w">
+    <div class="qx-ctl">
+      <label>Ángulo θ (°)<input id="qx-a" type="range" min="0" max="360" step="1" value="90"><span id="qx-av">90</span></label>
+      <label>Eje n<select id="qx-e" style="font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)"><option value="z" selected>z (0,0,1)</option><option value="x">x (1,0,0)</option><option value="y">y (0,1,0)</option></select></label>
+      <label>v = (vx, vy, vz)<span style="display:flex;gap:4px"><input id="qx-vx" type="number" step="0.1" value="1"><input id="qx-vy" type="number" step="0.1" value="0"><input id="qx-vz" type="number" step="0.1" value="0"></span></label>
+    </div>
+    <div class="qx-out" id="qx-out"></div>
+  </div>
+
+  <h3>3 · Spline cúbico: dibuja la trayectoria</h3>
+  <div class="sx" id="sx-w">
+    <div class="sx-ctl">
+      <label>q₀ (rad)<input id="sx-q0" type="number" step="0.1" value="0"></label>
+      <label>q_T (rad)<input id="sx-qT" type="number" step="0.1" value="2"></label>
+      <label>v₀ (rad/s)<input id="sx-v0" type="number" step="0.1" value="0"></label>
+      <label>v_T (rad/s)<input id="sx-vT" type="number" step="0.1" value="0"></label>
+      <label>T (s)<input id="sx-T" type="number" step="0.1" min="0.1" value="1"></label>
+    </div>
+    <svg id="sx-svg" class="sx-svg" viewBox="0 0 400 220" role="img" aria-label="Gráfica de q(t) y de su velocidad"></svg>
+    <div class="sx-out" id="sx-out"></div>
+  </div>
+
+  <h3>4 · Singularidad del 2R: mueve el codo</h3>
+  <div class="dx" id="dx-w">
+    <div class="dx-ctl">
+      <label>θ₁ (°)<input id="dx-t1" type="range" min="-180" max="180" step="1" value="30"><span id="dx-t1v">30</span></label>
+      <label>θ₂ (°)<input id="dx-t2" type="range" min="-180" max="180" step="1" value="30"><span id="dx-t2v">30</span></label>
+    </div>
+    <svg id="dx-svg" class="dx-svg" viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Brazo 2R en la configuración elegida"></svg>
+    <div class="dx-out" id="dx-out"></div>
+  </div>
+
+  <script data-w="ix">
+  (function(){
+    var box=document.getElementById('ik-w'); if(!box) return;
+    var NS='http://www.w3.org/2000/svg', svg=document.getElementById('ik-svg'), G=null;
+    var X=document.getElementById('ik-x'), Y=document.getElementById('ik-y');
+    function f(v){ return v.toFixed(3).replace('.',','); }
+    function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); G.appendChild(e); return e; }
+    function draw(){
+      var x=parseFloat(X.value), y=parseFloat(Y.value);
+      document.getElementById('ik-xv').textContent=x.toFixed(2).replace('.',',');
+      document.getElementById('ik-yv').textContent=y.toFixed(2).replace('.',',');
+      svg.innerHTML=''; G=document.createElementNS(NS,'g'); G.setAttribute('transform','scale(1,-1)'); svg.appendChild(G);
+      // ejes y alcance
+      el('line',{x1:-2.2,y1:0,x2:2.2,y2:0,stroke:'var(--line)','stroke-width':0.02});
+      el('line',{x1:0,y1:-2.2,x2:0,y2:2.2,stroke:'var(--line)','stroke-width':0.02});
+      el('circle',{cx:0,cy:0,r:2,fill:'none',stroke:'var(--line)','stroke-width':0.02,'stroke-dasharray':'0.08 0.08'});
+      var out=document.getElementById('ik-out'), r2=x*x+y*y, r=Math.sqrt(r2);
+      if(r>2.0001){ out.innerHTML='<p><b>Fuera de alcance:</b> r = '+f(r)+' m es mayor que l₁ + l₂ = 2 m. No hay solución. Mueve el punto hacia el origen.</p>'; return; }
+      var c2=(r2-2)/2, ok=true; if(c2<-1||c2>1){ ok=false; c2=Math.max(-1,Math.min(1,c2)); }
+      var a2=Math.acos(c2);
+      var html='<ol><li><b>r² = x² + y²</b> = '+f(x)+'² + '+f(y)+'² = '+f(r2)+'.</li>'
+        +'<li><b>cos θ₂ = (r² − l₁² − l₂²)/(2 l₁ l₂)</b> = ('+f(r2)+' − 2)/2 = '+f(c2)+'.</li>'
+        +'<li><b>θ₂ = ± arccos('+f(c2)+')</b> = ±'+f(a2)+' rad = ±'+f(a2*180/Math.PI)+'°.</li></ol>';
+      var sols=[{n:'codo arriba (θ₂ > 0)',s:1,col:'var(--accent)',dash:''},{n:'codo abajo (θ₂ < 0)',s:-1,col:'#7a7a7a',dash:'0.1 0.07'}];
+      html+='<p><b>4 · θ₁ = atan2(y, x) − atan2(l₂ sen θ₂, l₁ + l₂ cos θ₂)</b> para cada solución:</p><ul>';
+      sols.forEach(function(o){
+        var t2=o.s*a2, t1=Math.atan2(y,x)-Math.atan2(Math.sin(t2),1+Math.cos(t2));
+        var ex=Math.cos(t1), ey=Math.sin(t1), tx=ex+Math.cos(t1+t2), ty=ey+Math.sin(t1+t2);
+        el('polyline',{points:'0,0 '+ex+','+ey+' '+tx+','+ty,fill:'none',stroke:o.col,'stroke-width':0.06,'stroke-linecap':'round','stroke-dasharray':o.dash});
+        el('circle',{cx:ex,cy:ey,r:0.07,fill:o.col});
+        html+='<li><b>'+o.n+'</b>: θ₁ = atan2('+f(y)+', '+f(x)+') − atan2('+f(Math.sin(t2))+', '+f(1+Math.cos(t2))+') = '+f(t1)+' rad = '+f(t1*180/Math.PI)+'°; θ₂ = '+f(t2)+' rad = '+f(t2*180/Math.PI)+'°.</li>';
+      });
+      html+='</ul>';
+      if(!ok) html+='<p><b>Ojo:</b> el punto está en el borde del alcance; las dos soluciones coinciden.</p>';
+      html+='<p>El punto se marca con un círculo en el extremo. El codo arriba es la línea continua y el codo abajo la discontinua.</p>';
+      out.innerHTML=html;
+    }
+    X.addEventListener('input',draw); Y.addEventListener('input',draw);
+    draw();
+  })();
+  </script>
+
+  <script data-w="qx">
+  (function(){
+    var box=document.getElementById('qx-w'); if(!box) return;
+    var A=document.getElementById('qx-a'), E=document.getElementById('qx-e');
+    var V=['qx-vx','qx-vy','qx-vz'].map(function(id){return document.getElementById(id)});
+    function f(v){ return (Math.abs(v)<5e-10?0:v).toFixed(3).replace('.',','); }
+    function mul(p,q){
+      return [p[0]*q[0]-p[1]*q[1]-p[2]*q[2]-p[3]*q[3],
+              p[0]*q[1]+p[1]*q[0]+p[2]*q[3]-p[3]*q[2],
+              p[0]*q[2]-p[1]*q[3]+p[2]*q[0]+p[3]*q[1],
+              p[0]*q[3]+p[1]*q[2]-p[2]*q[1]+p[3]*q[0]];
+    }
+    function draw(){
+      var th=parseFloat(A.value)*Math.PI/180;
+      document.getElementById('qx-av').textContent=A.value;
+      var n=E.value==='x'?[1,0,0]:(E.value==='y'?[0,1,0]:[0,0,1]);
+      var v=V.map(function(e){return parseFloat(e.value)||0;});
+      var s=Math.sin(th/2), c=Math.cos(th/2);
+      var q=[c,s*n[0],s*n[1],s*n[2]], qc=[q[0],-q[1],-q[2],-q[3]];
+      var p=mul(q,[0,v[0],v[1],v[2]]), r=mul(p,qc);
+      var vr=[r[1],r[2],r[3]];
+      // Rodrigues como comprobación
+      var nv=n[0]*v[0]+n[1]*v[1]+n[2]*v[2];
+      var cr=[n[1]*v[2]-n[2]*v[1], n[2]*v[0]-n[0]*v[2], n[0]*v[1]-n[1]*v[0]];
+      var rod=[0,1,2].map(function(k){return v[k]*Math.cos(th)+cr[k]*Math.sin(th)+n[k]*nv*(1-Math.cos(th));});
+      var err=Math.max(Math.abs(rod[0]-vr[0]),Math.abs(rod[1]-vr[1]),Math.abs(rod[2]-vr[2]));
+      document.getElementById('qx-out').innerHTML='<ol>'
+        +'<li><b>Cuaternión</b>: w = cos(θ/2) = cos('+f(th*180/Math.PI/2)+'°) = '+f(c)+'; (x, y, z) = sen(θ/2)·n = '+f(s)+'·('+n.map(f).join(', ')+') = ('+[0,1,2].map(function(k){return f(s*n[k])}).join(', ')+').</li>'
+        +'<li><b>Conjugado</b>: q* = ('+f(qc[0])+', '+f(qc[1])+', '+f(qc[2])+', '+f(qc[3])+').</li>'
+        +'<li><b>Producto q · (0, v)</b>: = ('+p.map(f).join(', ')+').</li>'
+        +'<li><b>Resultado (q · (0, v)) · q*</b>: parte vectorial = ('+vr.map(f).join(', ')+').</li>'
+        +'<li><b>Comprobación (Rodrigues)</b>: v cos θ + (n × v) sen θ + n (n · v)(1 − cos θ) = ('+rod.map(f).join(', ')+'). Diferencia máxima: '+err.toExponential(1).replace('.',',')+'.</li>'
+        +'</ol><p>Lectura: el vector gira alrededor del eje n. Con θ = 0° no cambia, y con θ = 360° vuelve a su posición.</p>';
+    }
+    A.addEventListener('input',draw); E.addEventListener('change',draw); V.forEach(function(e){e.addEventListener('input',draw)});
+    draw();
+  })();
+  </script>
+
+  <script data-w="sx">
+  (function(){
+    var box=document.getElementById('sx-w'); if(!box) return;
+    var ids=['sx-q0','sx-qT','sx-v0','sx-vT','sx-T'];
+    var g=function(id){return parseFloat(document.getElementById(id).value.replace(',','.'))};
+    function f(v){ return (Math.abs(v)<5e-10?0:v).toFixed(3).replace('.',','); }
+    function draw(){
+      var q0=g('sx-q0'), qT=g('sx-qT'), v0=g('sx-v0'), vT=g('sx-vT'), T=g('sx-T');
+      var out=document.getElementById('sx-out'), svg=document.getElementById('sx-svg');
+      if(!(T>0)||isNaN(q0+qT+v0+vT)){ out.innerHTML='<p>Introduce valores numéricos y un T mayor que cero.</p>'; svg.innerHTML=''; return; }
+      var D=qT-q0, a=q0, b=v0, c=3*D/(T*T)-(2*v0+vT)/T, d=-2*D/(T*T*T)+(v0+vT)/(T*T);
+      var q=function(t){return a+b*t+c*t*t+d*t*t*t}, qd=function(t){return b+2*c*t+3*d*t*t};
+      var N=200, ts=[], qs=[], vs=[], vmax=0, tmax=0;
+      for(var k=0;k<=N;k++){ var t=T*k/N; ts.push(t); qs.push(q(t)); vs.push(qd(t)); if(Math.abs(qd(t))>Math.abs(vmax)){vmax=qd(t); tmax=t;} }
+      var all=qs.concat(vs), lo=Math.min.apply(null,all), hi=Math.max.apply(null,all); if(hi-lo<1e-6){hi=lo+1;}
+      function X(t){return 30+ (t/T)*350}
+      function Y(v){return 200 - (v-lo)/(hi-lo)*180}
+      var pq=ts.map(function(t,k){return X(t)+','+Y(qs[k])}).join(' '), pv=ts.map(function(t,k){return X(t)+','+Y(vs[k])}).join(' ');
+      svg.innerHTML='<line x1="30" y1="200" x2="380" y2="200" stroke="var(--line)"/><line x1="30" y1="10" x2="30" y2="200" stroke="var(--line)"/>'
+        +'<polyline points="'+pq+'" fill="none" stroke="var(--accent)" stroke-width="2.5"/>'
+        +'<polyline points="'+pv+'" fill="none" stroke="#7a7a7a" stroke-width="2" stroke-dasharray="5 4"/>'
+        +'<text x="36" y="22" font-size="11" fill="var(--accent)">q(t)</text><text x="70" y="22" font-size="11" fill="#7a7a7a">q̇(t)</text>';
+      var sobrepasa = (Math.max.apply(null,qs)>Math.max(q0,qT)+1e-9)||(Math.min.apply(null,qs)<Math.min(q0,qT)-1e-9);
+      out.innerHTML='<ol>'
+        +'<li><b>Condiciones</b>: q(0) = '+f(q0)+', q('+f(T)+') = '+f(qT)+', q̇(0) = '+f(v0)+', q̇('+f(T)+') = '+f(vT)+'.</li>'
+        +'<li><b>a = q₀ = '+f(a)+'</b> y <b>b = v₀ = '+f(b)+'</b>.</li>'
+        +'<li><b>Δ = q_T − q₀ = '+f(D)+'</b>.</li>'
+        +'<li><b>c = 3Δ/T² − (2v₀ + v_T)/T</b> = '+f(c)+'.</li>'
+        +'<li><b>d = −2Δ/T³ + (v₀ + v_T)/T²</b> = '+f(d)+'.</li>'
+        +'<li><b>Polinomio</b>: q(t) = '+f(a)+' + '+f(b)+'·t + '+f(c)+'·t² + '+f(d)+'·t³.</li>'
+        +'<li><b>Velocidad máxima en [0, T]</b>: |q̇| = '+f(Math.abs(vmax))+' en t ≈ '+f(tmax)+' s.</li>'
+        +'</ol>'+(sobrepasa?'<p><b>Ojo:</b> la curva se sale del intervalo [q₀, q_T]. Es normal en un spline, pero revísalo si el enunciado pide no pasar de un valor.</p>':'');
+    }
+    ids.forEach(function(id){document.getElementById(id).addEventListener('input',draw)});
+    draw();
+  })();
+  </script>
+
+  <script data-w="dx">
+  (function(){
+    var box=document.getElementById('dx-w'); if(!box) return;
+    var svg=document.getElementById('dx-svg'), NS='http://www.w3.org/2000/svg', G=null;
+    var T1=document.getElementById('dx-t1'), T2=document.getElementById('dx-t2');
+    function f(v){ return (Math.abs(v)<5e-10?0:v).toFixed(3).replace('.',','); }
+    function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); G.appendChild(e); return e; }
+    function draw(){
+      var t1=parseFloat(T1.value)*Math.PI/180, t2=parseFloat(T2.value)*Math.PI/180;
+      document.getElementById('dx-t1v').textContent=T1.value; document.getElementById('dx-t2v').textContent=T2.value;
+      var s1=Math.sin(t1), c1=Math.cos(t1), s12=Math.sin(t1+t2), c12=Math.cos(t1+t2);
+      var J=[[-s1-s12,-s12],[c1+c12,c12]], det=J[0][0]*J[1][1]-J[0][1]*J[1][0];
+      svg.innerHTML=''; G=document.createElementNS(NS,'g'); G.setAttribute('transform','scale(1,-1)'); svg.appendChild(G);
+      el('circle',{cx:0,cy:0,r:2,fill:'none',stroke:'var(--line)','stroke-width':0.02,'stroke-dasharray':'0.08 0.08'});
+      var ex=c1, ey=s1, tx=ex+c12, ty=ey+s12;
+      el('polyline',{points:'0,0 '+ex+','+ey+' '+tx+','+ty,fill:'none',stroke:'var(--accent)','stroke-width':0.07,'stroke-linecap':'round'});
+      el('circle',{cx:0,cy:0,r:0.09,fill:'var(--fg)'}); el('circle',{cx:ex,cy:ey,r:0.08,fill:'var(--fg)'}); el('circle',{cx:tx,cy:ty,r:0.08,fill:'#b3261e'});
+      var sing=Math.abs(det)<1e-6;
+      document.getElementById('dx-out').innerHTML='<ol>'
+        +'<li><b>Jacobiana</b> (l₁ = l₂ = 1): J = [[−sen θ₁ − sen θ₁₂, −sen θ₁₂], [cos θ₁ + cos θ₁₂, cos θ₁₂]], con θ₁₂ = θ₁ + θ₂.</li>'
+        +'<li><b>Valores</b>: J = [[ '+f(J[0][0])+', '+f(J[0][1])+' ], [ '+f(J[1][0])+', '+f(J[1][1])+' ]].</li>'
+        +'<li><b>Determinante</b>: det J = J₁₁·J₂₂ − J₁₂·J₂₁ = '+f(det)+'. Coincide con sen θ₂ = '+f(Math.sin(t2))+'.</li>'
+        +'<li><b>Lectura</b>: '+(sing?'<b>configuración singular</b>: el extremo pierde una dirección de movimiento.':'configuración regular: la Jacobiana es invertible.')+'</li>'
+        +'</ol><p>Pulsa θ₂ = 0° o 180° para ver el brazo estirado o doblado: son las singularidades del 2R.</p>';
+    }
+    T1.addEventListener('input',draw); T2.addEventListener('input',draw);
+    draw();
+  })();
+  </script>
+</section>
+</main>
+</div>
+<footer>
+  Guía de estudio · Sistemas Robotizados · Curso 2026-27 · Los cálculos numéricos de la guía se han comprobado con código.
+</footer>
+<script>
+
+(function(){
+  /* --- progreso: examen y plan --- */
+  function track(prefix, ids, barId, contId, key){
+    var est={}; try{est=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+    function act(){
+      var n=0; ids.forEach(function(id){var el=document.getElementById(id); if(el&&el.checked)n++;});
+      var b=document.getElementById(barId); if(b) b.style.width=(n/ids.length*100)+'%';
+      var c=document.getElementById(contId); if(c) c.textContent=n+' de '+ids.length+' completados';
+    }
+    ids.forEach(function(id){
+      var el=document.getElementById(id); if(!el) return;
+      el.checked=!!est[id];
+      el.addEventListener('change',function(){est[id]=el.checked; try{localStorage.setItem(key,JSON.stringify(est))}catch(e){} act();});
+    });
+    act();
+  }
+  track('c',['c1','c2','c3','c4','c5','c6','c7','c8'],'barra-c','cont-c','robotizados-examen');
+  track('p',['p1','p2','p3','p4','p5','p6','p7','p8','p9'],'barra-p','cont-p','robotizados-plan');
+
+  /* --- filtro de exámenes por tema --- */
+  /* --- filtro de ejercicios por tema --- */
+  var ct=document.querySelectorAll('#filtro-tema button');
+  ct.forEach(function(b){b.addEventListener('click',function(){
+    ct.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    var f=b.getAttribute('data-f');
+    document.querySelectorAll('#tabla-tema .ex-row').forEach(function(r){
+      r.hidden=!(f==='todos'||r.getAttribute('data-t')===f);
+    });
+  });});
+
+  /* --- buscar un examen: tipo + texto --- */
+  var tipo='todos', q='';
+  var cb=document.querySelectorAll('#filtro-tipo button');
+  function aplicarBusqueda(){
+    var vis=0;
+    document.querySelectorAll('#practicar .exb').forEach(function(e){
+      var okTipo = tipo==='todos' || (tipo==='res' ? e.getAttribute('data-res')==='1' : e.getAttribute('data-k')===tipo);
+      var okTxt = !q || (e.getAttribute('data-text')||'').indexOf(q)>=0 || e.textContent.toLowerCase().indexOf(q)>=0;
+      e.hidden = !(okTipo && okTxt);
+      if(!e.hidden) vis++;
+    });
+    document.querySelectorAll('#practicar details.yr').forEach(function(d){
+      d.hidden = d.querySelectorAll('.exb:not([hidden])').length===0;
+    });
+    var c=document.getElementById('cont-buscar');
+    if(c) c.textContent = vis+' examen(es) con los filtros actuales';
+  }
+  cb.forEach(function(b){b.addEventListener('click',function(){
+    cb.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    tipo=b.getAttribute('data-k'); aplicarBusqueda();
+  });});
+  var inp=document.getElementById('buscar-examen');
+  if(inp) inp.addEventListener('input',function(){ q=inp.value.trim().toLowerCase(); aplicarBusqueda(); });
+  aplicarBusqueda();
+
+  if(document.getElementById('s-t1')){
+  /* --- simulador 2R plano --- */
+  var D=Math.PI/180, NS='http://www.w3.org/2000/svg';
+  function fk(t1,t2,l1,l2){
+    var x1=l1*Math.cos(t1), y1=l1*Math.sin(t1);
+    return [x1,y1, x1+l2*Math.cos(t1+t2), y1+l2*Math.sin(t1+t2)];
+  }
+  function ik(x,y,l1,l2){
+    var c2=(x*x+y*y-l1*l1-l2*l2)/(2*l1*l2);
+    if(Math.abs(c2)>1) return null;
+    var s=Math.acos(Math.max(-1,Math.min(1,c2))), out=[];
+    [s,-s].forEach(function(t2){
+      var t1=Math.atan2(y,x)-Math.atan2(l2*Math.sin(t2), l1+l2*Math.cos(t2));
+      out.push([t1,t2]);
+    });
+    return out;
+  }
+  function brazo(t1,t2,l1,l2,col){
+    var p=fk(t1,t2,l1,l2);
+    return '<line x1="0" y1="0" x2="'+p[0]+'" y2="'+p[1]+'" stroke="'+col+'" stroke-width="0.09" stroke-linecap="round"/>'+
+           '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+p[2]+'" y2="'+p[3]+'" stroke="'+col+'" stroke-width="0.09" stroke-linecap="round"/>'+
+           '<circle cx="'+p[2]+'" cy="'+p[3]+'" r="0.08" fill="'+col+'"/>';
+  }
+  var $=function(id){return document.getElementById(id)};
+  function leerL(){return [parseFloat($('l1').value)||1, parseFloat($('l2').value)||1]}
+  function dibujarFK(){
+    var t1=parseFloat($('s-t1').value)*D, t2=parseFloat($('s-t2').value)*D, L=leerL();
+    $('o-t1').textContent=$('s-t1').value+'°'; $('o-t2').textContent=$('s-t2').value+'°';
+    $('g2r').innerHTML=brazo(t1,t2,L[0],L[1],'var(--accent)');
+    var p=fk(t1,t2,L[0],L[1]);
+    var detJ=L[0]*L[1]*Math.sin(t2);
+    $('out-fk').textContent='Extremo: x = '+p[2].toFixed(3).replace('.',',')+' ; y = '+p[3].toFixed(3).replace('.',',')+
+      '\ndet J = '+detJ.toFixed(3).replace('.',',')+(Math.abs(detJ)<1e-3?'  ← singular':'');
+  }
+  function calcularIK(){
+    var L=leerL(), x=parseFloat($('tx').value), y=parseFloat($('ty').value);
+    var sol=ik(x,y,L[0],L[1]);
+    if(!sol){ $('out-ik').textContent='Punto fuera de alcance: no hay solución.'; $('g2r').innerHTML=brazo(parseFloat($('s-t1').value)*D,parseFloat($('s-t2').value)*D,L[0],L[1],'var(--accent)'); return; }
+    var txt='';
+    sol.forEach(function(s,i){
+      txt+=(i===0?'Codo arriba':'Codo abajo')+': θ₁ = '+(s[0]/D).toFixed(2).replace('.',',')+'° , θ₂ = '+(s[1]/D).toFixed(2).replace('.',',')+'°\n';
+    });
+    $('out-ik').textContent=txt.trim();
+    $('g2r').innerHTML=brazo(sol[0][0],sol[0][1],L[0],L[1],'var(--accent)')+brazo(sol[1][0],sol[1][1],L[0],L[1],'var(--c7)');
+  }
+  ['s-t1','s-t2','l1','l2'].forEach(function(id){$(id).addEventListener('input',dibujarFK)});
+  $('btn-ik').addEventListener('click',calcularIK);
+  dibujarFK();
+  }
+})();
+
+/* --- búsqueda global --- */
+(function(){
+  var box=document.getElementById('q-global'), res=document.getElementById('q-res');
+  if(!box||!res) return;
+  var idx=null;
+  function cargar(cb){ if(idx) return cb(idx); fetch('search-index.json').then(function(r){return r.json()}).then(function(j){idx=j; cb(j)}).catch(function(){res.textContent='La búsqueda necesita abrir la guía desde su dirección web.'; res.hidden=false;}); }
+  box.addEventListener('input',function(){
+    var q=box.value.trim().toLowerCase();
+    if(q.length<2){res.hidden=true; res.innerHTML=''; return;}
+    cargar(function(j){
+      var out=[];
+      j.forEach(function(e){ if(e.text.toLowerCase().indexOf(q)>=0) out.push(e); });
+      res.innerHTML = out.slice(0,12).map(function(e){return '<a href="'+e.url+'">'+e.title+'</a>'}).join('') || '<span>Sin resultados</span>';
+      res.hidden=false;
+    });
+  });
+})();
+if('serviceWorker' in navigator){ try{ navigator.serviceWorker.register('sw.js'); }catch(e){} }
+
+</script>
+</body>
+</html>

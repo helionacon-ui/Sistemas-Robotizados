@@ -27,8 +27,8 @@
 }
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
   color-scheme:dark;
-  --bg:#1a120c; --surface:#241a12; --fg:#f6e7da; --muted:#c09c84; --line:#3c2a1d;
-  --accent:#f0893f; --accent-soft:#3a2415; --warn:#ffad7a; --warn-soft:#3d2719;
+  --bg:#0a0705; --surface:#120d09; --fg:#f6e7da; --muted:#c09c84; --line:#2b1e15;
+  --accent:#f0893f; --accent-soft:#24160c; --warn:#ffad7a; --warn-soft:#3d2719;
   --c0:#f0893f; --c0s:#3a2415; --c1:#f5a05a; --c1s:#3b2616; --c2:#ef8a4a; --c2s:#37231a;
   --c3:#ffb27a; --c3s:#3c2a1c; --c4:#e07a3c; --c4s:#34210f; --c5:#f7c060; --c5s:#3b2d13;
   --c6:#f29a52; --c6s:#372315; --c7:#c79a7a; --c7s:#2c2119; --c8:#f57f3a; --c8s:#3a2214;
@@ -170,7 +170,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
 </head>
 <body>
 
-<div class="gsearch" style="max-width:1100px;margin:12px auto 0;padding:0 16px"><input id="q-global" type="search" placeholder="Buscar en toda la guía…" aria-label="Buscar en toda la guía" style="width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)"><div id="q-res" hidden class="qres"></div></div><style>#q-res[hidden]{display:none}#q-res.qres{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:6px}#q-res a{color:var(--accent)}</style>
+<div class="gsearch" style="max-width:1100px;margin:12px auto 0;padding:0 16px"><input id="q-global" type="search" placeholder="Buscar en toda la guía…" aria-label="Buscar en toda la guía" style="width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)"><div id="q-res" hidden class="qres"></div></div><style>#q-res[hidden],#q-res.qres[hidden]{display:none!important}#q-res.qres{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:6px}#q-res a{color:var(--accent)}</style>
 <div class="wrap">
 <nav class="toc" aria-label="Índice">
   <div class="grp">Empezar</div>
@@ -190,6 +190,10 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
   <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
+  <div class="grp">Interactivo</div>
+  <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
+  <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
+  <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <div class="grp">Referencia</div>
   <a href="formulario.html#formulario" style="--tc:var(--c7)">Formulario</a>
   <a href="glosario.html#glosario" style="--tc:var(--c7)">Glosario</a>
