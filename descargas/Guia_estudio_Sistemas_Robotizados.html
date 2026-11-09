@@ -92,7 +92,7 @@ p,li{max-width:70ch}
 .zero .ft{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
 .tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin:2px 6px 2px 0}
 .pill{font-family:var(--mono);font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.formula{font-family:var(--mono);font-size:14.5px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;white-space:pre-wrap}
+.formula{font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Georgia",var(--mono);font-size:17px;line-height:1.55;text-align:center;letter-spacing:.01em;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:14px 16px;margin:14px 0;overflow-x:auto;white-space:pre-wrap}
 
 /* mapa */
 .map{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
@@ -1500,8 +1500,85 @@ print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
     </ul>
     <b>Conclusión práctica:</b> puedes fiarte de las soluciones de referencia. Donde difieren de un cálculo exacto es casi siempre por redondear a dos decimales a mitad de camino, así que arrastra decimales hasta el final.</div>
   
+  <details>
+    <summary>Ejercicio N · Velocidad lineal y angular de un robot de 4 ejes (parcial 2 de 2025)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> En el instante inicial las articulaciones valen θ₁ = 10°, θ₂ = 20°, θ₃ = 30° y θ₄ = 40°. En el instante de estudio θ₁ = 20° y θ̇₁ = θ̇₂ = θ̇₃ = 5°/s. Las articulaciones se mueven con un interpolador lineal y l₁ = l₂ = l₃ = 1 m. La orientación del extremo en ese instante viene dada por una matriz R conocida. Halla la velocidad lineal y la angular del extremo.</p>
+      <div class="box key"><strong>La clave:</strong> con un interpolador lineal cada articulación va a velocidad constante, así que el dato de θ₁ sirve de reloj. Y θ₄, que no te dan, sale de la matriz R.</div>
+      <details><summary>Paso 1 · ¿Cuánto tiempo ha pasado?</summary>
+        <div class="inner"><p>θ₁ va de 10° a 20° a 5°/s, luego t = (20 − 10)/5 = <b>2 s</b>.</p></div>
+      </details>
+      <details><summary>Paso 2 · Las demás articulaciones en ese instante</summary>
+        <div class="inner"><p>Con velocidad constante: θ₂ = 20 + 5·2 = <b>30°</b> y θ₃ = 30 + 5·2 = <b>40°</b>. Entonces θ₂₃ = θ₂ + θ₃ = 70°.</p></div>
+      </details>
+      <details><summary>Paso 3 · Sacar θ₄ de la matriz R</summary>
+        <div class="inner"><p>De la matriz de transformación, R₃₁ = cos θ₄ · cos θ₂₃ y R₃₂ = −sen θ₄ · cos θ₂₃, con cos 70° = 0,342.</p>
+        <p>cos θ₄ = 0,171 / 0,342 = <b>0,5</b> y sen θ₄ = 0,296 / 0,342 = <b>0,866</b>, luego <b>θ₄ = 60°</b>.</p>
+        <p>Comprobación: reconstruyendo R entera con θ₁ = 20°, θ₂ = 30°, θ₃ = 40° y θ₄ = 60° se obtiene la matriz del enunciado, con diferencias menores de 0,001.</p>
+        <p>Como θ₄ ha pasado de 40° a 60° en 2 s, <b>θ̇₄ = 10°/s</b>. Ojo: este dato no te lo dan, hay que deducirlo.</p></div>
+      </details>
+      <details><summary>Paso 4 · Posición del extremo</summary>
+        <div class="inner"><p>De la cuarta columna de la matriz, con l = 1 m y u = cos θ₂ + cos θ₂₃ = 0,866 + 0,342 = 1,208:</p>
+        <div class="formula">P = ( −sen θ₁ · u ; cos θ₁ · u ; 1 + sen θ₂ + sen θ₂₃ ) = ( −0,413 ; 1,135 ; 2,440 ) m</div></div>
+      </details>
+      <details><summary>Paso 5 · Velocidad lineal</summary>
+        <div class="inner"><p>Se deriva la posición respecto a cada articulación. θ₄ gira sobre el propio eje del último eslabón, así que no mueve el extremo y su columna es nula.</p>
+        <div class="formula">v = J · q̇ = ( −0,0280 ; −0,2312 ; 0,1353 ) m/s     |v| = 0,269 m/s</div>
+        <p>Comprobado derivando numéricamente la posición: coincide hasta la sexta cifra.</p></div>
+      </details>
+      <details><summary>Paso 6 · Velocidad angular</summary>
+        <div class="inner"><p>La velocidad angular es la suma de las de cada articulación, cada una por la dirección de su eje:</p>
+        <ul>
+          <li>θ₁ gira sobre z₀ = (0 ; 0 ; 1).</li>
+          <li>θ₂ y θ₃ giran sobre el mismo eje horizontal, perpendicular al plano del brazo: (cos θ₁ ; sen θ₁ ; 0).</li>
+          <li>θ₄ gira sobre el eje del tercer eslabón: (−sen θ₁ cos θ₂₃ ; cos θ₁ cos θ₂₃ ; sen θ₂₃).</li>
+        </ul>
+        <div class="formula">ω = θ̇₁ z₀ + (θ̇₂ + θ̇₃) k₂ + θ̇₄ k₄ = ( 0,1436 ; 0,1158 ; 0,2513 ) rad/s     |ω| = 0,312 rad/s</div></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> v = (−0,028 ; −0,231 ; 0,135) m/s y ω = (0,144 ; 0,116 ; 0,251) rad/s. <b>Ojo:</b> el error típico es olvidarse de θ₄. No aparece en los datos de velocidad, pero la matriz R lo delata, y sí contribuye a la velocidad angular.</div>
+    </div>
+  </details>
+  <details>
+    <summary>Ejercicio O · Seguir una circunferencia con el extremo perpendicular (parcial 2 de 2025)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Un robot plano de tres eslabones de 1 m debe recorrer el contorno de una circunferencia de centro (3 ; 2) y radio 1 m, manteniendo su tercer eslabón perpendicular a ella. El recorrido dura 1 s. Halla (a) los puntos inicial y final del máximo recorrido posible y (b) las articulaciones en t = 0,5 s, sabiendo que la orientación del extremo sigue un interpolador lineal. Se toma 0° ≤ θ₂ ≤ 180°.</p>
+      <div class="box key"><strong>La clave:</strong> «perpendicular a la circunferencia» quiere decir que el tercer eslabón va en la dirección del radio. Eso fija dónde está la muñeca, y el problema se reduce a si los dos primeros eslabones llegan hasta ella.</div>
+      <details><summary>Paso 1 · Dónde está la muñeca</summary>
+        <div class="inner"><p>Llama u = (cos φ ; sen φ) al vector radial unitario. El extremo está en P = C + u. Como el tercer eslabón apunta al centro y mide 1 m, la muñeca queda un metro más afuera:</p>
+        <div class="formula">muñeca = C + 2u</div>
+        <p>Es decir, la muñeca recorre una circunferencia del mismo centro y radio 2.</p></div>
+      </details>
+      <details><summary>Paso 2 · Hasta dónde llegan los dos primeros eslabones</summary>
+        <div class="inner"><p>Los eslabones 1 y 2 miden 1 m cada uno, así que la muñeca tiene que estar a 2 m o menos del origen:</p>
+        <div class="formula">|C + 2u|² = 13 + 4 + 4(3 cos φ + 2 sen φ) = 17 + 12 cos φ + 8 sen φ ≤ 4</div>
+        <p>Es decir, 12 cos φ + 8 sen φ ≤ −13. La igualdad marca los dos extremos del recorrido.</p></div>
+      </details>
+      <details><summary>Paso 3 · Resolver la condición</summary>
+        <div class="inner"><p>Escribiendo 12 cos φ + 8 sen φ = √(12² + 8²) · cos(φ − δ) = 14,422 · cos(φ − δ), con δ = atan2(8, 12) = 33,69°:</p>
+        <div class="formula">cos(φ − δ) = −13 / 14,422 = −0,9014   →   φ − δ = ±154,34°</div>
+        <p>De ahí <b>φ = 188,03°</b> y <b>φ = 239,35°</b>.</p></div>
+      </details>
+      <details><summary>Paso 4 · Los dos puntos</summary>
+        <div class="inner"><p>Sustituyendo en P = C + u:</p>
+        <div class="formula">(x_A ; y_A) = (2,490 ; 1,140) m        (x_B ; y_B) = (2,010 ; 1,860) m</div>
+        <p>En los dos la muñeca está exactamente a 2 m del origen, o sea con el brazo estirado y θ₂ = 0. Tiene sentido: son el límite de lo que el robot alcanza sin dejar de ser perpendicular.</p></div>
+      </details>
+      <details><summary>Paso 5 · La orientación en t = 0,5 s</summary>
+        <div class="inner"><p>La orientación del extremo la fija φ. Con un interpolador lineal y un recorrido de 1 s, a mitad de camino está en el valor medio:</p>
+        <div class="formula">φ(0,5) = (239,35° + 188,03°) / 2 = 213,69°</div>
+        <p>Entonces el extremo está en P = (2,168 ; 1,445) y la muñeca en (1,336 ; 0,891), a 1,606 m del origen.</p></div>
+      </details>
+      <details><summary>Paso 6 · Cinemática inversa hasta la muñeca</summary>
+        <div class="inner"><p>Con dos eslabones de 1 m y la muñeca a r = 1,606 m:</p>
+        <div class="formula">cos θ₂ = (r² − 2) / 2 = 0,289   →   θ₂ = 73,21°</div>
+        <p>Se toma la raíz positiva porque el enunciado pide 0° ≤ θ₂ ≤ 180°. Después θ₁ = atan2(y, x) − atan2(sen θ₂, 1 + cos θ₂) = <b>−2,91°</b>.</p>
+        <p>Por último, el tercer eslabón apunta al centro, así que su dirección forma un ángulo φ + 180° con el eje x. Como θ₁ + θ₂ + θ₃ es esa dirección, θ₃ = (213,69° + 180°) − (−2,91°) − 73,21° = <b>−36,60°</b>.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> (a) A = (2,490 ; 1,140) m y B = (2,010 ; 1,860) m. (b) θ₁ = −2,91°, θ₂ = 73,21° y θ₃ = −36,60°. Comprobado con cinemática directa: el extremo cae exactamente en P y queda a 1,000 m del centro de la circunferencia.</div>
+    </div>
+  </details>
   <div class="box trap">
-    <strong>Qué falta:</strong> hay 38 exámenes distintos de cursos anteriores. Aquí tienes resueltos siete ejercicios (de la E a la K), todos comprobados con código. El resto está listado en «Practicar por tema» y «Buscar un examen», pero sin resolver. Para resolver otro, usa la misma plantilla: primero la configuración, luego la cinemática o la Jacobiana, y al final sustituir para comprobar.
+    <strong>Qué falta:</strong> hay 38 exámenes distintos de cursos anteriores. Aquí tienes resueltos quince ejercicios (de la A a la O), todos comprobados con código. El resto está listado en «Practicar por tema» y «Buscar un examen», pero sin resolver. Para resolver otro, usa la misma plantilla: primero la configuración, luego la cinemática o la Jacobiana, y al final sustituir para comprobar.
   </div>
 </section>
 
