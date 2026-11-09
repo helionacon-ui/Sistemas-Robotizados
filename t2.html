@@ -194,6 +194,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="animaciones.html#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="calculadoras.html#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="figuras.html#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="diapositivas-temario.html#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -212,6 +213,59 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   </div>
   <h3>Por qué importa para el examen</h3>
   <p>No se pide memorizar catálogos, pero sí entender qué efecto tiene un reductor. Un reductor de relación <i>n</i> divide la velocidad entre <i>n</i> y multiplica el par por <i>n</i>, aproximadamente, sin contar pérdidas.</p>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw2">
+    <h3>Animación · Configuración y espacio de trabajo</h3>
+    <p>Cada configuración barre una zona distinta, vista desde arriba. La zona sombreada es el espacio de trabajo y la huella naranja es el camino del extremo.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Configuración <select id="tw2-s"><option value="cart">Cartesiana (dos ejes lineales)</option><option value="cil">Cilíndrica (giro + avance radial)</option><option value="scara" selected>SCARA (dos giros)</option></select></label></div>
+    <svg viewBox="-2 -2 4 4" role="img" aria-label="Espacio de trabajo según la configuración"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt2">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw2'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), S=document.getElementById('tw2-s'), trail=[];
+    var wsR=el(s,'rect',{x:-1.5,y:-1,width:3,height:2},'fill:var(--accent-soft);stroke:var(--accent);stroke-width:0.02');
+    var wsO=el(s,'circle',{cx:0,cy:0,r:1.6},'fill:var(--accent-soft);stroke:var(--accent);stroke-width:0.02');
+    var wsI=el(s,'circle',{cx:0,cy:0,r:0.4},'fill:var(--bg);stroke:var(--accent);stroke-width:0.02');
+    var tr=el(s,'polyline',{fill:'none','stroke-width':0.025},'stroke:var(--accent)');
+    var mech=el(s,'polyline',{fill:'none','stroke-width':0.06,'stroke-linecap':'round','stroke-linejoin':'round'},'stroke:var(--fg)');
+    var tip=el(s,'circle',{r:0.08},'fill:var(--accent)');
+    S.addEventListener('change',function(){trail=[];});
+    loop(r,function(T){
+      var k=S.value, x, y, p, txt;
+      wsR.style.display=(k==='cart')?'':'none'; wsO.style.display=wsI.style.display=(k==='cart')?'none':'';
+      if(k==='cart'){ x=1.4*Math.sin(2*Math.PI*T/5); y=0.9*Math.sin(2*Math.PI*T/3.1); p=[[x,-1],[x,y]]; txt='x = '+f(x)+' m, y = '+f(y)+' m. Zona: un rectángulo.'; }
+      else if(k==='cil'){ var th=2*Math.PI*T/8, rr=1.1+0.5*Math.sin(2*Math.PI*T/2.3); wsI.setAttribute('r',0.6); x=rr*Math.cos(th); y=rr*Math.sin(th); p=[[0,0],[x,y]]; txt='θ = '+f((th*180/Math.PI)%360,0)+'°, r = '+f(rr)+' m. Zona: una corona entre 0,6 y 1,6 m.'; }
+      else { var t1=2*Math.PI*T/9, t2=1.5+1.4*Math.sin(2*Math.PI*T/2.7); wsI.setAttribute('r',0.4); var ex=Math.cos(t1), ey=Math.sin(t1); x=ex+0.6*Math.cos(t1+t2); y=ey+0.6*Math.sin(t1+t2); p=[[0,0],[ex,ey],[x,y]]; txt='θ₁ = '+f((t1*180/Math.PI)%360,0)+'°, θ₂ = '+f(t2*180/Math.PI,0)+'°. Zona: corona entre |l₁ − l₂| = 0,4 y l₁ + l₂ = 1,6 m.'; }
+      mech.setAttribute('points',pts(p)); tip.setAttribute('cx',x); tip.setAttribute('cy',-y);
+      trail.push([x,y]); if(trail.length>500) trail.shift(); tr.setAttribute('points',pts(trail));
+      rd.textContent=txt;
+    });
+  })();
+  </script>
 </section>
 </main>
 </div>

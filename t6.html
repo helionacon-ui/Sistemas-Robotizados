@@ -194,6 +194,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="animaciones.html#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="calculadoras.html#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="figuras.html#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="diapositivas-temario.html#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -218,6 +219,60 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <div class="formula">θ(t) = (3π/2) t² − π t³</div>
   <p>Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</p>
   <div class="box key"><strong>Método de resolución:</strong> escribe las cuatro condiciones como un sistema 4 × 4 en (a₀, a₁, a₂, a₃) y resuélvelo. Si te dan velocidades del extremo en vez de velocidades articulares, pasa primero por la Jacobiana.</div>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw6">
+    <h3>Animación · Control PD de una articulación</h3>
+    <p>La referencia salta entre 0 y 1 rad cada 3 s. El controlador aplica u = Kp·(ref − θ) − Kd·θ̇ a una articulación de inercia 1 kg·m². Sube Kp para responder más rápido y sube Kd para quitar la oscilación.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Kp <input id="tw6-p" type="range" min="1" max="80" step="1" value="25"><span id="tw6-pv">25</span></label><label>Kd <input id="tw6-d" type="range" min="0" max="20" step="0.5" value="3"><span id="tw6-dv">3,0</span></label></div>
+    <svg viewBox="0 0 400 220" role="img" aria-label="Respuesta de la articulación frente a la referencia"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt6">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw6'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), KP=document.getElementById('tw6-p'), KD=document.getElementById('tw6-d');
+    var th=0, w=0, hist=[], W=6;
+    function Y(v){return 180-(v+0.4)/2.2*160;}
+    el(s,'line',{x1:20,y1:Y(0),x2:390,y2:Y(0)},'stroke:var(--line)'); el(s,'line',{x1:20,y1:Y(1),x2:390,y2:Y(1)},'stroke:var(--line);stroke-dasharray:3 3');
+    el(s,'text',{x:22,y:Y(1)-4,'font-size':11},'fill:var(--muted)').textContent='1 rad';
+    var lr=el(s,'polyline',{fill:'none','stroke-width':2,'stroke-dasharray':'6 4'},'stroke:var(--muted)');
+    var lt=el(s,'polyline',{fill:'none','stroke-width':3},'stroke:var(--accent)');
+    loop(r,function(T,dt){
+      var kp=parseFloat(KP.value), kd=parseFloat(KD.value); document.getElementById('tw6-pv').textContent=KP.value; document.getElementById('tw6-dv').textContent=f(kd,1);
+      var ref=(Math.floor(T/3)%2===0)?1:0;
+      var n=Math.max(1,Math.ceil(dt/0.002)), h=dt/n;
+      for(var i=0;i<n&&dt>0;i++){ var u=kp*(ref-th)-kd*w; w+=(u-0.5*w)*h; th+=w*h; }
+      if(dt>0){ hist.push([T,ref,th]); while(hist.length&&hist[0][0]<T-W) hist.shift(); }
+      var t0=Math.max(0,T-W), X=function(t){return 20+(t-t0)/W*370;};
+      lr.setAttribute('points',hist.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)}).join(' '));
+      lt.setAttribute('points',hist.map(function(p){return X(p[0]).toFixed(1)+','+Y(Math.max(-0.4,Math.min(1.8,p[2]))).toFixed(1)}).join(' '));
+      var z=(kd+0.5)/(2*Math.sqrt(kp));
+      rd.textContent='ref = '+ref+' rad   θ = '+f(th,3)+' rad   error = '+f(ref-th,3)+'   amortiguamiento ζ = '+f(z)+(z<1?' (oscila)':' (sin oscilación)');
+    });
+  })();
+  </script>
 </section>
 </main>
 </div>

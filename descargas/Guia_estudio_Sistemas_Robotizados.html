@@ -228,6 +228,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -364,6 +365,56 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   </div>
   <h3>Criterios de implantación</h3>
   <p>Antes de elegir un robot se mira la carga que tiene que mover, el alcance que necesita, la precisión, el espacio de trabajo y el coste de la instalación. Esos criterios explican por qué hay tantos tipos distintos.</p>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw1">
+    <h3>Animación · Grados de libertad</h3>
+    <p>Elige qué articulación se mueve. Cada articulación independiente es un grado de libertad: con una sola, el extremo recorre un arco; con las tres, puede colocarse y orientarse en el plano.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Se mueve <select id="tw1-s"><option value="0">Articulación 1</option><option value="1">Articulación 2</option><option value="2">Articulación 3</option><option value="9" selected>Las tres</option></select></label></div>
+    <svg viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Brazo de tres articulaciones"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt1">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw1'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), S=document.getElementById('tw1-s');
+    var L=[0.9,0.7,0.45], q0=[0.9,-0.6,-0.5], per=[3,2.2,1.6], trail=[];
+    var tr=el(s,'polyline',{fill:'none','stroke-width':0.03},'stroke:var(--accent);opacity:.7');
+    var arm=el(s,'polyline',{fill:'none','stroke-width':0.07,'stroke-linecap':'round','stroke-linejoin':'round'},'stroke:var(--fg)');
+    var js=[0,1,2].map(function(){return el(s,'circle',{r:0.07},'fill:var(--fg)')}); var tip=el(s,'circle',{r:0.09},'fill:var(--accent)');
+    S.addEventListener('change',function(){trail=[];});
+    loop(r,function(T){
+      var sel=parseInt(S.value,10), a=0, p=[[0,0]], x=0, y=0, n=0;
+      for(var i=0;i<3;i++){ var on=(sel===9||sel===i); if(on) n++; a+=q0[i]+(on?0.55*Math.sin(2*Math.PI*T/per[i]):0); x+=L[i]*Math.cos(a); y+=L[i]*Math.sin(a); p.push([x,y]); }
+      arm.setAttribute('points',pts(p));
+      for(var k=0;k<3;k++){ js[k].setAttribute('cx',p[k][0]); js[k].setAttribute('cy',-p[k][1]); }
+      tip.setAttribute('cx',x); tip.setAttribute('cy',-y);
+      trail.push([x,y]); if(trail.length>220) trail.shift(); tr.setAttribute('points',pts(trail));
+      rd.textContent='Grados de libertad en movimiento: '+n+'   extremo ('+f(x)+' ; '+f(y)+') m   orientación '+f(a*180/Math.PI,0)+'°';
+    });
+  })();
+  </script>
 </section>
 
 <!-- T2 -->
@@ -375,6 +426,59 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   </div>
   <h3>Por qué importa para el examen</h3>
   <p>No se pide memorizar catálogos, pero sí entender qué efecto tiene un reductor. Un reductor de relación <i>n</i> divide la velocidad entre <i>n</i> y multiplica el par por <i>n</i>, aproximadamente, sin contar pérdidas.</p>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw2">
+    <h3>Animación · Configuración y espacio de trabajo</h3>
+    <p>Cada configuración barre una zona distinta, vista desde arriba. La zona sombreada es el espacio de trabajo y la huella naranja es el camino del extremo.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Configuración <select id="tw2-s"><option value="cart">Cartesiana (dos ejes lineales)</option><option value="cil">Cilíndrica (giro + avance radial)</option><option value="scara" selected>SCARA (dos giros)</option></select></label></div>
+    <svg viewBox="-2 -2 4 4" role="img" aria-label="Espacio de trabajo según la configuración"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt2">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw2'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), S=document.getElementById('tw2-s'), trail=[];
+    var wsR=el(s,'rect',{x:-1.5,y:-1,width:3,height:2},'fill:var(--accent-soft);stroke:var(--accent);stroke-width:0.02');
+    var wsO=el(s,'circle',{cx:0,cy:0,r:1.6},'fill:var(--accent-soft);stroke:var(--accent);stroke-width:0.02');
+    var wsI=el(s,'circle',{cx:0,cy:0,r:0.4},'fill:var(--bg);stroke:var(--accent);stroke-width:0.02');
+    var tr=el(s,'polyline',{fill:'none','stroke-width':0.025},'stroke:var(--accent)');
+    var mech=el(s,'polyline',{fill:'none','stroke-width':0.06,'stroke-linecap':'round','stroke-linejoin':'round'},'stroke:var(--fg)');
+    var tip=el(s,'circle',{r:0.08},'fill:var(--accent)');
+    S.addEventListener('change',function(){trail=[];});
+    loop(r,function(T){
+      var k=S.value, x, y, p, txt;
+      wsR.style.display=(k==='cart')?'':'none'; wsO.style.display=wsI.style.display=(k==='cart')?'none':'';
+      if(k==='cart'){ x=1.4*Math.sin(2*Math.PI*T/5); y=0.9*Math.sin(2*Math.PI*T/3.1); p=[[x,-1],[x,y]]; txt='x = '+f(x)+' m, y = '+f(y)+' m. Zona: un rectángulo.'; }
+      else if(k==='cil'){ var th=2*Math.PI*T/8, rr=1.1+0.5*Math.sin(2*Math.PI*T/2.3); wsI.setAttribute('r',0.6); x=rr*Math.cos(th); y=rr*Math.sin(th); p=[[0,0],[x,y]]; txt='θ = '+f((th*180/Math.PI)%360,0)+'°, r = '+f(rr)+' m. Zona: una corona entre 0,6 y 1,6 m.'; }
+      else { var t1=2*Math.PI*T/9, t2=1.5+1.4*Math.sin(2*Math.PI*T/2.7); wsI.setAttribute('r',0.4); var ex=Math.cos(t1), ey=Math.sin(t1); x=ex+0.6*Math.cos(t1+t2); y=ey+0.6*Math.sin(t1+t2); p=[[0,0],[ex,ey],[x,y]]; txt='θ₁ = '+f((t1*180/Math.PI)%360,0)+'°, θ₂ = '+f(t2*180/Math.PI,0)+'°. Zona: corona entre |l₁ − l₂| = 0,4 y l₁ + l₂ = 1,6 m.'; }
+      mech.setAttribute('points',pts(p)); tip.setAttribute('cx',x); tip.setAttribute('cy',-y);
+      trail.push([x,y]); if(trail.length>500) trail.shift(); tr.setAttribute('points',pts(trail));
+      rd.textContent=txt;
+    });
+  })();
+  </script>
 </section>
 
 <!-- T3 -->
@@ -412,6 +516,57 @@ def Rz(a):
 R = Rz(np.pi/2)
 print(np.round(R @ [1, 0, 0], 6))   # -> [0. 1. 0.]
 print(np.allclose(R.T @ R, np.eye(3)), round(np.linalg.det(R), 6))  # True 1.0</pre>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw3">
+    <h3>Animación · El orden de las transformaciones importa</h3>
+    <p>La figura naranja primero <b>gira</b> y después <b>se traslada</b> 1 m en x. La gris primero <b>se traslada</b> y después <b>gira</b> alrededor del origen. Acaban en sitios distintos: el producto de matrices no es conmutativo.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Ángulo de giro <input id="tw3-a" type="range" min="0" max="180" step="5" value="90"><span id="tw3-av">90</span>°</label></div>
+    <svg viewBox="-1.9 -1.9 3.8 3.8" role="img" aria-label="Dos figuras transformadas en distinto orden"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt3">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw3'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), A=document.getElementById('tw3-a');
+    var shape=[[0,0],[0.5,0],[0.5,0.2],[0.2,0.2],[0.2,0.5],[0,0.5]];
+    el(s,'line',{x1:-1.8,y1:0,x2:1.8,y2:0},'stroke:var(--line);stroke-width:0.015'); el(s,'line',{x1:0,y1:-1.8,x2:0,y2:1.8},'stroke:var(--line);stroke-width:0.015');
+    el(s,'polygon',{points:pts(shape)},'fill:none;stroke:var(--line);stroke-width:0.02;stroke-dasharray:0.05 0.04');
+    var pb=el(s,'polygon',{},'fill:var(--muted);opacity:.55;stroke:var(--muted);stroke-width:0.02');
+    var pa=el(s,'polygon',{},'fill:var(--accent);opacity:.7;stroke:var(--accent);stroke-width:0.02');
+    function cl(v){return Math.max(0,Math.min(1,v));}
+    function rot(p,a){return [p[0]*Math.cos(a)-p[1]*Math.sin(a), p[0]*Math.sin(a)+p[1]*Math.cos(a)];}
+    loop(r,function(T){
+      var th=parseFloat(A.value)*Math.PI/180; document.getElementById('tw3-av').textContent=A.value;
+      var u=(T%5)/5, s1=cl(u*3), s2=cl((u-0.36)*3);
+      pa.setAttribute('points',pts(shape.map(function(p){var q=rot(p,th*s1); return [q[0]+s2,q[1]];})));
+      pb.setAttribute('points',pts(shape.map(function(p){return rot([p[0]+s1,p[1]],th*s2);})));
+      var fb=rot([1,0],th);
+      rd.textContent=(s2<1?(s1<1?'Paso 1 en curso':'Paso 2 en curso'):'Final')+'   naranja (gira y traslada): origen en (1,00 ; 0,00)   gris (traslada y gira): origen en ('+f(fb[0])+' ; '+f(fb[1])+')';
+    });
+  })();
+  </script>
 </section>
 
 <!-- T4 -->
@@ -464,6 +619,57 @@ y = l₁ sin θ₁ + l₂ sin(θ₁ + θ₂)</div>
     </div>
     <div class="readout" id="out-ik"></div>
   </div>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw4">
+    <h3>Animación · Las dos soluciones de la cinemática inversa</h3>
+    <p>El punto objetivo recorre un círculo. Para cada posición hay dos brazos posibles: codo arriba (naranja, θ₂ &gt; 0) y codo abajo (gris, θ₂ &lt; 0). Los dos llegan al mismo punto.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Radio del círculo <input id="tw4-r" type="range" min="0.1" max="0.9" step="0.05" value="0.5"></label></div>
+    <svg viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Dos soluciones de codo siguiendo un punto"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt4">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw4'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), R=document.getElementById('tw4-r');
+    el(s,'circle',{cx:0,cy:0,r:2},'fill:none;stroke:var(--line);stroke-width:0.02;stroke-dasharray:0.08 0.08');
+    var path=el(s,'circle',{cx:0.9,cy:-0.6},'fill:none;stroke:var(--line);stroke-width:0.02');
+    var b=el(s,'polyline',{fill:'none','stroke-width':0.06,'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':'0.1 0.07'},'stroke:var(--muted)');
+    var a=el(s,'polyline',{fill:'none','stroke-width':0.06,'stroke-linecap':'round','stroke-linejoin':'round'},'stroke:var(--accent)');
+    var tg=el(s,'circle',{r:0.09},'fill:var(--fg)');
+    loop(r,function(T){
+      var rr=parseFloat(R.value); path.setAttribute('r',rr);
+      var ph=2*Math.PI*T/6, x=0.9+rr*Math.cos(ph), y=0.6+rr*Math.sin(ph);
+      var c2=(x*x+y*y-2)/2; c2=Math.max(-1,Math.min(1,c2)); var a2=Math.acos(c2), out=[];
+      [1,-1].forEach(function(sg){ var t2=sg*a2, t1=Math.atan2(y,x)-Math.atan2(Math.sin(t2),1+Math.cos(t2)); out.push([t1,t2]); });
+      a.setAttribute('points',pts([[0,0],[Math.cos(out[0][0]),Math.sin(out[0][0])],[x,y]]));
+      b.setAttribute('points',pts([[0,0],[Math.cos(out[1][0]),Math.sin(out[1][0])],[x,y]]));
+      tg.setAttribute('cx',x); tg.setAttribute('cy',-y);
+      rd.textContent='objetivo ('+f(x)+' ; '+f(y)+')   arriba: θ₁ = '+f(out[0][0]*180/Math.PI,1)+'°, θ₂ = '+f(out[0][1]*180/Math.PI,1)+'°   abajo: θ₁ = '+f(out[1][0]*180/Math.PI,1)+'°, θ₂ = '+f(out[1][1]*180/Math.PI,1)+'°';
+    });
+  })();
+  </script>
 </section>
 
 <!-- T5 -->
@@ -485,6 +691,58 @@ M₁₂ = m₂ l₂ (l₁ cos θ₂ + l₂)
 M₂₂ = m₂ l₂²</div>
   <p>Comprobado con código (m₁ = 2, m₂ = 1, θ₂ = 0,8 rad): M₁₁ = 5,393 ; M₁₂ = 1,697 ; M₂₂ = 1.</p>
   <div class="box trap"><strong>Ojo:</strong> M₁₂ es igual a M₂₁. Si al derivar obtienes matrices no simétricas, revisa el cálculo de la energía cinética.</div>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw5">
+    <h3>Animación · Simulación dinámica de un eslabón</h3>
+    <p>El motor aplica un par τ constante. El brazo (m = 1 kg, l = 1 m, con rozamiento) se mueve según m·l²·θ̈ = τ − m·g·l·cos θ − b·θ̇. Si |τ| es menor que m·g·l = 9,81 N·m, el brazo se para donde el par del motor iguala al del peso.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Par τ (N·m) <input id="tw5-t" type="range" min="-12" max="12" step="0.5" value="5"><span id="tw5-tv">5,0</span></label><button class="btn" id="tw5-r" type="button">Reiniciar</button></div>
+    <svg viewBox="-1.5 -1.5 3 3" role="img" aria-label="Eslabón que se mueve bajo un par y la gravedad"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt5">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw5'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), TQ=document.getElementById('tw5-t');
+    var th=-Math.PI/2, w=0, g=9.81, bb=0.8;
+    el(s,'line',{x1:-1.4,y1:0,x2:1.4,y2:0},'stroke:var(--line);stroke-width:0.015');
+    var eq=el(s,'line',{x1:0,y1:0,'stroke-dasharray':'0.06 0.05'},'stroke:var(--accent);stroke-width:0.02');
+    var arm=el(s,'line',{x1:0,y1:0,'stroke-linecap':'round'},'stroke:var(--fg);stroke-width:0.07');
+    var ms=el(s,'circle',{r:0.11},'fill:var(--accent)'); el(s,'circle',{cx:0,cy:0,r:0.07},'fill:var(--fg)');
+    document.getElementById('tw5-r').addEventListener('click',function(){th=-Math.PI/2; w=0;});
+    loop(r,function(T,dt){
+      var tau=parseFloat(TQ.value); document.getElementById('tw5-tv').textContent=f(tau,1);
+      var n=Math.max(1,Math.ceil(dt/0.004)), h=dt/n;
+      for(var i=0;i<n&&dt>0;i++){ var acc=tau-g*Math.cos(th)-bb*w; w+=acc*h; th+=w*h; }
+      var x=Math.cos(th), y=Math.sin(th);
+      arm.setAttribute('x2',x); arm.setAttribute('y2',-y); ms.setAttribute('cx',x); ms.setAttribute('cy',-y);
+      var has=Math.abs(tau)<=g, te=has?Math.acos(tau/g):0;
+      eq.style.display=has?'':'none'; if(has){ eq.setAttribute('x2',Math.cos(-te)); eq.setAttribute('y2',Math.sin(te)); }
+      rd.textContent='θ = '+f(th*180/Math.PI,1)+'°   θ̇ = '+f(w)+' rad/s   par del peso = '+f(g*Math.cos(th))+' N·m   '+(has?'equilibrio estable en θ = −'+f(te*180/Math.PI,1)+'° (línea discontinua)':'sin equilibrio: el brazo gira sin parar');
+    });
+  })();
+  </script>
 </section>
 
 <!-- T6 -->
@@ -502,6 +760,60 @@ M₂₂ = m₂ l₂²</div>
   <div class="formula">θ(t) = (3π/2) t² − π t³</div>
   <p>Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</p>
   <div class="box key"><strong>Método de resolución:</strong> escribe las cuatro condiciones como un sistema 4 × 4 en (a₀, a₁, a₂, a₃) y resuélvelo. Si te dan velocidades del extremo en vez de velocidades articulares, pasa primero por la Jacobiana.</div>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw6">
+    <h3>Animación · Control PD de una articulación</h3>
+    <p>La referencia salta entre 0 y 1 rad cada 3 s. El controlador aplica u = Kp·(ref − θ) − Kd·θ̇ a una articulación de inercia 1 kg·m². Sube Kp para responder más rápido y sube Kd para quitar la oscilación.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Kp <input id="tw6-p" type="range" min="1" max="80" step="1" value="25"><span id="tw6-pv">25</span></label><label>Kd <input id="tw6-d" type="range" min="0" max="20" step="0.5" value="3"><span id="tw6-dv">3,0</span></label></div>
+    <svg viewBox="0 0 400 220" role="img" aria-label="Respuesta de la articulación frente a la referencia"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt6">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw6'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), KP=document.getElementById('tw6-p'), KD=document.getElementById('tw6-d');
+    var th=0, w=0, hist=[], W=6;
+    function Y(v){return 180-(v+0.4)/2.2*160;}
+    el(s,'line',{x1:20,y1:Y(0),x2:390,y2:Y(0)},'stroke:var(--line)'); el(s,'line',{x1:20,y1:Y(1),x2:390,y2:Y(1)},'stroke:var(--line);stroke-dasharray:3 3');
+    el(s,'text',{x:22,y:Y(1)-4,'font-size':11},'fill:var(--muted)').textContent='1 rad';
+    var lr=el(s,'polyline',{fill:'none','stroke-width':2,'stroke-dasharray':'6 4'},'stroke:var(--muted)');
+    var lt=el(s,'polyline',{fill:'none','stroke-width':3},'stroke:var(--accent)');
+    loop(r,function(T,dt){
+      var kp=parseFloat(KP.value), kd=parseFloat(KD.value); document.getElementById('tw6-pv').textContent=KP.value; document.getElementById('tw6-dv').textContent=f(kd,1);
+      var ref=(Math.floor(T/3)%2===0)?1:0;
+      var n=Math.max(1,Math.ceil(dt/0.002)), h=dt/n;
+      for(var i=0;i<n&&dt>0;i++){ var u=kp*(ref-th)-kd*w; w+=(u-0.5*w)*h; th+=w*h; }
+      if(dt>0){ hist.push([T,ref,th]); while(hist.length&&hist[0][0]<T-W) hist.shift(); }
+      var t0=Math.max(0,T-W), X=function(t){return 20+(t-t0)/W*370;};
+      lr.setAttribute('points',hist.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)}).join(' '));
+      lt.setAttribute('points',hist.map(function(p){return X(p[0]).toFixed(1)+','+Y(Math.max(-0.4,Math.min(1.8,p[2]))).toFixed(1)}).join(' '));
+      var z=(kd+0.5)/(2*Math.sqrt(kp));
+      rd.textContent='ref = '+ref+' rad   θ = '+f(th,3)+' rad   error = '+f(ref-th,3)+'   amortiguamiento ζ = '+f(z)+(z<1?' (oscila)':' (sin oscilación)');
+    });
+  })();
+  </script>
 </section>
 
 <!-- PRÁCTICAS -->
@@ -2182,6 +2494,247 @@ y = l₁ sen θ₁ + l₂ sen(θ₁ + θ₂)</div>
         rd4.textContent='t = '+f(t)+' s   spline: q = '+f(splQ(t),3)+', q̇ = '+f(splV(t),3)+'   lineal: q = '+f(linQ(t),3)+', q̇ = '+f(linV(t),3);
       });
     }
+  })();
+  </script>
+</section>
+
+<section class="sec" id="calculadoras" style="--tc:var(--c7)">
+  <div class="sh"><span class="badge" aria-hidden="true">C</span><div class="shx"><p class="kick">Herramientas</p><h2>Calculadoras</h2></div></div>
+  <p>Ocho calculadoras para comprobar tus cuentas sin abrir otro programa. Se actualizan al escribir. Admiten coma o punto decimal. Úsalas para <b>comprobar</b>, no para saltarte el desarrollo: en el examen tendrás que hacerlo a mano.</p>
+  <style>
+  .cx{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .cx-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 14px;margin:8px 0}
+  .cx label{display:flex;flex-direction:column;gap:4px;font-size:.9rem}
+  .cx input,.cx select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);max-width:100%;min-width:0}
+  .cx table input{width:5.2rem}
+  .cx-sc{overflow-x:auto;max-width:100%}
+  .cx table{border-collapse:collapse;font-size:.88rem;margin:6px 0}
+  .cx th,.cx td{padding:3px 5px;text-align:left}
+  .cx-out{font-size:.92rem;margin-top:8px;overflow-wrap:anywhere}
+  .cx-m td{font-family:var(--mono);text-align:right;padding:2px 8px;font-size:.84rem}
+  .cx-btn{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+  .cx svg{width:100%;max-width:460px;height:auto;display:block;margin:8px auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+
+  <div class="cx" id="c1">
+    <h3>1 · Cuaterniones: crear y multiplicar</h3>
+    <p>Construye q₁ y q₂ a partir de eje y ángulo, o escribe sus cuatro componentes. Obtienes el producto q₁·q₂ y la matriz de rotación de q₁.</p>
+    <div class="cx-g">
+      <label>Eje de q₁ (x y z)<input id="c1-e1" value="0 0 1"></label><label>Ángulo de q₁ (°)<input id="c1-a1" value="90"></label>
+      <label>Eje de q₂ (x y z)<input id="c1-e2" value="1 0 0"></label><label>Ángulo de q₂ (°)<input id="c1-a2" value="-90"></label>
+    </div>
+    <div class="cx-g">
+      <label>O bien q₁ = (w x y z)<input id="c1-q1" placeholder="vacío = usar eje y ángulo"></label>
+      <label>O bien q₂ = (w x y z)<input id="c1-q2" placeholder="vacío = usar eje y ángulo"></label>
+    </div>
+    <div class="cx-out" id="c1-o"></div>
+  </div>
+
+  <div class="cx" id="c2">
+    <h3>2 · Cadena de rotaciones y traslaciones (matrices 4×4)</h3>
+    <p>Añade pasos en orden. Cada paso multiplica <b>por la derecha</b>, es decir, se aplica respecto al sistema móvil. En una rotación solo se usa la primera casilla (ángulo en grados); en una traslación, las tres (x, y, z).</p>
+    <div class="cx-sc"><table id="c2-t"></table></div>
+    <div class="cx-btn"><button class="btn" type="button" id="c2-add">Añadir paso</button><button class="btn" type="button" id="c2-del">Quitar el último</button></div>
+    <div class="cx-out" id="c2-o"></div>
+  </div>
+
+  <div class="cx" id="c3">
+    <h3>3 · Cadena de sistemas con cuaterniones</h3>
+    <p>Cada fila es un salto de sistema: primero el desplazamiento (px, py, pz) medido en el sistema anterior, luego el giro. El resultado es la posición y la orientación del último sistema respecto al primero.</p>
+    <div class="cx-sc"><table id="c3-t"></table></div>
+    <div class="cx-btn"><button class="btn" type="button" id="c3-add">Añadir salto</button><button class="btn" type="button" id="c3-del">Quitar el último</button></div>
+    <div class="cx-out" id="c3-o"></div>
+  </div>
+
+  <div class="cx" id="c4">
+    <h3>4 · Tabla de Denavit-Hartenberg</h3>
+    <p>Una fila por articulación. Calcula cada Aᵢ y la matriz total T. Ángulos en grados; d y a en la unidad que uses.</p>
+    <div class="cx-sc"><table id="c4-t"></table></div>
+    <div class="cx-btn"><button class="btn" type="button" id="c4-add">Añadir articulación</button><button class="btn" type="button" id="c4-del">Quitar la última</button></div>
+    <div class="cx-out" id="c4-o"></div>
+  </div>
+
+  <div class="cx" id="c5">
+    <h3>5 · Cinemática inversa del 2R</h3>
+    <div class="cx-g">
+      <label>l₁<input id="c5-l1" value="1"></label><label>l₂<input id="c5-l2" value="1"></label>
+      <label>x<input id="c5-x" value="1"></label><label>y<input id="c5-y" value="1"></label>
+    </div>
+    <div class="cx-out" id="c5-o"></div>
+  </div>
+
+  <div class="cx" id="c6">
+    <h3>6 · Jacobiana con notación abreviada</h3>
+    <p>Escribe cada ecuación con <b>s1</b>, <b>c1</b>, <b>s12</b>, <b>c123</b>… (seno y coseno de la suma de ángulos), números y los signos + − * / ( ) ^. Una ecuación por línea. La calculadora deriva numéricamente y evalúa en los ángulos que indiques.</p>
+    <div class="cx-g">
+      <label style="grid-column:1/-1">Ecuaciones<textarea id="c6-f" rows="3" style="font:inherit;font-family:var(--mono);padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);width:100%;box-sizing:border-box">c1 + 0.8*c12
+s1 + 0.8*s12</textarea></label>
+      <label>Ángulos θ₁ θ₂ … (°)<input id="c6-q" value="30 30"></label>
+    </div>
+    <div class="cx-out" id="c6-o"></div>
+  </div>
+
+  <div class="cx" id="c7">
+    <h3>7 · Interpolador lineal o cúbico por puntos</h3>
+    <p>Una fila por punto de paso: tiempo, posición y, en el cúbico, velocidad. Devuelve los coeficientes de cada tramo y dibuja q, q̇ y q̈.</p>
+    <div class="cx-g"><label>Tipo<select id="c7-k"><option value="cub" selected>Cúbico</option><option value="lin">Lineal</option></select></label></div>
+    <div class="cx-sc"><table id="c7-t"></table></div>
+    <div class="cx-btn"><button class="btn" type="button" id="c7-add">Añadir punto</button><button class="btn" type="button" id="c7-del">Quitar el último</button></div>
+    <svg id="c7-s" viewBox="0 0 460 330" role="img" aria-label="Posición, velocidad y aceleración de la trayectoria"></svg>
+    <div class="cx-out" id="c7-o"></div>
+  </div>
+
+  <div class="cx" id="c8">
+    <h3>8 · Triángulos: teoremas del seno y del coseno</h3>
+    <div class="cx-g">
+      <label>Qué calcular<select id="c8-k">
+        <option value="cl">Coseno: lado opuesto (dados a, b y el ángulo entre ellos)</option>
+        <option value="ca">Coseno: ángulo opuesto a c (dados a, b, c)</option>
+        <option value="sl">Seno: lado b (dados a, A y B)</option>
+        <option value="sa">Seno: ángulo B (dados a, A y b)</option></select></label>
+      <label id="c8-l1">a<input id="c8-1" value="3"></label><label id="c8-l2">b<input id="c8-2" value="4"></label><label id="c8-l3">ángulo (°)<input id="c8-3" value="90"></label>
+    </div>
+    <div class="cx-out" id="c8-o"></div>
+  </div>
+
+  <script data-w="cx">
+  (function(){
+    if(!document.getElementById('c1')) return;
+    var $=function(id){return document.getElementById(id)};
+    function P(v){ var x=parseFloat(String(v).trim().replace(',','.')); return x; }
+    function vec(s){ return String(s).trim().split(/[\s;]+/).filter(function(x){return x!==''}).map(P); }
+    function fm(v,d){ if(!isFinite(v)) return '—'; var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?4:d).replace('.',','); }
+    function mat(M){ return '<div class="cx-sc"><table class="cx-m">'+M.map(function(r){return '<tr>'+r.map(function(v){return '<td>'+fm(v)+'</td>'}).join('')+'</tr>'}).join('')+'</table></div>'; }
+    var D2R=Math.PI/180;
+    function qmul(p,q){ return [p[0]*q[0]-p[1]*q[1]-p[2]*q[2]-p[3]*q[3], p[0]*q[1]+p[1]*q[0]+p[2]*q[3]-p[3]*q[2], p[0]*q[2]-p[1]*q[3]+p[2]*q[0]+p[3]*q[1], p[0]*q[3]+p[1]*q[2]-p[2]*q[1]+p[3]*q[0]]; }
+    function qax(e,deg){ var n=Math.hypot(e[0],e[1],e[2]); if(!(n>0)) return null; var h=deg*D2R/2, s=Math.sin(h)/n; return [Math.cos(h),e[0]*s,e[1]*s,e[2]*s]; }
+    function q2m(q){ var n=Math.hypot(q[0],q[1],q[2],q[3]), w=q[0]/n,x=q[1]/n,y=q[2]/n,z=q[3]/n;
+      return [[1-2*(y*y+z*z),2*(x*y-w*z),2*(x*z+w*y)],[2*(x*y+w*z),1-2*(x*x+z*z),2*(y*z-w*x)],[2*(x*z-w*y),2*(y*z+w*x),1-2*(x*x+y*y)]]; }
+    function qrot(q,v){ var r=qmul(qmul(q,[0,v[0],v[1],v[2]]),[q[0],-q[1],-q[2],-q[3]]); return [r[1],r[2],r[3]]; }
+    function mm(A,B){ var n=A.length,C=[]; for(var i=0;i<n;i++){C.push([]);for(var j=0;j<n;j++){var s=0;for(var k=0;k<n;k++)s+=A[i][k]*B[k][j];C[i].push(s);}} return C; }
+    function I4(){ return [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]; }
+    function on(ids,fn){ ids.forEach(function(id){ $(id).addEventListener('input',fn); $(id).addEventListener('change',fn); }); fn(); }
+    // tabla de filas editable
+    function grid(tab,cols,rows,fn,addId,delId,blank,min,max){
+      function draw(){
+        var h='<tr><th>#</th>'+cols.map(function(c){return '<th>'+c.l+'</th>'}).join('')+'</tr>';
+        rows.forEach(function(r,i){ h+='<tr><td>'+(i+1)+'</td>'+cols.map(function(c){
+          if(c.o) return '<td><select data-i="'+i+'" data-k="'+c.k+'">'+c.o.map(function(o){return '<option value="'+o[0]+'"'+(String(r[c.k])===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select></td>';
+          return '<td><input data-i="'+i+'" data-k="'+c.k+'" value="'+String(r[c.k]).replace('.',',')+'" inputmode="decimal" aria-label="'+c.l+' fila '+(i+1)+'"></td>'; }).join('')+'</tr>'; });
+        tab.innerHTML=h;
+        tab.querySelectorAll('input,select').forEach(function(e){ var ev=function(){ var c=e.getAttribute('data-k'), i=+e.getAttribute('data-i'); rows[i][c]=(e.tagName==='SELECT')?e.value:P(e.value); fn(rows); }; e.addEventListener('input',ev); e.addEventListener('change',ev); });
+        fn(rows);
+      }
+      $(addId).addEventListener('click',function(){ if(rows.length<max){ rows.push(blank(rows)); draw(); } });
+      $(delId).addEventListener('click',function(){ if(rows.length>min){ rows.pop(); draw(); } });
+      draw();
+    }
+    // 1 cuaterniones
+    on(['c1-e1','c1-a1','c1-e2','c1-a2','c1-q1','c1-q2'],function(){
+      function get(qi,ei,ai){ var t=$(qi).value.trim(); if(t){ var v=vec(t); return (v.length===4&&v.every(isFinite))?v:null; } var e=vec($(ei).value); return (e.length===3&&e.every(isFinite)&&isFinite(P($(ai).value)))?qax(e,P($(ai).value)):null; }
+      var q1=get('c1-q1','c1-e1','c1-a1'), q2=get('c1-q2','c1-e2','c1-a2');
+      if(!q1||!q2){ $('c1-o').innerHTML='<p>Revisa los datos: el eje necesita 3 números no nulos y el cuaternión 4.</p>'; return; }
+      var p=qmul(q1,q2), s=function(q){return '('+q.map(function(v){return fm(v)}).join(' ; ')+')'};
+      $('c1-o').innerHTML='<p><b>q₁</b> = '+s(q1)+'<br><b>q₂</b> = '+s(q2)+'<br><b>q₁ · q₂</b> = '+s(p)+'<br><b>Conjugado de q₁</b> = '+s([q1[0],-q1[1],-q1[2],-q1[3]])+'<br><b>Módulo de q₁</b> = '+fm(Math.hypot(q1[0],q1[1],q1[2],q1[3]))+'</p><p><b>Matriz de rotación de q₁</b> (normalizado):</p>'+mat(q2m(q1));
+    });
+    // 2 cadena de matrices
+    var AX=[['rx','Rotación X'],['ry','Rotación Y'],['rz','Rotación Z'],['t','Traslación']];
+    grid($('c2-t'),[{k:'k',l:'Paso',o:AX},{k:'a',l:'ángulo (°) o x'},{k:'b',l:'y'},{k:'c',l:'z'}],
+      [{k:'rz',a:90,b:0,c:0},{k:'t',a:1,b:0,c:0}],function(rows){
+        var M=I4(), bad=false;
+        rows.forEach(function(r){ var a=r.a,b=r.b,c=r.c, A=I4();
+          if(r.k==='t'){ if(![a,b,c].every(isFinite)) bad=true; A[0][3]=a;A[1][3]=b;A[2][3]=c; }
+          else { if(!isFinite(a)) bad=true; var co=Math.cos(a*D2R), si=Math.sin(a*D2R);
+            if(r.k==='rx'){A[1][1]=co;A[1][2]=-si;A[2][1]=si;A[2][2]=co;} if(r.k==='ry'){A[0][0]=co;A[0][2]=si;A[2][0]=-si;A[2][2]=co;} if(r.k==='rz'){A[0][0]=co;A[0][1]=-si;A[1][0]=si;A[1][1]=co;} }
+          M=mm(M,A); });
+        $('c2-o').innerHTML=bad?'<p>Hay casillas sin número.</p>':'<p><b>Matriz total</b> (producto en el orden de la tabla):</p>'+mat(M)+'<p><b>Posición del origen final</b>: ('+fm(M[0][3])+' ; '+fm(M[1][3])+' ; '+fm(M[2][3])+')</p>';
+      },'c2-add','c2-del',function(){return {k:'t',a:0,b:0,c:0}},1,12);
+    // 3 cadena con cuaterniones
+    var EJ=[['x','X'],['y','Y'],['z','Z']];
+    grid($('c3-t'),[{k:'px',l:'px'},{k:'py',l:'py'},{k:'pz',l:'pz'},{k:'e',l:'Eje de giro',o:EJ},{k:'a',l:'Ángulo (°)'}],
+      [{px:0,py:0,pz:1,e:'z',a:120},{px:0,py:0,pz:1,e:'x',a:-90}],function(rows){
+        var Q=[1,0,0,0], p=[0,0,0], bad=false;
+        rows.forEach(function(r){ if(![r.px,r.py,r.pz,r.a].every(isFinite)){bad=true;return;}
+          var d=qrot(Q,[r.px,r.py,r.pz]); p=[p[0]+d[0],p[1]+d[1],p[2]+d[2]];
+          Q=qmul(Q,qax(r.e==='x'?[1,0,0]:(r.e==='y'?[0,1,0]:[0,0,1]),r.a)); });
+        $('c3-o').innerHTML=bad?'<p>Hay casillas sin número.</p>':'<p><b>Posición</b> del último sistema: ('+p.map(function(v){return fm(v)}).join(' ; ')+')<br><b>Orientación</b> (cuaternión): ('+Q.map(function(v){return fm(v)}).join(' ; ')+')</p><p><b>Matriz de rotación equivalente</b>:</p>'+mat(q2m(Q));
+      },'c3-add','c3-del',function(){return {px:0,py:0,pz:0,e:'z',a:0}},1,12);
+    // 4 DH
+    grid($('c4-t'),[{k:'th',l:'θ (°)'},{k:'d',l:'d'},{k:'a',l:'a'},{k:'al',l:'α (°)'}],
+      [{th:30,d:475,a:150,al:-90},{th:-30,d:0,a:600,al:0},{th:-15,d:0,a:120,al:-90}],function(rows){
+        var T=I4(), h='', bad=false;
+        rows.forEach(function(r,i){ if(![r.th,r.d,r.a,r.al].every(isFinite)){bad=true;return;}
+          var ct=Math.cos(r.th*D2R),st=Math.sin(r.th*D2R),ca=Math.cos(r.al*D2R),sa=Math.sin(r.al*D2R);
+          var A=[[ct,-ca*st,sa*st,r.a*ct],[st,ca*ct,-sa*ct,r.a*st],[0,sa,ca,r.d],[0,0,0,1]];
+          h+='<p><b>A'+(i+1)+'</b>:</p>'+mat(A); T=mm(T,A); });
+        $('c4-o').innerHTML=bad?'<p>Hay casillas sin número.</p>':h+'<p><b>T = A₁ · … · A'+rows.length+'</b>:</p>'+mat(T)+'<p><b>Posición del extremo</b>: ('+fm(T[0][3])+' ; '+fm(T[1][3])+' ; '+fm(T[2][3])+')</p>';
+      },'c4-add','c4-del',function(){return {th:0,d:0,a:0,al:0}},1,7);
+    // 5 inversa 2R
+    on(['c5-l1','c5-l2','c5-x','c5-y'],function(){
+      var l1=P($('c5-l1').value), l2=P($('c5-l2').value), x=P($('c5-x').value), y=P($('c5-y').value), o=$('c5-o');
+      if(![l1,l2,x,y].every(isFinite)||!(l1>0)||!(l2>0)){ o.innerHTML='<p>Introduce cuatro números, con longitudes positivas.</p>'; return; }
+      var D=Math.hypot(x,y);
+      if(D>l1+l2+1e-12||D<Math.abs(l1-l2)-1e-12){ o.innerHTML='<p><b>No alcanzable:</b> la distancia al punto es '+fm(D)+' y el alcance va de '+fm(Math.abs(l1-l2))+' a '+fm(l1+l2)+'.</p>'; return; }
+      var c2=Math.max(-1,Math.min(1,(x*x+y*y-l1*l1-l2*l2)/(2*l1*l2))), a=Math.acos(c2), h='<p>cos θ₂ = '+fm(c2)+'</p>';
+      [[1,'θ₂ &gt; 0 (codo arriba en esta guía)'],[-1,'θ₂ &lt; 0 (codo abajo en esta guía)']].forEach(function(s){ var t2=s[0]*a, t1=Math.atan2(y,x)-Math.atan2(l2*Math.sin(t2),l1+l2*Math.cos(t2));
+        h+='<p><b>'+s[1]+'</b>: θ₁ = '+fm(t1/D2R,2)+'° = '+fm(t1)+' rad; θ₂ = '+fm(t2/D2R,2)+'° = '+fm(t2)+' rad</p>'; });
+      o.innerHTML=h+'<p class="muted">Ojo: el nombre «codo arriba» o «codo abajo» depende del dibujo de cada ejercicio. Fíate del signo de θ₂.</p>';
+    });
+    // 6 Jacobiana numérica
+    on(['c6-f','c6-q'],function(){
+      var o=$('c6-o'), lines=$('c6-f').value.split('\n').map(function(s){return s.trim()}).filter(function(s){return s}), q=vec($('c6-q').value).map(function(v){return v*D2R});
+      if(!lines.length||!q.length||!q.every(isFinite)){ o.innerHTML='<p>Escribe al menos una ecuación y los ángulos.</p>'; return; }
+      var fs=[];
+      for(var i=0;i<lines.length;i++){
+        var src=lines[i].replace(/,/g,'.');
+        if(!/^[0-9sc+\-*/().^\s]+$/.test(src)){ o.innerHTML='<p>La ecuación '+(i+1)+' tiene símbolos no admitidos. Usa s1, c12, números y + − * / ( ) ^.</p>'; return; }
+        var badIdx=false;
+        var js=src.replace(/\^/g,'**').replace(/([sc])(\d+)/g,function(_,f,ds){ var t=ds.split('').map(function(d){ if(+d<1||+d>q.length) badIdx=true; return 'q['+(+d-1)+']'; }).join('+'); return (f==='s'?'Math.sin(':'Math.cos(')+t+')'; });
+        if(badIdx||/[sc](?![a-zA-Z.(])/.test(js.replace(/Math\.(sin|cos)/g,''))){ o.innerHTML='<p>La ecuación '+(i+1)+' usa un ángulo que no has definido, o una «s»/«c» sin número.</p>'; return; }
+        try{ fs.push(new Function('q','return ('+js+');')); fs[i](q); }catch(e){ o.innerHTML='<p>No puedo leer la ecuación '+(i+1)+'. Revisa paréntesis y operadores.</p>'; return; }
+      }
+      var J=fs.map(function(fn){ return q.map(function(_,j){ var h=1e-6, a=q.slice(), b=q.slice(); a[j]+=h; b[j]-=h; return (fn(a)-fn(b))/(2*h); }); });
+      var h2='<p><b>Valor de las funciones</b>: ('+fs.map(function(fn){return fm(fn(q))}).join(' ; ')+')</p><p><b>Jacobiana</b> (fila = ecuación, columna = ángulo):</p>'+mat(J);
+      if(J.length===2&&q.length===2) h2+='<p><b>Determinante</b>: '+fm(J[0][0]*J[1][1]-J[0][1]*J[1][0])+'</p>';
+      o.innerHTML=h2+'<p class="muted">Derivada numérica: los últimos decimales pueden variar. En el examen hay que derivar a mano.</p>';
+    });
+    // 7 interpolador
+    var c7rows=[{t:0,q:0,v:0},{t:1,q:2,v:0}];
+    function c7(rows){
+      var k=$('c7-k').value, o=$('c7-o'), S=$('c7-s'), segs=[], h='';
+      S.innerHTML='';
+      for(var i=1;i<rows.length;i++){ var a=rows[i-1], b=rows[i], T=b.t-a.t;
+        if(![a.t,a.q,b.t,b.q].every(isFinite)||(k==='cub'&&![a.v,b.v].every(isFinite))||!(T>0)){ o.innerHTML='<p>Revisa los datos: los tiempos deben ser crecientes y todas las casillas numéricas.</p>'; return; }
+        var c0=a.q,c1,c2=0,c3=0;
+        if(k==='lin'){ c1=(b.q-a.q)/T; } else { c1=a.v; c2=3*(b.q-a.q)/(T*T)-(2*a.v+b.v)/T; c3=-2*(b.q-a.q)/(T*T*T)+(a.v+b.v)/(T*T); }
+        segs.push({t0:a.t,T:T,c:[c0,c1,c2,c3]});
+        h+='<p><b>Tramo '+i+'</b> (t de '+fm(a.t,2)+' a '+fm(b.t,2)+' s, τ = t − '+fm(a.t,2)+'): q = '+fm(c0)+' + '+fm(c1)+'·τ'+(k==='cub'?' + '+fm(c2)+'·τ² + '+fm(c3)+'·τ³':'')+'</p>'; }
+      var t0=rows[0].t, t1=rows[rows.length-1].t, N=240, ser=[[],[],[]];
+      for(var n=0;n<=N;n++){ var t=t0+(t1-t0)*n/N, sg=segs[segs.length-1]; for(var j=0;j<segs.length;j++){ if(t<=segs[j].t0+segs[j].T+1e-12){ sg=segs[j]; break; } }
+        var u=t-sg.t0, c=sg.c; ser[0].push(c[0]+c[1]*u+c[2]*u*u+c[3]*u*u*u); ser[1].push(c[1]+2*c[2]*u+3*c[3]*u*u); ser[2].push(2*c[2]+6*c[3]*u); }
+      var names=['q','q̇ (velocidad)','q̈ (aceleración)'], cols=['var(--accent)','var(--fg)','var(--muted)'], svg='';
+      ser.forEach(function(v,p){ var lo=Math.min.apply(null,v), hi=Math.max.apply(null,v); if(hi-lo<1e-9){ lo-=1; hi+=1; } var y0=p*110+100, y1=p*110+22;
+        var pts=v.map(function(val,n){ return (40+n/N*400).toFixed(1)+','+(y0-(val-lo)/(hi-lo)*(y0-y1)).toFixed(1); }).join(' ');
+        svg+='<line x1="40" y1="'+y0+'" x2="440" y2="'+y0+'" style="stroke:var(--line)"/><polyline points="'+pts+'" style="fill:none;stroke:'+cols[p]+';stroke-width:2.5"/><text x="42" y="'+(y1-6)+'" font-size="12" style="fill:var(--fg)">'+names[p]+'  ['+fm(lo,2)+' ; '+fm(hi,2)+']</text>'; });
+      S.innerHTML=svg;
+      var vm=Math.max.apply(null,ser[1].map(Math.abs));
+      o.innerHTML=h+'<p><b>Velocidad máxima en valor absoluto</b>: '+fm(vm,3)+(k==='lin'&&segs.length>1?'. <b>Ojo:</b> en el lineal la velocidad salta en cada punto de paso.':'')+'</p>';
+    }
+    grid($('c7-t'),[{k:'t',l:'t (s)'},{k:'q',l:'q'},{k:'v',l:'velocidad (solo cúbico)'}],c7rows,c7,'c7-add','c7-del',function(r){var l=r[r.length-1];return {t:l.t+1,q:l.q,v:0}},2,8);
+    $('c7-k').addEventListener('change',function(){ c7(c7rows); });
+    // 8 triángulos
+    function c8(){
+      var k=$('c8-k').value, L={cl:['a','b','ángulo entre a y b (°)'],ca:['a','b','c (lado opuesto al ángulo)'],sl:['a','A, ángulo opuesto a a (°)','B, ángulo opuesto a b (°)'],sa:['a','A, ángulo opuesto a a (°)','b']}[k];
+      [1,2,3].forEach(function(i){ $('c8-l'+i).firstChild.nodeValue=L[i-1]; });
+      var a=P($('c8-1').value), b=P($('c8-2').value), c=P($('c8-3').value), o=$('c8-o'), r;
+      if(![a,b,c].every(isFinite)){ o.innerHTML='<p>Introduce tres números.</p>'; return; }
+      if(k==='cl') r='c = √(a² + b² − 2ab·cos γ) = <b>'+fm(Math.sqrt(a*a+b*b-2*a*b*Math.cos(c*D2R)))+'</b>';
+      if(k==='ca'){ var co=(a*a+b*b-c*c)/(2*a*b); r=Math.abs(co)>1?'Esos lados no forman un triángulo.':'γ = arccos((a² + b² − c²)/(2ab)) = <b>'+fm(Math.acos(co)/D2R)+'°</b>'; }
+      if(k==='sl') r='b = a·sen B / sen A = <b>'+fm(a*Math.sin(c*D2R)/Math.sin(b*D2R))+'</b>';
+      if(k==='sa'){ var si=c*Math.sin(b*D2R)/a; r=Math.abs(si)>1?'Esos datos no forman un triángulo.':'B = arcsen(b·sen A / a) = <b>'+fm(Math.asin(si)/D2R)+'°</b>. Ojo: también puede valer '+fm(180-Math.asin(si)/D2R)+'° (caso ambiguo).'; }
+      o.innerHTML='<p>'+r+'</p>';
+    }
+    on(['c8-k','c8-1','c8-2','c8-3'],c8);
   })();
   </script>
 </section>

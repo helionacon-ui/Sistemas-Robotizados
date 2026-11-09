@@ -194,6 +194,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="animaciones.html#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="calculadoras.html#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="figuras.html#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="diapositivas-temario.html#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -238,6 +239,57 @@ def Rz(a):
 R = Rz(np.pi/2)
 print(np.round(R @ [1, 0, 0], 6))   # -> [0. 1. 0.]
 print(np.allclose(R.T @ R, np.eye(3)), round(np.linalg.det(R), 6))  # True 1.0</pre>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw3">
+    <h3>Animación · El orden de las transformaciones importa</h3>
+    <p>La figura naranja primero <b>gira</b> y después <b>se traslada</b> 1 m en x. La gris primero <b>se traslada</b> y después <b>gira</b> alrededor del origen. Acaban en sitios distintos: el producto de matrices no es conmutativo.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Ángulo de giro <input id="tw3-a" type="range" min="0" max="180" step="5" value="90"><span id="tw3-av">90</span>°</label></div>
+    <svg viewBox="-1.9 -1.9 3.8 3.8" role="img" aria-label="Dos figuras transformadas en distinto orden"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt3">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw3'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), A=document.getElementById('tw3-a');
+    var shape=[[0,0],[0.5,0],[0.5,0.2],[0.2,0.2],[0.2,0.5],[0,0.5]];
+    el(s,'line',{x1:-1.8,y1:0,x2:1.8,y2:0},'stroke:var(--line);stroke-width:0.015'); el(s,'line',{x1:0,y1:-1.8,x2:0,y2:1.8},'stroke:var(--line);stroke-width:0.015');
+    el(s,'polygon',{points:pts(shape)},'fill:none;stroke:var(--line);stroke-width:0.02;stroke-dasharray:0.05 0.04');
+    var pb=el(s,'polygon',{},'fill:var(--muted);opacity:.55;stroke:var(--muted);stroke-width:0.02');
+    var pa=el(s,'polygon',{},'fill:var(--accent);opacity:.7;stroke:var(--accent);stroke-width:0.02');
+    function cl(v){return Math.max(0,Math.min(1,v));}
+    function rot(p,a){return [p[0]*Math.cos(a)-p[1]*Math.sin(a), p[0]*Math.sin(a)+p[1]*Math.cos(a)];}
+    loop(r,function(T){
+      var th=parseFloat(A.value)*Math.PI/180; document.getElementById('tw3-av').textContent=A.value;
+      var u=(T%5)/5, s1=cl(u*3), s2=cl((u-0.36)*3);
+      pa.setAttribute('points',pts(shape.map(function(p){var q=rot(p,th*s1); return [q[0]+s2,q[1]];})));
+      pb.setAttribute('points',pts(shape.map(function(p){return rot([p[0]+s1,p[1]],th*s2);})));
+      var fb=rot([1,0],th);
+      rd.textContent=(s2<1?(s1<1?'Paso 1 en curso':'Paso 2 en curso'):'Final')+'   naranja (gira y traslada): origen en (1,00 ; 0,00)   gris (traslada y gira): origen en ('+f(fb[0])+' ; '+f(fb[1])+')';
+    });
+  })();
+  </script>
 </section>
 </main>
 </div>

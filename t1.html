@@ -194,6 +194,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="animaciones.html#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="calculadoras.html#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="figuras.html#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="diapositivas-temario.html#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -212,6 +213,56 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   </div>
   <h3>Criterios de implantación</h3>
   <p>Antes de elegir un robot se mira la carga que tiene que mover, el alcance que necesita, la precisión, el espacio de trabajo y el coste de la instalación. Esos criterios explican por qué hay tantos tipos distintos.</p>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw1">
+    <h3>Animación · Grados de libertad</h3>
+    <p>Elige qué articulación se mueve. Cada articulación independiente es un grado de libertad: con una sola, el extremo recorre un arco; con las tres, puede colocarse y orientarse en el plano.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Se mueve <select id="tw1-s"><option value="0">Articulación 1</option><option value="1">Articulación 2</option><option value="2">Articulación 3</option><option value="9" selected>Las tres</option></select></label></div>
+    <svg viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Brazo de tres articulaciones"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt1">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw1'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), S=document.getElementById('tw1-s');
+    var L=[0.9,0.7,0.45], q0=[0.9,-0.6,-0.5], per=[3,2.2,1.6], trail=[];
+    var tr=el(s,'polyline',{fill:'none','stroke-width':0.03},'stroke:var(--accent);opacity:.7');
+    var arm=el(s,'polyline',{fill:'none','stroke-width':0.07,'stroke-linecap':'round','stroke-linejoin':'round'},'stroke:var(--fg)');
+    var js=[0,1,2].map(function(){return el(s,'circle',{r:0.07},'fill:var(--fg)')}); var tip=el(s,'circle',{r:0.09},'fill:var(--accent)');
+    S.addEventListener('change',function(){trail=[];});
+    loop(r,function(T){
+      var sel=parseInt(S.value,10), a=0, p=[[0,0]], x=0, y=0, n=0;
+      for(var i=0;i<3;i++){ var on=(sel===9||sel===i); if(on) n++; a+=q0[i]+(on?0.55*Math.sin(2*Math.PI*T/per[i]):0); x+=L[i]*Math.cos(a); y+=L[i]*Math.sin(a); p.push([x,y]); }
+      arm.setAttribute('points',pts(p));
+      for(var k=0;k<3;k++){ js[k].setAttribute('cx',p[k][0]); js[k].setAttribute('cy',-p[k][1]); }
+      tip.setAttribute('cx',x); tip.setAttribute('cy',-y);
+      trail.push([x,y]); if(trail.length>220) trail.shift(); tr.setAttribute('points',pts(trail));
+      rd.textContent='Grados de libertad en movimiento: '+n+'   extremo ('+f(x)+' ; '+f(y)+') m   orientación '+f(a*180/Math.PI,0)+'°';
+    });
+  })();
+  </script>
 </section>
 </main>
 </div>

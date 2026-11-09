@@ -194,6 +194,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="animaciones.html#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="calculadoras.html#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="figuras.html#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="diapositivas-temario.html#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -222,6 +223,58 @@ M₁₂ = m₂ l₂ (l₁ cos θ₂ + l₂)
 M₂₂ = m₂ l₂²</div>
   <p>Comprobado con código (m₁ = 2, m₂ = 1, θ₂ = 0,8 rad): M₁₁ = 5,393 ; M₁₂ = 1,697 ; M₂₂ = 1.</p>
   <div class="box trap"><strong>Ojo:</strong> M₁₂ es igual a M₂₁. Si al derivar obtienes matrices no simétricas, revisa el cálculo de la energía cinética.</div>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw5">
+    <h3>Animación · Simulación dinámica de un eslabón</h3>
+    <p>El motor aplica un par τ constante. El brazo (m = 1 kg, l = 1 m, con rozamiento) se mueve según m·l²·θ̈ = τ − m·g·l·cos θ − b·θ̇. Si |τ| es menor que m·g·l = 9,81 N·m, el brazo se para donde el par del motor iguala al del peso.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Par τ (N·m) <input id="tw5-t" type="range" min="-12" max="12" step="0.5" value="5"><span id="tw5-tv">5,0</span></label><button class="btn" id="tw5-r" type="button">Reiniciar</button></div>
+    <svg viewBox="-1.5 -1.5 3 3" role="img" aria-label="Eslabón que se mueve bajo un par y la gravedad"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt5">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw5'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), TQ=document.getElementById('tw5-t');
+    var th=-Math.PI/2, w=0, g=9.81, bb=0.8;
+    el(s,'line',{x1:-1.4,y1:0,x2:1.4,y2:0},'stroke:var(--line);stroke-width:0.015');
+    var eq=el(s,'line',{x1:0,y1:0,'stroke-dasharray':'0.06 0.05'},'stroke:var(--accent);stroke-width:0.02');
+    var arm=el(s,'line',{x1:0,y1:0,'stroke-linecap':'round'},'stroke:var(--fg);stroke-width:0.07');
+    var ms=el(s,'circle',{r:0.11},'fill:var(--accent)'); el(s,'circle',{cx:0,cy:0,r:0.07},'fill:var(--fg)');
+    document.getElementById('tw5-r').addEventListener('click',function(){th=-Math.PI/2; w=0;});
+    loop(r,function(T,dt){
+      var tau=parseFloat(TQ.value); document.getElementById('tw5-tv').textContent=f(tau,1);
+      var n=Math.max(1,Math.ceil(dt/0.004)), h=dt/n;
+      for(var i=0;i<n&&dt>0;i++){ var acc=tau-g*Math.cos(th)-bb*w; w+=acc*h; th+=w*h; }
+      var x=Math.cos(th), y=Math.sin(th);
+      arm.setAttribute('x2',x); arm.setAttribute('y2',-y); ms.setAttribute('cx',x); ms.setAttribute('cy',-y);
+      var has=Math.abs(tau)<=g, te=has?Math.acos(tau/g):0;
+      eq.style.display=has?'':'none'; if(has){ eq.setAttribute('x2',Math.cos(-te)); eq.setAttribute('y2',Math.sin(te)); }
+      rd.textContent='θ = '+f(th*180/Math.PI,1)+'°   θ̇ = '+f(w)+' rad/s   par del peso = '+f(g*Math.cos(th))+' N·m   '+(has?'equilibrio estable en θ = −'+f(te*180/Math.PI,1)+'° (línea discontinua)':'sin equilibrio: el brazo gira sin parar');
+    });
+  })();
+  </script>
 </section>
 </main>
 </div>

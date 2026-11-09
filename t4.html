@@ -194,6 +194,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="interactivos.html#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
   <a href="animaciones.html#animaciones" style="--tc:var(--c5)">Animaciones</a>
+  <a href="calculadoras.html#calculadoras" style="--tc:var(--c7)">Calculadoras</a>
   <a href="resolver.html#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="figuras.html#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="diapositivas-temario.html#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -253,6 +254,57 @@ y = l₁ sin θ₁ + l₂ sin(θ₁ + θ₂)</div>
     </div>
     <div class="readout" id="out-ik"></div>
   </div>
+
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .an-ctl select{font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+  <div class="an" id="tw4">
+    <h3>Animación · Las dos soluciones de la cinemática inversa</h3>
+    <p>El punto objetivo recorre un círculo. Para cada posición hay dos brazos posibles: codo arriba (naranja, θ₂ &gt; 0) y codo abajo (gris, θ₂ &lt; 0). Los dos llegan al mismo punto.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Radio del círculo <input id="tw4-r" type="range" min="0.1" max="0.9" step="0.05" value="0.5"></label></div>
+    <svg viewBox="-2.3 -2.3 4.6 4.6" role="img" aria-label="Dos soluciones de codo siguiendo un punto"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+  <script data-w="twt4">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){ if(last===null) last=ts; var dt=Math.min((ts-last)/1000,0.05); last=ts; if(playing) T+=dt; step(T, playing?dt:0); requestAnimationFrame(frame); }
+      step(0,0); requestAnimationFrame(frame);
+    }
+    function pts(a){ return a.map(function(p){return p[0].toFixed(3)+','+(-p[1]).toFixed(3)}).join(' '); }
+
+    var r=document.getElementById('tw4'); if(!r) return;
+    var s=r.querySelector('svg'), rd=r.querySelector('[data-read]'), R=document.getElementById('tw4-r');
+    el(s,'circle',{cx:0,cy:0,r:2},'fill:none;stroke:var(--line);stroke-width:0.02;stroke-dasharray:0.08 0.08');
+    var path=el(s,'circle',{cx:0.9,cy:-0.6},'fill:none;stroke:var(--line);stroke-width:0.02');
+    var b=el(s,'polyline',{fill:'none','stroke-width':0.06,'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':'0.1 0.07'},'stroke:var(--muted)');
+    var a=el(s,'polyline',{fill:'none','stroke-width':0.06,'stroke-linecap':'round','stroke-linejoin':'round'},'stroke:var(--accent)');
+    var tg=el(s,'circle',{r:0.09},'fill:var(--fg)');
+    loop(r,function(T){
+      var rr=parseFloat(R.value); path.setAttribute('r',rr);
+      var ph=2*Math.PI*T/6, x=0.9+rr*Math.cos(ph), y=0.6+rr*Math.sin(ph);
+      var c2=(x*x+y*y-2)/2; c2=Math.max(-1,Math.min(1,c2)); var a2=Math.acos(c2), out=[];
+      [1,-1].forEach(function(sg){ var t2=sg*a2, t1=Math.atan2(y,x)-Math.atan2(Math.sin(t2),1+Math.cos(t2)); out.push([t1,t2]); });
+      a.setAttribute('points',pts([[0,0],[Math.cos(out[0][0]),Math.sin(out[0][0])],[x,y]]));
+      b.setAttribute('points',pts([[0,0],[Math.cos(out[1][0]),Math.sin(out[1][0])],[x,y]]));
+      tg.setAttribute('cx',x); tg.setAttribute('cy',-y);
+      rd.textContent='objetivo ('+f(x)+' ; '+f(y)+')   arriba: θ₁ = '+f(out[0][0]*180/Math.PI,1)+'°, θ₂ = '+f(out[0][1]*180/Math.PI,1)+'°   abajo: θ₁ = '+f(out[1][0]*180/Math.PI,1)+'°, θ₂ = '+f(out[1][1]*180/Math.PI,1)+'°';
+    });
+  })();
+  </script>
 </section>
 </main>
 </div>
