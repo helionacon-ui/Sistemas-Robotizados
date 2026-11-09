@@ -1,0 +1,18 @@
+{
+ "name": "Sistemas Robotizados · Guía de estudio",
+ "short_name": "Robotizados",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#fbf5ef",
+ "theme_color": "#b9561a",
+ "lang": "es",
+ "icons": [
+  {
+   "src": "icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any maskable"
+  }
+ ]
+}

@@ -1,0 +1,1465 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sistemas Robotizados · Guía de estudio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#fbf5ef; --surface:#ffffff; --fg:#2b1a0e; --muted:#7a5a46; --line:#ecd9c7;
+  --accent:#b9561a; --accent-soft:#fbe6d6; --warn:#7a3510; --warn-soft:#f6dccb;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --c0:#b9561a; --c0s:#fbe6d6; --c1:#e0701f; --c1s:#fdeedf; --c2:#c8641a; --c2s:#fbe8d8;
+  --c3:#f08a3c; --c3s:#fef0e3; --c4:#a8481a; --c4s:#f7e3d6; --c5:#e9a23b; --c5s:#fdf3e0;
+  --c6:#d9772b; --c6s:#fbeadb; --c7:#7a4a2b; --c7s:#f1e5da; --c8:#c25a10; --c8s:#fae5d4;
+  --shadow:0 1px 2px rgba(80,40,10,.06),0 8px 26px rgba(80,40,10,.07);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#1a120c; --surface:#241a12; --fg:#f6e7da; --muted:#c09c84; --line:#3c2a1d;
+  --accent:#f0893f; --accent-soft:#3a2415; --warn:#ffad7a; --warn-soft:#3d2719;
+  --c0:#f0893f; --c0s:#3a2415; --c1:#f5a05a; --c1s:#3b2616; --c2:#ef8a4a; --c2s:#37231a;
+  --c3:#ffb27a; --c3s:#3c2a1c; --c4:#e07a3c; --c4s:#34210f; --c5:#f7c060; --c5s:#3b2d13;
+  --c6:#f29a52; --c6s:#372315; --c7:#c79a7a; --c7s:#2c2119; --c8:#f57f3a; --c8s:#3a2214;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.3); } }
+
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.65;padding:0 16px 64px}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display)}
+code,pre{font-family:var(--mono)}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;font-size:13.5px;line-height:1.5}
+
+/* portada */
+header.hero{background:linear-gradient(135deg,var(--accent-soft),var(--bg) 72%);border-bottom:1px solid var(--line);margin:0 -16px 36px}
+.hero-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center;padding:48px 16px 44px}
+@media (max-width:760px){.hero-in{grid-template-columns:minmax(0,1fr);padding-block:32px 28px}.hero-art{display:none}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+header.hero h1{font-size:clamp(38px,6.4vw,64px);line-height:1.02;margin:10px 0 4px;letter-spacing:-.01em;font-weight:700}
+header.hero h1 span{color:var(--accent)}
+header.hero .sub{font-family:var(--display);font-size:clamp(20px,2.6vw,26px);font-weight:500;color:var(--muted);margin:0 0 14px}
+.fecha{font:13px/1.45 system-ui,sans-serif;color:var(--muted);margin:6px 0 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 18px;max-width:640px}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stats div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+.stats b{display:block;font-family:var(--display);font-size:28px;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stats span{font-size:12.5px;color:var(--muted);line-height:1.3;display:block}
+.cta{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-block;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;font-weight:600;font-size:14px}
+.btn:hover,.btn:focus-visible{border-color:var(--accent);outline:none}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.zart{width:100%;height:auto;max-width:300px}
+.art-cap{font-size:13px;color:var(--muted);text-align:center;margin:6px 0 0}
+
+/* rejilla */
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);gap:0}.toc{display:none}}
+main{min-width:0;display:flex;flex-direction:column;gap:28px}
+.toc{position:sticky;top:0;align-self:start;padding-top:8px;max-height:100vh;overflow:auto}
+.toc .grp{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:18px 0 6px}
+.toc a{display:block;color:var(--muted);text-decoration:none;font-size:14px;padding:4px 0 4px 10px;border-left:2px solid var(--line)}
+.toc a:hover,.toc a:focus-visible{color:var(--fg);border-left-color:var(--tc,var(--accent));outline:none}
+
+/* secciones */
+section.sec{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px 32px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-width:0;scroll-margin-top:16px}
+section.sec::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--tc,var(--accent))}
+@media (max-width:640px){section.sec{padding:6px 18px 22px;border-radius:14px}}
+.sh{display:flex;gap:16px;align-items:center;margin:24px 0 10px}
+.badge{flex:none;min-width:58px;height:58px;padding:0 10px;border-radius:16px;background:var(--tc,var(--accent));color:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:22px;box-shadow:0 4px 14px color-mix(in srgb,var(--tc,var(--accent)) 35%,transparent)}
+.shx{min-width:0}
+.kick{margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--tc,var(--accent))}
+h2{font-size:28px;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h3{font-size:20px;margin:28px 0 8px;font-weight:500;text-wrap:balance}
+h4{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:22px 0 6px;font-weight:500}
+p,li{max-width:70ch}
+.muted{color:var(--muted)}
+.ojo{color:var(--warn);font-weight:600}
+
+/* cajas */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:16px 0}
+.box.key{border-left:4px solid var(--accent)}
+.box.trap{border-left:4px solid var(--warn)}
+.box > :first-child{margin-top:0}.box > :last-child{margin-bottom:0}
+.zero{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:16px 0}
+.zero > :first-child{margin-top:0}.zero > :last-child{margin-bottom:0}
+.zero .ft{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin:2px 6px 2px 0}
+.pill{font-family:var(--mono);font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.formula{font-family:var(--mono);font-size:14.5px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;white-space:pre-wrap}
+
+/* mapa */
+.map{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.map a{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);text-decoration:none;font-size:14px}
+.map a:hover,.map a:focus-visible{border-color:var(--accent);outline:none}
+.map a b{color:var(--accent);font-family:var(--mono);font-weight:500;margin-right:4px}
+.map span{color:var(--muted);font-family:var(--mono)}
+
+/* tarjetas */
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:12px 0}
+.fcards .box{margin:0;border-top:3px solid var(--tc,var(--accent))}
+.fcards ul,.fcards ol{padding-left:18px;margin:0}
+.fcards li{margin:4px 0}
+
+/* tablas */
+.tw{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+td.c,th.c{text-align:center}
+
+/* evaluación */
+.pesos{display:flex;gap:14px;margin:10px 0 6px}
+@media (max-width:640px){.pesos{flex-direction:column}}
+.peso{flex:1;background:linear-gradient(160deg,var(--c1),var(--c4));color:#fff;border-radius:12px;padding:18px;text-align:center}
+.peso .porc{font-family:var(--display);font-size:38px;font-weight:700;line-height:1}
+.peso .lbl{font-size:13px;margin-top:6px;opacity:.95}
+
+/* checklists */
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.check label{cursor:pointer}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:8px 0 4px;max-width:420px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+
+/* desplegables */
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:14px 0}
+details>summary{cursor:pointer;padding:12px 18px;font-weight:600;list-style:none;display:flex;gap:10px;align-items:baseline}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--mono);color:var(--accent);width:1ch}
+details[open]>summary::before{content:"−"}
+details .inner{padding:0 20px 16px;border-top:1px solid var(--line)}
+details .inner > :first-child{margin-top:12px}
+
+/* filtros de examen */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chips button{font:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);color:var(--accent);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.ex-row[hidden]{display:none}
+
+/* simulador */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin:16px 0}
+.sim .ctrl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px;margin-bottom:8px}
+.sim .ctrl label{display:flex;gap:8px;align-items:center}
+.sim input[type=range]{width:170px;max-width:55vw;accent-color:var(--accent)}
+.sim input[type=number]{width:90px;font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.sim output{font-family:var(--mono);font-size:13px;min-width:6ch}
+.sim button{font:inherit;font-size:14px;padding:6px 14px;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:var(--surface);cursor:pointer}
+.sim svg{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:var(--bg);border-radius:8px}
+.readout{font-family:var(--mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;white-space:pre-wrap}
+
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:14px}
+.busq{width:100%;max-width:520px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);margin:8px 0}
+.exb{border-top:1px solid var(--line);padding:10px 0}
+.exb[hidden],details.yr[hidden]{display:none}
+details.yr{margin:10px 0}
+ul.start{padding-left:20px}ul.start li{margin:6px 0}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="hero-txt">
+      <div class="eyebrow">UPCT · Grado en Ingeniería Electrónica Industrial y Automática · 3.º curso</div>
+      <h1>Sistemas <span>Robotizados</span></h1>
+      <p class="sub">Guía de estudio para aprobar</p>
+      <p class="fecha">Código 507103009 · Obligatoria · 6 ECTS · Segundo cuatrimestre · Última actualización: 9 de noviembre de 2026</p>
+      <div class="stats">
+        <div><b>6</b><span>unidades didácticas</span></div>
+        <div><b>7</b><span>prácticas de informática</span></div>
+        <div><b>38</b><span>exámenes únicos analizados</span></div>
+        <div><b>80/20</b><span>exámenes / prácticas</span></div>
+      </div>
+      <div class="cta">
+        <a class="btn pri" href="#cero">Empieza desde cero</a>
+        <a class="btn" href="#examen">El examen</a>
+        <a class="btn" href="#t4">Cinemática (simulador)</a>
+        <a class="btn" href="#resueltos">Ejercicios resueltos</a>
+        <a class="btn" href="#plan">Plan de estudio</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="-120 -120 240 240" class="zart">
+        <circle r="112" fill="var(--accent)" fill-opacity=".07"/>
+        <line x1="-116" y1="0" x2="116" y2="0" stroke="var(--line)" stroke-width="1.5"/>
+        <line x1="0" y1="-116" x2="0" y2="116" stroke="var(--line)" stroke-width="1.5"/>
+        <polyline points="-70,80 -70,30 -10,-10 50,-40 80,-70" fill="none" stroke="var(--fg)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="-70,80 -70,30 -10,-10 50,-40 80,-70" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="-70" cy="80" r="11" fill="var(--c7)"/>
+        <circle cx="-70" cy="30" r="9" fill="var(--c1)"/>
+        <circle cx="-10" cy="-10" r="9" fill="var(--c1)"/>
+        <circle cx="50" cy="-40" r="9" fill="var(--c1)"/>
+        <path d="M80 -70 l12 -6 M80 -70 l4 -14 M80 -70 l-12 6" stroke="var(--warn)" stroke-width="3" stroke-linecap="round"/>
+        <text x="0" y="-96" fill="var(--muted)" font-size="11" font-family="IBM Plex Mono, monospace" text-anchor="middle">posición · velocidad · par</text>
+      </svg>
+      <p class="art-cap">Un robot es una cadena de eslabones: todo el curso sale de ahí</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc" aria-label="Índice">
+  <div class="grp">Empezar</div>
+  <a href="#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a>
+  <a href="#examen" style="--tc:var(--c0)">El examen y cómo estudiar</a>
+  <a href="#mapa" style="--tc:var(--c0)">Mapa del temario</a>
+  <div class="grp">Teoría</div>
+  <a href="#t1" style="--tc:var(--c1)">T1 Introducción</a>
+  <a href="#t2" style="--tc:var(--c2)">T2 Morfología</a>
+  <a href="#t3" style="--tc:var(--c3)">T3 Herramientas matemáticas</a>
+  <a href="#t4" style="--tc:var(--c4)">T4 Cinemática</a>
+  <a href="#t5" style="--tc:var(--c5)">T5 Dinámica</a>
+  <a href="#t6" style="--tc:var(--c6)">T6 Control</a>
+  <div class="grp">Prácticas</div>
+  <a href="#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
+  <div class="grp">Problemas</div>
+  <a href="#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
+  <a href="#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
+  <div class="grp">Referencia</div>
+  <a href="#formulario" style="--tc:var(--c7)">Formulario</a>
+  <a href="#glosario" style="--tc:var(--c7)">Glosario</a>
+  <a href="#plan" style="--tc:var(--c7)">Plan de estudio</a>
+  <a href="#bibliografia" style="--tc:var(--c7)">Bibliografía</a>
+</nav>
+
+<main>
+
+<!-- 0 -->
+<section class="sec" id="cero" style="--tc:var(--c0)">
+  <div class="sh"><span class="badge" aria-hidden="true">0</span><div class="shx"><p class="kick">Empezar</p><h2>Empieza aquí si partes de cero</h2></div></div>
+  <div class="zero">
+    <p class="ft">La asignatura en un párrafo</p>
+    <p>Un robot industrial es una cadena de <b>eslabones</b> unidos por <b>articulaciones</b>. Para moverlo hay que responder a tres preguntas: <b>dónde está su extremo</b> (cinemática directa), <b>qué ángulos poner para llegar a un punto</b> (cinemática inversa) y <b>qué pares necesita</b> para moverse como quieres (dinámica y control). La asignatura trata esas tres preguntas, de la más sencilla a la más difícil.</p>
+  </div>
+  <h3>Lo que necesitas repasar antes</h3>
+  <div class="fcards">
+    <div class="box"><h4>Trigonometría</h4><p>Seno, coseno, suma de ángulos y la función atan2 (ángulo de un vector según sus componentes). La usarás en casi todos los ejercicios.</p></div>
+    <div class="box"><h4>Álgebra lineal</h4><p>Multiplicar matrices, calcular un determinante y resolver sistemas de 2 × 2 o 4 × 4.</p></div>
+    <div class="box"><h4>Derivadas</h4><p>Derivar funciones de un ángulo que depende del tiempo. Es la base de la matriz Jacobiana y de los splines.</p></div>
+  </div>
+  <p>El camino, en orden. Cada tema usa lo del anterior:</p>
+  <div class="map">
+    <a href="#t1"><b>1–2</b>Qué es un robot</a><span>→</span>
+    <a href="#t3"><b>3</b>Posición y orientación</a><span>→</span>
+    <a href="#t4"><b>4</b>Cinemática directa e inversa</a><span>→</span>
+    <a href="#t5"><b>5</b>Dinámica</a><span>→</span>
+    <a href="#t6"><b>6</b>Control y trayectorias</a>
+  </div>
+  <div class="box key">
+    <strong>Consejo de partida:</strong> no memorices fórmulas sueltas. Para cada problema pregúntate qué <em>entra</em> (ángulos, posición, velocidades, fuerzas) y qué <em>sale</em> (posición, ángulos, pares). Con eso casi siempre sabes qué herramienta usar.
+  </div>
+</section>
+
+<!-- EXAMEN -->
+<section class="sec" id="examen" style="--tc:var(--c0)">
+  <div class="sh"><span class="badge" aria-hidden="true">E</span><div class="shx"><p class="kick">Examen</p><h2>El examen y cómo estudiar</h2></div></div>
+
+  <h3>Cómo se evalúa</h3>
+  <div class="pesos">
+    <div class="peso"><div class="porc">80 %</div><div class="lbl">Exámenes escritos y/u orales<br>(teoría, aplicación y aspectos prácticos)</div></div>
+    <div class="peso"><div class="porc">20 %</div><div class="lbl">Evaluación de prácticas<br>(memorias, informes o exámenes)</div></div>
+  </div>
+  <div class="box trap">
+    <strong>Evaluación continua:</strong> para aprobar por evaluación continua hace falta <strong>al menos 4 sobre 10 en cada parcial</strong>. Si no llegas al mínimo en uno, ese parcial cuenta como suspenso aunque la media sea alta.
+  </div>
+
+  <h3>Cómo es un examen</h3>
+  <p>Los exámenes de cursos anteriores tienen dos formatos:</p>
+  <ul>
+    <li><b>Finales:</b> normalmente <b>4 ejercicios</b>. Por ejemplo, el de junio de 2023 tiene cuatro de 2 puntos; el de junio de 2018 tiene tres de 2 puntos y uno de 3.</li>
+    <li><b>Parciales:</b> normalmente <b>2 ejercicios</b>. En los parciales de 2017 y 2018, cada ejercicio valía 5 puntos.</li>
+  </ul>
+  <p>Algunos enunciados dan un tiempo orientativo por ejercicio, entre 25 y 45 minutos. Por ejemplo, el examen de julio de 2021 da 45 minutos al primer ejercicio y 30 al segundo.</p>
+  <p>Cada ejercicio suele combinar herramientas: una matriz de rotación o un cuaternio, una tabla de Denavit-Hartenberg, una cinemática inversa o una Jacobiana, y una trayectoria con splines o interpoladores.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Tipo de ejercicio</th><th>Qué te piden</th><th>Tema</th></tr></thead>
+    <tbody>
+      <tr><td>Rotaciones y cuaterniones</td><td>Matriz de rotación entre dos sistemas, conversión cuaternión ↔ matriz, o un cuaternio que orienta la herramienta</td><td>T3</td></tr>
+      <tr><td>Denavit-Hartenberg</td><td>Rellenar la tabla DH o las matrices de transformación de un robot dibujado</td><td>T4</td></tr>
+      <tr><td>Cinemática inversa</td><td>Ángulos de las articulaciones para llegar a un punto (con dos soluciones posibles)</td><td>T4</td></tr>
+      <tr><td>Jacobiana y velocidades</td><td>Velocidad del extremo a partir de velocidades articulares, o al revés; singularidades</td><td>T4</td></tr>
+      <tr><td>Trayectorias</td><td>Spline cúbico o interpolador lineal entre configuraciones, con condiciones de velocidad inicial y final</td><td>T6</td></tr>
+      <tr><td>Dinámica y estática</td><td>Par o fuerza en el extremo, matriz de inercia o ecuaciones de un robot sencillo</td><td>T5</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Qué cae más</h3>
+  <p>He clasificado a mano cada ejercicio de los 38 exámenes distintos de cursos anteriores (algunos aparecían repetidos y aquí cuentan una sola vez). Un ejercicio puede tener más de un tema; la tabla cuenta en cuántos exámenes aparece cada uno. Las tablas de la sección «Practicar por tema» tienen el detalle.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Tema</th><th class="c">Exámenes en los que aparece</th></tr></thead>
+    <tbody>
+      <tr><td>Trayectorias (splines e interpoladores)</td><td class="c">18 de 38</td></tr>
+      <tr><td>Rotaciones y cuaterniones</td><td class="c">28 de 38</td></tr>
+      <tr><td>Tabla DH y transformaciones homogéneas</td><td class="c">24 de 38</td></tr>
+      <tr><td>Cinemática inversa</td><td class="c">18 de 38</td></tr>
+      <tr><td>Velocidades, Jacobiana y singularidades</td><td class="c">7 de 38</td></tr>
+      <tr><td>Dinámica y estática</td><td class="c">3 de 38</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box key">
+    <strong>Lectura:</strong> las trayectorias, las rotaciones y la tabla DH aparecen casi siempre. La dinámica casi no aparece en exámenes, pero la Jacobiana y las velocidades sí, y muchas veces van unidas a una trayectoria.
+  </div>
+  <div class="box trap"><strong>Ojo:</strong> algunos enunciados venían mezclados en el texto de origen. Esos ejercicios están en la lista como «revisar el enunciado original antes de resolver» y no tienen solución en esta guía.</div>
+
+  <h3>Estrategia</h3>
+  <ol class="steps" style="padding-left:22px">
+    <li>Haz primero los ejercicios de los que tienes más seguridad. Los 2 puntos de cada uno cuentan igual.</li>
+    <li>Escribe el sistema de referencia y la convención de signos antes de calcular nada. La mayoría de errores vienen de ahí.</li>
+    <li>Comprueba el resultado con un caso sencillo: ángulos cero, o un punto que sabes alcanzar.</li>
+    <li>Cuando un ejercicio tenga dos soluciones (cinemática inversa), di cuál eliges y por qué (codo arriba o codo abajo).</li>
+  </ol>
+
+  <h3>Seguimiento de tu progreso</h3>
+  <p>Marca lo que vayas dominando. Se guarda en este navegador.</p>
+  <div class="check"><input type="checkbox" id="c1"><label for="c1">Sé calcular una matriz de rotación y comprobar que es ortogonal.</label></div>
+  <div class="check"><input type="checkbox" id="c2"><label for="c2">Sé pasar de cuaternión a matriz y al revés.</label></div>
+  <div class="check"><input type="checkbox" id="c3"><label for="c3">Sé construir la tabla DH de un robot.</label></div>
+  <div class="check"><input type="checkbox" id="c4"><label for="c4">Sé resolver la cinemática directa de un 2R.</label></div>
+  <div class="check"><input type="checkbox" id="c5"><label for="c5">Sé resolver la cinemática inversa de un 2R y elegir la solución.</label></div>
+  <div class="check"><input type="checkbox" id="c6"><label for="c6">Sé calcular la Jacobiana y encontrar singularidades.</label></div>
+  <div class="check"><input type="checkbox" id="c7"><label for="c7">Sé plantear un spline cúbico con condiciones de contorno.</label></div>
+  <div class="check"><input type="checkbox" id="c8"><label for="c8">Sé escribir las ecuaciones de Lagrange de un 2R.</label></div>
+  <div class="bar" aria-hidden="true"><i id="barra-c"></i></div>
+  <p class="muted" id="cont-c" style="font-size:14px"></p>
+</section>
+
+<section class="sec" id="mapa" style="--tc:var(--c0)">
+  <div class="sh"><span class="badge" aria-hidden="true">M</span><div class="shx"><p class="kick">Visión general</p><h2>Mapa del temario</h2></div></div>
+  <p>Seis unidades didácticas que avanzan desde la descripción del robot hasta su control:</p>
+  <div class="map">
+    <a href="#t1"><b>T1</b>Introducción</a><span>·</span>
+    <a href="#t2"><b>T2</b>Morfología</a><span>·</span>
+    <a href="#t3"><b>T3</b>Matemáticas espaciales</a><span>·</span>
+    <a href="#t4"><b>T4</b>Cinemática</a><span>·</span>
+    <a href="#t5"><b>T5</b>Dinámica</a><span>·</span>
+    <a href="#t6"><b>T6</b>Control</a>
+  </div>
+  <div class="box">
+    <strong>Hilo conductor:</strong> T3 da el lenguaje (matrices de transformación y cuaterniones). T4 lo usa para saber dónde está el robot. T5 dice qué par hace falta para moverlo. T6 decide cómo moverlo.
+  </div>
+</section>
+
+<!-- T1 -->
+<section class="sec" id="t1" style="--tc:var(--c1)">
+  <div class="sh"><span class="badge" aria-hidden="true">1</span><div class="shx"><p class="kick">Unidad 1</p><h2>Introducción a la robótica industrial</h2></div></div>
+  <div class="fcards">
+    <div class="box"><h4>Idea clave</h4><p>Un robot manipulador es un conjunto de <b>eslabones</b> conectados por <b>articulaciones</b>. Cada articulación tiene un <b>grado de libertad</b>: rotación (articulación de revolución) o desplazamiento (prismática).</p></div>
+    <div class="box"><h4>Configuraciones habituales</h4><ul><li>Cartesiano: tres desplazamientos.</li><li>Cilíndrico y esférico: combinan desplazamientos y giros.</li><li>SCARA: útil para montaje en plano.</li><li>Antropomórfico: tres giros, como un brazo humano.</li></ul></div>
+  </div>
+  <h3>Criterios de implantación</h3>
+  <p>Antes de elegir un robot se mira la carga que tiene que mover, el alcance que necesita, la precisión, el espacio de trabajo y el coste de la instalación. Esos criterios explican por qué hay tantos tipos distintos.</p>
+</section>
+
+<!-- T2 -->
+<section class="sec" id="t2" style="--tc:var(--c2)">
+  <div class="sh"><span class="badge" aria-hidden="true">2</span><div class="shx"><p class="kick">Unidad 2</p><h2>Morfología del robot</h2></div></div>
+  <div class="fcards">
+    <div class="box"><h4>Temas</h4><ul><li>Estructura mecánica</li><li>Transmisiones y reductores</li><li>Actuadores</li><li>Sensores internos</li><li>Elementos terminales (pinzas, herramientas)</li></ul></div>
+    <div class="box key"><h4>Idea clave</h4><p>En cada articulación hay un <b>actuador</b> que da el par, una <b>transmisión</b> que cambia velocidad por par, y un <b>sensor</b> que mide la posición. Esas tres piezas aparecen luego en el modelo de control.</p></div>
+  </div>
+  <h3>Por qué importa para el examen</h3>
+  <p>No se pide memorizar catálogos, pero sí entender qué efecto tiene un reductor. Un reductor de relación <i>n</i> divide la velocidad entre <i>n</i> y multiplica el par por <i>n</i>, aproximadamente, sin contar pérdidas.</p>
+</section>
+
+<!-- T3 -->
+<section class="sec" id="t3" style="--tc:var(--c3)">
+  <div class="sh"><span class="badge" aria-hidden="true">3</span><div class="shx"><p class="kick">Unidad 3</p><h2>Herramientas matemáticas para la localización espacial</h2></div></div>
+  <div class="fcards">
+    <div class="box"><h4>Temas</h4><ul><li>Representación de posición</li><li>Representación de orientación</li><li>Matrices de transformación homogénea</li><li>Cuaterniones</li></ul></div>
+    <div class="box trap"><h4>Error típico</h4><p>Multiplicar las transformaciones en el orden equivocado. El orden importa: <b>T = T₁ · T₂ · …</b> sigue el orden en que se encadenan los sistemas de referencia, y cambiarlo da otro resultado.</p></div>
+  </div>
+
+  <h3>Rotaciones</h3>
+  <p>Una rotación alrededor del eje <i>z</i> de un ángulo θ se escribe así:</p>
+  <div class="formula">Rz(θ) = | cos θ  −sin θ  0 |
+          | sin θ   cos θ  0 |
+          |   0       0    1 |</div>
+  <p>Una matriz de rotación cumple <b>Rᵀ R = I</b> y <b>det R = 1</b>. Si una matriz no cumple eso, no es una rotación.</p>
+
+  <h3>Cuaterniones</h3>
+  <p>Un cuaternión unitario q = (w, x, y, z) representa una rotación de un ángulo φ alrededor de un eje unitario <i>u</i>:</p>
+  <div class="formula">q = ( cos(φ/2),  sin(φ/2)·u )</div>
+  <p>Ejemplo comprobado: una rotación de 120° alrededor del eje <i>x</i> da q = (cos 60°, sin 60°, 0, 0) = (0,5 ; 0,866 ; 0 ; 0). Al convertir ese cuaternión en matriz se obtiene exactamente Rx(120°).</p>
+  <div class="box key"><strong>Ventaja:</strong> los cuaterniones no tienen el problema de bloqueo de los ángulos de Euler y se interpolan bien. Por eso aparecen en los exámenes con tanta frecuencia.</div>
+
+  <h3>Transformaciones homogéneas</h3>
+  <p>Juntan rotación y traslación en una matriz 4 × 4:</p>
+  <div class="formula">T = | R    p |
+    | 0    1 |</div>
+  <div class="box trap"><strong>Ojo:</strong> la última fila de T siempre es [0 0 0 1]. Si no lo es, has cometido un error de dimensiones.</div>
+
+  <h3>Práctica de comprobación</h3>
+  <pre>import numpy as np
+def Rz(a):
+    c, s = np.cos(a), np.sin(a)
+    return np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]])
+R = Rz(np.pi/2)
+print(np.round(R @ [1, 0, 0], 6))   # -> [0. 1. 0.]
+print(np.allclose(R.T @ R, np.eye(3)), round(np.linalg.det(R), 6))  # True 1.0</pre>
+</section>
+
+<!-- T4 -->
+<section class="sec" id="t4" style="--tc:var(--c4)">
+  <div class="sh"><span class="badge" aria-hidden="true">4</span><div class="shx"><p class="kick">Unidad 4</p><h2>Cinemática</h2></div></div>
+  <div class="fcards">
+    <div class="box"><h4>Temas</h4><ul><li>Cinemática directa</li><li>Cinemática inversa</li><li>Matriz Jacobiana</li><li>Configuraciones singulares</li></ul></div>
+    <div class="box key"><h4>Directa frente a inversa</h4><p>La <b>directa</b> va de ángulos a posición del extremo: da un único resultado. La <b>inversa</b> va de posición a ángulos: puede tener dos soluciones, una o ninguna.</p></div>
+  </div>
+
+  <h3>Convención de Denavit-Hartenberg</h3>
+  <p>Cada eslabón se describe con cuatro parámetros: θ (ángulo de la articulación), <i>d</i> (desplazamiento a lo largo de <i>z</i>), <i>a</i> (longitud del eslabón) y α (giro alrededor de <i>x</i>). La matriz de cada eslabón es:</p>
+  <div class="formula">Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ)</div>
+  <p>La matriz total es el producto <b>T = A₁ · A₂ · … · Aₙ</b>. Su columna de posición da la posición del extremo.</p>
+
+  <h3>Ejemplo: robot plano de 2 grados de libertad</h3>
+  <p>Con eslabones de longitud l₁ y l₂ y ángulos θ₁ y θ₂, la posición del extremo es:</p>
+  <div class="formula">x = l₁ cos θ₁ + l₂ cos(θ₁ + θ₂)
+y = l₁ sin θ₁ + l₂ sin(θ₁ + θ₂)</div>
+  <p>Comprobado con código: la cinemática directa con Denavit-Hartenberg da el mismo punto que esas dos ecuaciones.</p>
+
+  <h3>Cinemática inversa del 2R</h3>
+  <p>Para un punto (x, y) alcanzable, se calcula primero θ₂ con la ley de cosenos y después θ₁. Hay dos soluciones: <b>codo arriba</b> (θ₂ positivo) y <b>codo abajo</b> (θ₂ negativo).</p>
+  <div class="formula">cos θ₂ = (x² + y² − l₁² − l₂²) / (2 l₁ l₂)
+θ₁ = atan2(y, x) − atan2(l₂ sin θ₂, l₁ + l₂ cos θ₂)</div>
+  <div class="box trap"><strong>Ojo:</strong> si |cos θ₂| &gt; 1, el punto está fuera del alcance del robot. Di que no tiene solución; no fuerces el cálculo.</div>
+
+  <h3>Jacobiana y singularidades</h3>
+  <p>La Jacobiana relaciona velocidades articulares con velocidad del extremo: <b>v = J(θ) · θ̇</b>. Para el 2R plano, comprobado con código:</p>
+  <div class="formula">det J = l₁ · l₂ · sin θ₂</div>
+  <p>Así que el robot está en <b>singularidad</b> cuando θ₂ = 0 o θ₂ = π: el brazo está estirado o doblado del todo, y pierde movilidad en alguna dirección.</p>
+
+  <h3>Simulador del 2R plano</h3>
+  <p>Mueve los ángulos para ver la posición del extremo, o escribe un punto objetivo para ver las dos soluciones de la cinemática inversa.</p>
+  <div class="sim" id="sim2r">
+    <div class="ctrl">
+      <label>θ₁ <input type="range" id="s-t1" min="-180" max="180" value="30"><output id="o-t1">30°</output></label>
+      <label>θ₂ <input type="range" id="s-t2" min="-180" max="180" value="60"><output id="o-t2">60°</output></label>
+    </div>
+    <div class="ctrl">
+      <label>l₁ <input type="number" id="l1" value="1" step="0.1" min="0.1"></label>
+      <label>l₂ <input type="number" id="l2" value="1" step="0.1" min="0.1"></label>
+    </div>
+    <svg id="svg2r" viewBox="-3 -3 6 6" role="img" aria-label="Brazo plano de dos eslabones"><g id="g2r" transform="scale(1,-1)"></g></svg>
+    <div class="readout" id="out-fk"></div>
+    <div class="ctrl" style="margin-top:12px">
+      <label>x objetivo <input type="number" id="tx" value="1" step="0.1"></label>
+      <label>y objetivo <input type="number" id="ty" value="1" step="0.1"></label>
+      <button type="button" id="btn-ik">Calcular cinemática inversa</button>
+    </div>
+    <div class="readout" id="out-ik"></div>
+  </div>
+</section>
+
+<!-- T5 -->
+<section class="sec" id="t5" style="--tc:var(--c5)">
+  <div class="sh"><span class="badge" aria-hidden="true">5</span><div class="shx"><p class="kick">Unidad 5</p><h2>Dinámica del robot</h2></div></div>
+  <div class="fcards">
+    <div class="box"><h4>Temas</h4><ul><li>Introducción</li><li>Algoritmo de Lagrange-Euler</li><li>Algoritmo de Newton-Euler</li><li>Modelo dinámico directo</li><li>Modelo dinámico en el espacio de tarea</li></ul></div>
+    <div class="box key"><h4>Qué pregunta responde</h4><p>Dadas las posiciones, velocidades y aceleraciones de las articulaciones, ¿qué pares hacen falta? Es el paso previo al control dinámico.</p></div>
+  </div>
+
+  <h3>La forma general</h3>
+  <div class="formula">τ = M(q) · q̈ + C(q, q̇) · q̇ + G(q)</div>
+  <p>τ son los pares, <i>M</i> la matriz de inercia, <i>C</i> los términos de Coriolis y centrífugos, y <i>G</i> el peso. Lagrange-Euler obtiene estas matrices a partir de la energía cinética <i>T</i> y potencial <i>V</i>.</p>
+
+  <h3>Ejemplo: 2R plano con masas en los extremos</h3>
+  <p>Con m₁ en el extremo del primer eslabón y m₂ en el extremo del segundo, y longitudes l₁ = l₂ = 1, las matrices de inercia que salen de Lagrange son:</p>
+  <div class="formula">M₁₁ = (m₁ + m₂) l₁² + m₂ l₂² + 2 m₂ l₁ l₂ cos θ₂
+M₁₂ = m₂ l₂ (l₁ cos θ₂ + l₂)
+M₂₂ = m₂ l₂²</div>
+  <p>Comprobado con código (m₁ = 2, m₂ = 1, θ₂ = 0,8 rad): M₁₁ = 5,393 ; M₁₂ = 1,697 ; M₂₂ = 1.</p>
+  <div class="box trap"><strong>Ojo:</strong> M₁₂ es igual a M₂₁. Si al derivar obtienes matrices no simétricas, revisa el cálculo de la energía cinética.</div>
+</section>
+
+<!-- T6 -->
+<section class="sec" id="t6" style="--tc:var(--c6)">
+  <div class="sh"><span class="badge" aria-hidden="true">6</span><div class="shx"><p class="kick">Unidad 6</p><h2>Control del robot</h2></div></div>
+  <div class="fcards">
+    <div class="box"><h4>Control cinemático</h4><p>Trabaja con posiciones, velocidades y trayectorias articulares. Supone que el robot sigue esas referencias. Si conoces la velocidad deseada del extremo, la velocidad articular es θ̇ = J⁻¹ v (fuera de singularidades).</p></div>
+    <div class="box"><h4>Control dinámico</h4><p>Incluye las fuerzas y los pares. Diseña reguladores que compensan la dinámica del robot. Un ejemplo sencillo es el control PD con compensación de la gravedad: τ = Kp (qd − q) + Kd (q̇d − q̇) + G(q).</p></div>
+  </div>
+
+  <h3>Trayectorias: splines cúbicos</h3>
+  <p>Para pasar de una posición a otra con velocidad controlada se usa un polinomio cúbico por articulación:</p>
+  <div class="formula">θ(t) = a₀ + a₁ t + a₂ t² + a₃ t³</div>
+  <p>Hay cuatro incógnitas, así que se necesitan cuatro condiciones: posición inicial y final, y velocidad inicial y final. Ejemplo comprobado: θ(0) = 0, θ(1) = π/2, con velocidad cero al principio y al final:</p>
+  <div class="formula">θ(t) = (3π/2) t² − π t³</div>
+  <p>Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</p>
+  <div class="box key"><strong>Método de resolución:</strong> escribe las cuatro condiciones como un sistema 4 × 4 en (a₀, a₁, a₂, a₃) y resuélvelo. Si te dan velocidades del extremo en vez de velocidades articulares, pasa primero por la Jacobiana.</div>
+</section>
+
+<!-- PRÁCTICAS -->
+<section class="sec" id="practicas" style="--tc:var(--c7)">
+  <div class="sh"><span class="badge" aria-hidden="true">P</span><div class="shx"><p class="kick">Aula de informática</p><h2>Las 7 prácticas</h2></div></div>
+  <div class="tw"><table>
+    <thead><tr><th class="c">Nº</th><th>Práctica</th><th>Contenido</th><th>Tema</th></tr></thead>
+    <tbody>
+      <tr><td class="c"><span class="pill">P1</span></td><td>RobotStudio</td><td>Introducción, consola de programación, programación por guiado</td><td>T1, T2</td></tr>
+      <tr><td class="c"><span class="pill">P2</span></td><td>Software de cálculo simbólico</td><td>Matrices simbólicas y comandos básicos</td><td>T3</td></tr>
+      <tr><td class="c"><span class="pill">P3</span></td><td>Herramientas matemáticas</td><td>Posición, orientación y transformaciones</td><td>T3</td></tr>
+      <tr><td class="c"><span class="pill">P4</span></td><td>Cinemática</td><td>Directa, inversa, Jacobiana y singularidades</td><td>T4</td></tr>
+      <tr><td class="c"><span class="pill">P5</span></td><td>Cuaterniones</td><td>Orientación con cuaterniones</td><td>T3</td></tr>
+      <tr><td class="c"><span class="pill">P6</span></td><td>Dinámica</td><td>Algoritmo de Newton-Euler</td><td>T5</td></tr>
+      <tr><td class="c"><span class="pill">P7</span></td><td>Control cinemático</td><td>Diseño de trayectorias articulares</td><td>T6</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box key"><strong>Entrega:</strong> la memoria de prácticas cuenta el 20 % de la nota. Se entrega al final del cuatrimestre, individual o en pareja.</div>
+
+  <h3>Cómo hacer una práctica de cinemática (P4)</h3>
+  <ol style="padding-left:22px">
+    <li><b>Dibuja</b> el robot con sus sistemas de referencia y los ángulos en cero.</li>
+    <li><b>Rellena</b> la tabla DH: θ, d, a, α para cada eslabón.</li>
+    <li><b>Calcula</b> T con el código de abajo y compara la columna de posición con la fórmula a mano.</li>
+    <li><b>Interpreta</b>: escribe qué significa el resultado físicamente (dónde está el extremo, qué pasa en singularidad).</li>
+  </ol>
+  <pre>import numpy as np
+def Tdh(th, d, a, al):
+    ct, st, ca, sa = np.cos(th), np.sin(th), np.cos(al), np.sin(al)
+    return np.array([[ct, -st*ca,  st*sa, a*ct],
+                     [st,  ct*ca, -ct*sa, a*st],
+                     [0,   sa,     ca,    d   ],
+                     [0,   0,      0,     1   ]])
+# 2R plano: l1 = l2 = 1, theta1 = 30 grados, theta2 = 60 grados
+T = Tdh(np.radians(30), 0, 1, 0) @ Tdh(np.radians(60), 0, 1, 0)
+print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
+  <p class="muted" style="font-size:14px">Salida esperada: la posición del extremo, que coincide con las fórmulas x = l₁ cos θ₁ + l₂ cos(θ₁ + θ₂) e y = l₁ sin θ₁ + l₂ sin(θ₁ + θ₂).</p>
+</section>
+
+<!-- RESUELTOS -->
+<section class="sec" id="resueltos" style="--tc:var(--c8)">
+  <div class="sh"><span class="badge" aria-hidden="true">R</span><div class="shx"><p class="kick">Problemas</p><h2>Ejercicios resueltos</h2></div></div>
+  <p>Estos ejercicios están resueltos paso a paso y comprobados con código. Están pensados como plantilla para los ejercicios del examen, no como copia de ellos.</p>
+
+  <h3>Ejercicios de práctica (A–D)</h3>
+
+  <details open>
+    <summary>Ejercicio A · Cinemática inversa de un 2R plano (dos soluciones)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot plano de dos eslabones con l₁ = l₂ = 1. Calcula las articulaciones para llevar el extremo al punto (1, 1) y al punto (0,5 ; 0,5). Indica las dos soluciones.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> qué piden (θ₁ y θ₂) y qué teoría usas (ley de cosenos para θ₂, atan2 para θ₁; las dos soluciones son codo arriba y codo abajo).</div>
+      <details><summary>Paso 1 · Calcular cos θ₂</summary>
+        <div class="inner"><p>cos θ₂ = (x² + y² − l₁² − l₂²) / (2 l₁ l₂). Para (1, 1): cos θ₂ = (1 + 1 − 1 − 1)/2 = 0, así que θ₂ = ±90°.</p></div>
+      </details>
+      <details><summary>Paso 2 · Calcular θ₁ para cada θ₂</summary>
+        <div class="inner"><p>θ₁ = atan2(y, x) − atan2(l₂ sin θ₂, l₁ + l₂ cos θ₂).</p><p>Para θ₂ = +90°: atan2(1, 1) = 45° y atan2(1, 1 + 0) = 45°, así que θ₁ = 45° − 45° = 0°.</p><p>Para θ₂ = −90°: atan2(−1, 1 + 0) = −45°, así que θ₁ = 45° − (−45°) = 90°.</p><p class="ojo">Ojo: el signo es fácil de equivocar. Comprueba siempre el resultado sustituyendo en la cinemática directa, como en el paso 3.</p></div>
+      </details>
+      <details><summary>Paso 3 · Comprobar sustituyendo</summary>
+        <div class="inner"><p>Codo arriba: θ₁ = 0°, θ₂ = 90° → x = cos 0° + cos 90° = 1, y = sin 0° + sin 90° = 1. ✔</p><p>Codo abajo: θ₁ = 90°, θ₂ = −90° → x = cos 90° + cos 0° = 1, y = sin 90° + sin 0° = 1. ✔</p></div>
+      </details>
+      <details><summary>Paso 4 · Punto (0,5 ; 0,5)</summary>
+        <div class="inner"><p>cos θ₂ = (0,25 + 0,25 − 2)/2 = −0,75, así que θ₂ ≈ ±138,59°. Con el cálculo completo: codo arriba θ₁ ≈ −24,30°, θ₂ ≈ 138,59°; codo abajo θ₁ ≈ 114,30°, θ₂ ≈ −138,59°. Ambas llevan el extremo a (0,5 ; 0,5).</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> (1, 1) → codo arriba (0°, 90°) o codo abajo (90°, −90°). (0,5 ; 0,5) → codo arriba (−24,30°, 138,59°) o codo abajo (114,30°, −138,59°).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Ejercicio B · Jacobiana y singularidad del 2R plano</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Halla la Jacobiana del 2R plano con l₁ = l₂ = 1 y encuentra en qué configuraciones es singular.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> derivar x e y respecto a θ₁ y θ₂ y ordenar los resultados en una matriz 2 × 2. Una configuración es singular cuando det J = 0.</div>
+      <details><summary>Paso 1 · Derivar</summary>
+        <div class="inner"><p>∂x/∂θ₁ = −l₁ sin θ₁ − l₂ sin(θ₁+θ₂), ∂x/∂θ₂ = −l₂ sin(θ₁+θ₂), ∂y/∂θ₁ = l₁ cos θ₁ + l₂ cos(θ₁+θ₂), ∂y/∂θ₂ = l₂ cos(θ₁+θ₂).</p></div>
+      </details>
+      <details><summary>Paso 2 · Determinante</summary>
+        <div class="inner"><p>Al calcular el determinante, sale det J = l₁ l₂ sin θ₂. Comprobado con código para θ₁ = 0,3 rad y θ₂ = 0,8 rad.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> J singular cuando sin θ₂ = 0, es decir, θ₂ = 0 o θ₂ = π.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Ejercicio C · Spline cúbico con velocidad nula en los extremos</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Una articulación pasa de θ = 0 a θ = π/2 en el intervalo t ∈ [0, 1] s, con velocidad cero al inicio y al final. Halla el polinomio cúbico.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> son 4 condiciones y 4 incógnitas.</div>
+      <details><summary>Paso 1 · Escribir las condiciones</summary>
+        <div class="inner"><p>θ(0) = a₀ = 0. θ̇(0) = a₁ = 0. θ(1) = a₂ + a₃ = π/2. θ̇(1) = 2a₂ + 3a₃ = 0.</p></div>
+      </details>
+      <details><summary>Paso 2 · Resolver</summary>
+        <div class="inner"><p>De la última ecuación, a₂ = −3a₃/2. Sustituyendo: −3a₃/2 + a₃ = π/2, luego a₃ = −π y a₂ = 3π/2.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> θ(t) = (3π/2) t² − π t³. Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</div>
+    </div>
+  </details>
+
+  <h3>Ejercicio D · Dinámica (resumen)</h3>
+  <details>
+    <summary>Ejercicio D · Matriz de inercia de un 2R con masas en los extremos</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Con m₁ = 2, m₂ = 1, l₁ = l₂ = 1 y θ₂ = 0,8 rad, calcula la matriz M(q).</p>
+      <div class="box key"><strong>Antes de empezar:</strong> usa las expresiones de M₁₁, M₁₂ y M₂₂ de la unidad 5.</div>
+      <div class="box"><strong>Resultado final:</strong> M₁₁ = 5,393 ; M₁₂ = M₂₁ = 1,697 ; M₂₂ = 1. Comprobado con código.</div>
+    </div>
+  </details>
+
+  <h3>Ejercicios de examen resueltos</h3>
+  <p>Estos cinco ejercicios vienen de exámenes de cursos anteriores. Están resueltos con los datos del enunciado y comprobados con código. Si el examen cambia algún dato, repite los mismos pasos.</p>
+  <div class="box trap"><strong>Convención de codo:</strong> en esta guía, con el robot plano de 2 eslabones, <b>codo arriba</b> es θ₂ &gt; 0 y <b>codo abajo</b> es θ₂ &lt; 0. Si una figura de examen usa otra convención, cambia el signo de θ₂ y revisa el resultado.</div>
+
+  <details id="ej-e">
+    <summary>Ejercicio E · Jacobiana y velocidades de un robot de 2 articulaciones (parcial de 2021)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> La posición del extremo es x = cos θ₁ (1 + cos θ₂), y = sen θ₁ (1 + cos θ₂), z = −sen θ₂. La coordenada z es siempre positiva. Calcula: a) la Jacobiana de velocidades lineales; b) las velocidades articulares cuando x = y = 1 m, ẋ = 2 m/s y ż = 1 m/s, sin usar la pseudoinversa; c) ẏ en ese caso.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> primero hay que encontrar la configuración (θ₁, θ₂) a partir de la posición. Después se deriva para obtener J, y con ẋ y ż se resuelve un sistema 2 × 2. La velocidad ẏ se obtiene al final, sustituyendo.</div>
+      <details><summary>Paso 1 · Encontrar la configuración</summary>
+        <div class="inner"><p>Si x = y = 1, entonces x² + y² = (1 + cos θ₂)² · (cos²θ₁ + sen²θ₁) = 2, así que 1 + cos θ₂ = √2 y cos θ₂ = √2 − 1 ≈ 0,4142. Como z = −sen θ₂ &gt; 0, sen θ₂ &lt; 0: sen θ₂ = −√(1 − 0,4142²) ≈ −0,9102, luego θ₂ ≈ −65,53°. Además cos θ₁ = sen θ₁ = 1/√2 y θ₁ = 45°. Comprobación: z = 0,9102 &gt; 0. ✔</p></div>
+      </details>
+      <details><summary>Paso 2 · Jacobiana</summary>
+        <div class="inner"><p>Derivando: ∂x/∂θ₁ = −sen θ₁ (1 + cos θ₂), ∂x/∂θ₂ = −cos θ₁ sen θ₂; ∂y/∂θ₁ = cos θ₁ (1 + cos θ₂), ∂y/∂θ₂ = −sen θ₁ sen θ₂; ∂z/∂θ₁ = 0, ∂z/∂θ₂ = −cos θ₂.</p>
+        <p>Evaluada en el punto: J = [[−1 ; 0,6436], [1 ; 0,6436], [0 ; −0,4142]].</p></div>
+      </details>
+      <details><summary>Paso 3 · Resolver ẋ y ż</summary>
+        <div class="inner"><p>Con ż = −0,4142 θ̇₂ = 1 sale θ̇₂ = −2,4142 rad/s. Con ẋ = −θ̇₁ + 0,6436 θ̇₂ = 2 sale θ̇₁ = −3,5538 rad/s.</p><p>La matriz 2 × 2 de las filas x y z tiene determinante 0,4142 ≠ 0, así que la solución es única.</p></div>
+      </details>
+      <details><summary>Paso 4 · Calcular ẏ</summary>
+        <div class="inner"><p>ẏ = θ̇₁ + 0,6436 θ̇₂ = −3,5538 + 0,6436 · (−2,4142) = −5,1075 m/s.</p><p>Comprobación: sustituyendo en la fila x, −(−3,5538) + 0,6436 · (−2,4142) = 2,0000. ✔</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> θ̇₁ ≈ −3,554 rad/s, θ̇₂ ≈ −2,414 rad/s, ẏ ≈ −5,11 m/s.<br><span class="ojo">Ojo:</span> el enunciado prohíbe la pseudoinversa. Con dos ecuaciones y dos incógnitas no hace falta: basta resolver el sistema directamente.</div>
+    </div>
+  </details>
+
+  <details id="ej-f">
+    <summary>Ejercicio F · Distancia a la segunda articulación en un 2R con interpoladores lineales (junio de 2019)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot plano de 2 eslabones de 1 m. La articulación 1 gira 90° en 3 s y la 2 gira 45° en 2 s, con interpolador lineal. Cuando el segundo eslabón pasa por el punto (1,2 ; 0,5), calcula la distancia a entre ese punto y la segunda articulación.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> la figura no está en el texto. Supón que la configuración inicial es el robot estirado sobre el eje x (θ₁ = θ₂ = 0). Lo que piden es a = |P − p₂|, donde p₂ es la posición de la articulación 2. El punto P está sobre el segundo eslabón cuando P − p₂ es paralelo a la dirección del eslabón.</div>
+      <details><summary>Paso 1 · Leyes horarias</summary>
+        <div class="inner"><p>θ₁(t) = (π/2) · t/3 para 0 ≤ t ≤ 3 s, y θ₂(t) = (π/4) · t/2 para 0 ≤ t ≤ 2 s (después se queda en 45°).</p></div>
+      </details>
+      <details><summary>Paso 2 · Posición de la articulación 2 y dirección del segundo eslabón</summary>
+        <div class="inner"><p>p₂ = (cos θ₁, sen θ₁). La dirección del segundo eslabón es u = (cos(θ₁ + θ₂), sen(θ₁ + θ₂)).</p></div>
+      </details>
+      <details><summary>Paso 3 · Condición de alineación</summary>
+        <div class="inner"><p>Se busca t tal que el producto vectorial (P − p₂) × u sea cero, y que la proyección (P − p₂) · u esté entre 0 y 1 m. Como el movimiento es continuo, el cruce se localiza barriendo t en el intervalo.</p></div>
+      </details>
+      <details><summary>Paso 4 · Resolver y calcular a</summary>
+        <div class="inner"><p>Hay un único cruce en 0 ≤ t ≤ 3 s, en t ≈ 0,641 s. Allí θ₁ ≈ 19,24° y θ₂ ≈ 14,43°, p₂ ≈ (0,944 ; 0,330) y P − p₂ ≈ (0,256 ; 0,170). La proyección sobre u es 0,307 m (positiva y menor que 1, así que P está sobre el eslabón).</p><p>Entonces a = |P − p₂| ≈ 0,307 m.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> a ≈ 0,307 m, cuando t ≈ 0,641 s.</div>
+    </div>
+  </details>
+
+  <details id="ej-g">
+    <summary>Ejercicio G · Instantes en que el extremo pasa por dos puntos de una recta (febrero y junio de 2016)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> El extremo de un robot 2R con eslabones de 1 m sigue la recta que va de B (0,4 ; 0,4) a C (1,4 ; 1,4), es decir, y = x. El movimiento dura 1 s. Calcula los instantes en que pasa por A₁ (a 0,5 m de B) y por A₂ (a 0,3 m de C), y los ángulos θ₁ y θ₂ en esos instantes, con 0 ≤ θ₂ ≤ π. Hay dos variantes: en junio, la coordenada x(t) sigue un interpolador lineal; en febrero, un spline cúbico que empieza y acaba con velocidad cero.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> como la recta es y = x, la distancia sobre la recta se traduce en la coordenada x. Para A₁, x = 0,4 + 0,5/√2 ≈ 0,7536. Para A₂, x = 1,4 − 0,3/√2 ≈ 1,1879. La variante cambia solo los instantes, no los ángulos.</div>
+      <details><summary>Paso 1 · Coordenadas de A₁ y A₂</summary>
+        <div class="inner"><p>A₁ = (0,7536 ; 0,7536) y A₂ = (1,1879 ; 1,1879).</p></div>
+      </details>
+      <details><summary>Paso 2 · Instantes</summary>
+        <div class="inner"><p><b>Lineal:</b> x(t) = 0,4 + t, así que t₁ = 0,354 s y t₂ = 0,788 s.</p><p><b>Spline:</b> x(t) = 0,4 + (3t² − 2t³). Resolviendo numéricamente, t₁ ≈ 0,401 s y t₂ ≈ 0,703 s. Comprobación: 3 · 0,401² − 2 · 0,401³ = 0,354, que coincide con 0,7536 − 0,4.</p></div>
+      </details>
+      <details><summary>Paso 3 · θ₂ por la ley de cosenos</summary>
+        <div class="inner"><p>Con y = x: cos θ₂ = (x² + y² − 2)/2 = x² − 1. Para A₁: cos θ₂ ≈ −0,4319, θ₂ ≈ 115,61°. Para A₂: cos θ₂ ≈ 0,4116, θ₂ ≈ 65,73°. Los dos son positivos, así que cumplen 0 ≤ θ₂ ≤ π y la solución es la de codo arriba.</p></div>
+      </details>
+      <details><summary>Paso 4 · θ₁</summary>
+        <div class="inner"><p>θ₁ = atan2(y, x) − atan2(sen θ₂, 1 + cos θ₂). Para A₁: 45° − 57,80° = −12,80°. Para A₂: 45° − 32,86° = 12,14°.</p><p>Comprobación: sustituyendo en la cinemática directa se recupera (0,7536 ; 0,7536) y (1,1879 ; 1,1879). ✔</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong><br>A₁: t = 0,354 s (lineal) o 0,401 s (spline); θ₁ = −12,80°, θ₂ = 115,61°.<br>A₂: t = 0,788 s (lineal) o 0,703 s (spline); θ₁ = 12,14°, θ₂ = 65,73°.</div>
+    </div>
+  </details>
+
+  <details id="ej-h">
+    <summary>Ejercicio H · Velocidad del extremo en los puntos de paso A, B y C (junio de 2024)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> El extremo de un robot de 2 eslabones de 1 m sigue la trayectoria A (0,5 ; 1) → B (1 ; 1) → C (1,4 ; 0,7). Las articulaciones usan un interpolador lineal, 1 s por tramo, y el robot va en codo abajo. Comprueba si en algún punto de paso la velocidad del extremo supera 0,6 m/s.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> con interpolador lineal en articulaciones, q̇ es constante dentro de cada tramo y cambia de golpe en cada punto de paso. Por eso en cada punto hay dos velocidades, la del final del tramo anterior y la del inicio del siguiente. Hay que comprobar las dos.</div>
+      <details><summary>Paso 1 · Cinemática inversa en codo abajo</summary>
+        <div class="inner"><p>A: θ = (119,45° ; −112,02°). B: θ = (90,00° ; −90,00°). C: θ = (65,06° ; −77,00°). Comprobación: la cinemática directa devuelve los tres puntos.</p></div>
+      </details>
+      <details><summary>Paso 2 · Velocidades articulares en cada tramo</summary>
+        <div class="inner"><p>Tramo AB (1 s): q̇ = (−0,514 ; 0,384) rad/s. Tramo BC (1 s): q̇ = (−0,435 ; 0,227) rad/s.</p></div>
+      </details>
+      <details><summary>Paso 3 · Velocidad del extremo v = J(θ) q̇</summary>
+        <div class="inner"><p>Con J = [[−sen θ₁ − sen θ₁₂ , −sen θ₁₂], [cos θ₁ + cos θ₁₂ , cos θ₁₂]]:</p>
+        <p>En A (tramo AB): |v| ≈ 0,481 m/s. En B, final de AB: |v| ≈ 0,530 m/s. En B, inicio de BC: |v| ≈ 0,483 m/s. En C, final de BC: |v| ≈ 0,523 m/s.</p></div>
+      </details>
+      <details><summary>Paso 4 · Máximo dentro de cada tramo</summary>
+        <div class="inner"><p>Barriendo el tramo, el máximo se alcanza al final: 0,530 m/s en AB y 0,523 m/s en BC. No hay ningún punto por encima de 0,6 m/s.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> ningún punto de paso supera 0,6 m/s. La mayor velocidad es 0,53 m/s, en B.<br><span class="ojo">Ojo:</span> si el examen define el codo de otra forma, los valores de θ cambian (y también la velocidad). Comprueba la convención antes de dar el resultado.</div>
+    </div>
+  </details>
+
+  <details id="ej-i">
+    <summary>Ejercicio I · Interpolador articular que pasa por un punto (julio de 2021)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot 2R con eslabones de 1 m. El extremo parte de A (0,7 ; 1,1), pasa por B (1,5 ; 0,2) y termina en C en 1 s, en codo abajo. Las dos articulaciones se mueven con interpoladores lineales, en un único tramo. Al acabar, θ₁ = −50°. Calcula el instante en que pasa por B, las ecuaciones de θ₁(t) y θ₂(t) y las coordenadas de C.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> las incógnitas son el instante s en que se pasa por B y el valor final θ₂C (que es lo que define C). Son dos incógnitas y dos ecuaciones, las coordenadas de B. Hay que resolverlas juntas.</div>
+      <details><summary>Paso 1 · Configuración inicial</summary>
+        <div class="inner"><p>Con codo abajo, θ_A = (106,84° ; −98,63°). Comprobación: la cinemática directa devuelve A = (0,7 ; 1,1).</p></div>
+      </details>
+      <details><summary>Paso 2 · Interpolador lineal</summary>
+        <div class="inner"><p>q(s) = θ_A + s (θ_C − θ_A), con 0 ≤ s ≤ 1 y t = s. Como θ₁C = −50°, la primera articulación es θ₁(t) = 106,84° − 156,84° · t.</p></div>
+      </details>
+      <details><summary>Paso 3 · Pasar por B</summary>
+        <div class="inner"><p>Hay que cumplir cinemática directa(q(s)) = (1,5 ; 0,2). Con dos ecuaciones y dos incógnitas (s y θ₂C), se resuelve numéricamente (Newton). Solución: s ≈ 0,3725 y θ₂C ≈ −53,08°.</p><p>La otra solución que aparece tiene θ₂C ≈ +103°, es decir, codo arriba al final. Se descarta porque el enunciado pide codo abajo.</p></div>
+      </details>
+      <details><summary>Paso 4 · Ecuaciones y C</summary>
+        <div class="inner"><p>θ₂(t) = −98,63° + 45,55° · t, que se mantiene negativo en todo el movimiento (codo abajo).</p><p>En radianes: θ₁(t) = 1,865 − 2,737 t y θ₂(t) = −1,721 + 0,795 t. Comprobación: θ₂(0,3725) ≈ −81,65°, y la cinemática directa da (1,499 ; 0,207) ≈ B. ✔</p><p>C = cinemática directa(−50°, −53,08°) = (0,417 ; −1,740) m.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> el extremo pasa por B en t ≈ 0,372 s. θ₁(t) = 1,865 − 2,737 t (rad), θ₂(t) = −1,721 + 0,795 t (rad). C ≈ (0,417 ; −1,740) m.</div>
+    </div>
+  </details>
+
+  <details id="ej-j">
+    <summary>Ejercicio J · Spline cúbico seguido de interpolador lineal en una articulación (febrero de 2020)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Una articulación gira de 0 a 1 rad en 3 s. Entre 0 y 2 s se ajusta un spline cúbico q₁(t), y entre 2 y 3 s un interpolador lineal q₂(t). En t = 2 s hay continuidad de posición y de velocidad. La velocidad inicial es cero y la velocidad máxima que alcanza es 5 rad/s. Elige la solución que cumple q(2) &gt; 1 rad.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> llama a = q(2) y v = q̇(2). El interpolador lineal vale q₂(t) = a + v (t − 2), y debe cumplir q₂(3) = 1. El spline con q(0) = 0 y q̇(0) = 0 es q(t) = b t² + c t³. Hay que imponer tres condiciones: el valor de velocidad en t = 2, la condición de q₂(3) = 1 y que la velocidad máxima del spline sea 5 rad/s.</div>
+      <details><summary>Paso 1 · Condiciones de continuidad</summary>
+        <div class="inner"><p>q(2) = 4b + 8c = a. q̇(t) = 2bt + 3ct², así que q̇(2) = 4b + 12c = v.</p><p>El lineal tiene pendiente v, y por continuidad de velocidad, q₂(3) = a + v = 1. Entonces 4b + 12c = 1 − (4b + 8c), es decir, 8b + 20c = 1, o bien b = 1/8 − 5c/2.</p></div>
+      </details>
+      <details><summary>Paso 2 · Velocidad máxima</summary>
+        <div class="inner"><p>q̈ = 2b + 6ct = 0 da t* = −b/(3c). Sustituyendo en q̇: q̇(t*) = −b²/(3c). Imponiendo |q̇| = 5 con q̇ máxima en [0, 2]: −b²/(3c) = 5, es decir b² = −15c.</p><p>Sustituyendo b = 1/8 − 5c/2: 400c² + 920c + 1 = 0. Sus raíces son c = −(23 + 4√33)/20 ≈ −2,2989 y c ≈ −0,0011.</p></div>
+      </details>
+      <details><summary>Paso 3 · Elegir la raíz</summary>
+        <div class="inner"><p>Con c ≈ −0,0011, b ≈ 0,1277 y t* ≈ 39 s, fuera de [0, 2]. Esa raíz no da un máximo dentro del intervalo y se descarta.</p><p>Con c = −(23 + 4√33)/20: b = (6 + √33)/2 ≈ 5,8723 y t* ≈ 0,851 s, dentro de [0, 2]. Además a = q(2) = 2,8 + 0,4√33 ≈ 5,098 &gt; 1, que es la condición del enunciado.</p></div>
+      </details>
+      <details><summary>Paso 4 · Ecuaciones y comprobación</summary>
+        <div class="inner"><p>q₁(t) = ((6 + √33)/2) t² − ((23 + 4√33)/20) t³ para 0 ≤ t ≤ 2 (rad).</p><p>q₂(t) = a + (1 − a)(t − 2) = (2,8 + 0,4√33) − (1,8 + 0,4√33)(t − 2) para 2 ≤ t ≤ 3 (rad), es decir, q₂(t) ≈ 5,098 − 4,098 (t − 2).</p><p>Comprobación: q₂(3) = 1 ✔; q₁(2) = q₂(2) ≈ 5,098 ✔; q̇₁(2) = −4,098 = pendiente de q₂ ✔; |q̇₁| máxima = 5,000 en t ≈ 0,851 s ✔.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> q₁(t) ≈ 5,872 t² − 2,299 t³ (0 ≤ t ≤ 2 s) y q₂(t) ≈ 5,098 − 4,098 (t − 2) (2 ≤ t ≤ 3 s).<br><span class="ojo">Ojo:</span> la articulación sobrepasa 1 rad y vuelve a 1 rad en t = 3 s. Es lo que el enunciado pide al elegir q(2) &gt; 1 rad; no es un error de cálculo.</div>
+    </div>
+  </details>
+
+  <details id="ej-k">
+    <summary>Ejercicio K · Velocidad, mínimo y aceleración en un 2R con velocidades articulares constantes (junio de 2019)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot plano de 2 eslabones que se mueve en un plano horizontal durante 4 s con velocidad angular constante de 1 rad/s en ambas articulaciones. Calcula: a) el instante en que el extremo alcanza 2 m/s; b) el valor mínimo de la velocidad y el instante en que se alcanza; c) las componentes de la aceleración lineal del extremo en t = 1,823 s, respecto a la base.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> supón que el robot empieza estirado sobre el eje x y que θ₁ = θ₂ = t. Con esa suposición, la velocidad al cuadrado se simplifica mucho y la respuesta del apartado a) se confirma con el propio 1,823 s del enunciado.</div>
+      <details><summary>Paso 1 · Posición del extremo</summary>
+        <div class="inner"><p>x(t) = cos t + cos 2t, y(t) = sen t + sen 2t.</p></div>
+      </details>
+      <details><summary>Paso 2 · Módulo de la velocidad</summary>
+        <div class="inner"><p>ẋ = −sen t − 2 sen 2t y ẏ = cos t + 2 cos 2t. Entonces |v|² = ẋ² + ẏ² = 5 + 4 cos t.</p><p>Esto sale de expandir los cuadrados y usar que sen²+cos² = 1, y que cos 2t·cos t + sen 2t·sen t = cos t.</p></div>
+      </details>
+      <details><summary>Paso 3 · Apartado a) |v| = 2 m/s</summary>
+        <div class="inner"><p>4 = 5 + 4 cos t, así que cos t = −1/4. En [0, 4] s hay una sola solución: t = arccos(−1/4) ≈ 1,823 s. (La otra, 4,460 s, queda fuera del intervalo.)</p></div>
+      </details>
+      <details><summary>Paso 4 · Apartado b) mínimo</summary>
+        <div class="inner"><p>|v|² = 5 + 4 cos t es mínimo cuando cos t = −1, es decir t = π ≈ 3,142 s. Entonces |v|² = 1 y |v|_min = 1 m/s.</p><p>En t = 0, la velocidad es 3 m/s (máximo).</p></div>
+      </details>
+      <details><summary>Paso 5 · Apartado c) aceleración</summary>
+        <div class="inner"><p>Como las velocidades articulares son constantes, la aceleración es la derivada de la velocidad: a = d/dt (ẋ, ẏ).</p><p>a_x = −cos t − 4 cos 2t y a_y = −(8 cos t + 1) sen t.</p><p>En t = 1,823 s, cos t = −1/4, cos 2t = −7/8 y sen t = √15/4 ≈ 0,968. Entonces a_x = 0,25 + 3,5 = 3,750 m/s² y a_y = 0,968 m/s².</p><p>Comprobación: sustituyendo t = 1,823 s en las expresiones simbólicas se obtiene (3,751 ; 0,965) m/s², que coincide con la forma exacta dentro del redondeo.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> a) t ≈ 1,823 s. b) |v| mínimo = 1 m/s en t ≈ 3,142 s. c) a ≈ (3,75 ; 0,968) m/s² en la base.</div>
+    </div>
+  </details>
+
+  <div class="box trap">
+    <strong>Qué falta:</strong> hay 38 exámenes distintos de cursos anteriores. Aquí tienes resueltos siete ejercicios (de la E a la K), todos comprobados con código. El resto está listado en «Practicar por tema» y «Buscar un examen», pero sin resolver. Para resolver otro, usa la misma plantilla: primero la configuración, luego la cinemática o la Jacobiana, y al final sustituir para comprobar.
+  </div>
+</section>
+
+<!-- PRACTICAR -->
+<section class="sec" id="practicar" style="--tc:var(--c8)">
+  <div class="sh"><span class="badge" aria-hidden="true">Q</span><div class="shx"><p class="kick">Exámenes</p><h2>Exámenes de cursos anteriores</h2></div></div>
+  <h3>Empieza por aquí</h3>
+  <p>Cinco exámenes recientes y representativos. Cada uno tiene ejercicios de tres o cuatro temas distintos.</p>
+  <ul class="start">
+    <li><b>Junio 2025</b>: rotaciones y cuaterniones, tabla dh y transformaciones homogéneas, cinemática inversa, velocidades, jacobiana y singularidades.</li>
+    <li><b>Parcial 2 · 2025</b>: velocidades, jacobiana y singularidades.</li>
+    <li><b>Parcial 1 · 2025</b>: rotaciones y cuaterniones, tabla dh y transformaciones homogéneas.</li>
+    <li><b>Julio 2024</b>: trayectorias (splines e interpoladores), velocidades, jacobiana y singularidades.</li>
+    <li><b>Junio 2024</b>: trayectorias (splines e interpoladores), rotaciones y cuaterniones, tabla dh y transformaciones homogéneas, cinemática inversa. <a href="#ej-h">Ver resuelto</a></li>
+  </ul>
+  <h3>Practicar por tema</h3>
+  <p>Cada ejercicio está en su tema principal. Si un examen tiene solución en esta guía, aparece el enlace «Ver resuelto».</p>
+  <div class="chips" role="group" aria-label="Filtrar por tema" id="filtro-tema">
+    <button type="button" data-f="todos" aria-pressed="true">Todos</button>
+    <button type="button" data-f="T" aria-pressed="false">Trayectorias</button>
+    <button type="button" data-f="R" aria-pressed="false">Rotaciones</button>
+    <button type="button" data-f="DH" aria-pressed="false">Tabla DH</button>
+    <button type="button" data-f="CI" aria-pressed="false">Cinemática inversa</button>
+    <button type="button" data-f="J" aria-pressed="false">Velocidades</button>
+    <button type="button" data-f="D" aria-pressed="false">Dinámica</button>
+  </div>
+  <div class="tw"><table id="tabla-tema">
+    <thead><tr><th>Tema</th><th>Examen</th><th>Ejercicio</th></tr></thead>
+    <tbody>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Febrero 2016</td><td>Instantes en que el extremo pasa por A₁ y A₂ con spline cúbico (ver Ejercicio G) <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2016</td><td>Instantes A₁ y A₂ con interpolador lineal (variante de la guía, Ejercicio G) <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Febrero 2018</td><td>Ajuste parabólico de una articulación con tiempos y aceleración dados</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2018</td><td>Velocidad de una articulación en t = 3,36 s a partir del perfil de aceleraciones</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Septiembre 2018</td><td>Triángulo equilátero que gira 30° alrededor de C</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2019</td><td>Distancia de un punto a la segunda articulación con interpoladores lineales (Ejercicio F) <a href="#ej-f">Ver ejercicio F</a> <a href="#ej-k">Ver ejercicio K</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Febrero 2019</td><td>θ₁(t) y θ₂(t) para seguir una lámina ondulada en una cinta transportadora</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Febrero 2019</td><td>Splines de 2 articulaciones y contacto con un muro</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Septiembre 2019</td><td>Coordenada x en t = 0,5 s de un extremo que recorre un cuadrado con interpolador lineal</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Febrero 2020</td><td>Spline cúbico de 0 a 2 s y interpolador lineal de 2 a 3 s, de 0 a 1 rad (Ejercicio J) <a href="#ej-j">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2020</td><td>Tres splines cúbicos desde (0, 0, l₁ + l₂) hasta (3, 0, 0) en 2 s pasando por (2, 2, 1) en t = 1 s</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Parcial 2 · 2021</td><td>Spline cúbico de q₁ para un recorrido recto A-B en 1 s con codo abajo <a href="#ej-e">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Julio 2021</td><td>Dos interpoladores lineales por A, B y C (Ejercicio I) <a href="#ej-i">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Julio 2022</td><td>Robot que sube escaleras: q₁, q₃ y q₄ en t = 0,5 s (q₁ con interpolador lineal)</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Parcial 2 · 2022</td><td>Tiempo de A a B y trayectorias de splines cúbicos síncronos con codo abajo</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2022</td><td>Recorrido recto A-B con spline cúbico en q₂: posición del extremo, q₁ y velocidad en t = 0,75 s</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2023</td><td>Splines cúbicos de 2 articulaciones, codo abajo, con velocidades dadas en t = 1 s</td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Junio 2024</td><td>Trayectoria A-B-C: ¿alcanza el extremo más de 0,6 m/s en algún punto? (Ejercicio H) <a href="#ej-h">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="T"><td>Trayectorias</td><td>Julio 2024</td><td>Spline cúbico de θ₁ y tramos de θ₂ con velocidad del extremo dada en t = 1 s</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2016</td><td>Relación entre ángulos de Euler ZXZ y coordenadas articulares <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2016</td><td>Matrices entre {OUVW} y {OXYZ} con r = (2, 3, 4) y giro de 60° <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2016</td><td>Matriz de orientación desde un giro de 90° alrededor de r = (2, 2, 1) <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Septiembre 2016</td><td>Matriz de rotación a partir de giros de 90° alrededor de dos vectores y ángulo α</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2017</td><td>Matriz de orientación final desde la matriz a mitad de recorrido</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2017</td><td>Matriz A entre {OUVW} y {OXYZ} a partir de α, β, γ, θ (igual que septiembre de 2017)</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Septiembre 2017</td><td>Matriz A entre {OUVW} y {OXYZ} a partir de α, β, γ, θ</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Septiembre 2017</td><td>Cuaternio: ¿zₙ es perpendicular a alguna cara lateral de la pirámide?</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial · 10-04-2018</td><td>Cuál de cinco matrices orienta W perpendicular a un casquete esférico y en qué sector</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2018</td><td>Elementos que faltan en una matriz de rotación</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2018</td><td>Matriz de rotación de {OUVW} a partir de r, α, β, θ y φ</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Septiembre 2018</td><td>Posibles matrices de rotación de {OUVW} con W a 100° de una recta</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial · 9-04-2019</td><td>Matriz de rotación que lleva un triángulo a una proyección dada sobre ZY</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2019</td><td>Matriz de rotación con proyecciones de U y V y a_z = −0,408</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2019</td><td>Cuaternio para orientar la herramienta perpendicular a una esfera (con cuaterniones, no con matrices)</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Septiembre 2019</td><td>Qué cuaternios representan una matriz de rotación dada</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Septiembre 2019</td><td>Reorientar un vector con tres giros a partir de coordenadas esféricas</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial · 2020</td><td>Cuaternio de un sistema final igual a (1, 0, 0, 0) y cuaternio perpendicular a un lado de un triángulo (robot planar)</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Febrero 2020</td><td>Qué cuaternio orienta la herramienta hacia una de las ocho zonas de una esfera <a href="#ej-j">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial 1 · 2021</td><td>Matrices y cuaterniones que orientan la herramienta perpendicular a una cara de un octaedro</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2021</td><td>Cuaterniones Q₁, Q₂ y matriz R con o₄ = −0,231 (dos soluciones)</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Julio 2021</td><td>Matriz de rotación de {OUVW} a partir de la matriz A y el vector r <a href="#ej-i">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Julio 2022</td><td>Cadena de sistemas S₀ … S₄ con cuaterniones</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial 1 · 2022</td><td>¹R₃, ¹P₃, ⁰T₃ y ⁰T₂ a partir de ⁰T₁, ⁰R₂ y un giro de 30° alrededor de r = (1, 1, 1)</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2022</td><td>Cuaterniones y rotaciones de un sistema con un giro de 30° alrededor de rxyz = (1, 2, 3)</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial 1 · 2023</td><td>Ángulo θ, eje k₁ y ⁰T₂ a partir de ⁰T₁, ⁰T₃ y relaciones entre sistemas</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2023</td><td>Matriz de rotación R a partir de un cuaternio, un vector v y la componente ox</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Julio 2023</td><td>Ángulos y matriz de rotación a partir de un cuaternio y ox = −0,1342</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial 1 · 2024</td><td>Cuaternios para que un IRB 120 meta un objeto en los huecos A, B, C y D de una pirámide</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2024</td><td>Matrices de cambio de sistema con giros alrededor de vectores: ¹T₂, ¹T₃, ⁰R₃, ⁰T₃ <a href="#ej-h">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Parcial 1 · 2025</td><td>⁰T₁, ¹T₂, ²T₃ y ⁰T₃ con cuaternio y R₂ dados</td></tr>
+      <tr class="ex-row" data-t="R"><td>Rotaciones</td><td>Junio 2025</td><td>Matriz R para atrapar un objeto que llega con v = (1, 2, 3) (cazamariposas)</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Febrero 2016</td><td>Matriz homogénea de un robot particularizada para θ₁, θ₃, θ₄, θ₆ dados <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2016</td><td>Tabla DH, cinemática directa con cuaterniones y cinemática inversa de un robot de 3 GDL <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2016</td><td>Dibujar un robot cuya matriz de transformación homogénea se da <a href="#ej-g">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Septiembre 2016</td><td>Matriz homogénea entre {xn, yn, zn} y {X0, Y0, Z0} de un robot de 5 GDL</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Febrero 2017</td><td>Robot paralelo Delta: matriz homogénea en función de θ₂ y θ₄</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial · 28-03-2017</td><td>Matriz homogénea de {X₀, Y₀, Z₀} a {Xn, Yn, Zn} con sistema definido por un plano</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial · 28-03-2017</td><td>Tabla DH y matriz final de un robot de 5 articulaciones con θ = π/2</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2017</td><td>Matriz de un robot de 5 articulaciones; piezas sobre una mesa paralela al eje Y₀ y valores de las articulaciones</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Septiembre 2017</td><td>Matriz homogénea del robot IRB 8700 con θ dados</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial · 10-04-2018</td><td>Matriz homogénea n-0 particularizada para θ₁, θ₃, θ₅, θ₆ y α</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Febrero 2018</td><td>Tabla DH del robot de la figura</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Septiembre 2018</td><td>Tabla DH y cinemática directa con cuaterniones</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial · 9-04-2019</td><td>Matriz homogénea n-0 de un robot de 6 GDL con prismáticas d₂, d₃, d₄</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2019</td><td>Matriz homogénea de un IRB 1400 con θ dados <a href="#ej-f">Ver ejercicio F</a> <a href="#ej-k">Ver ejercicio K</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Febrero 2020</td><td>Posición y matriz de orientación de un FANUC R-2000iC/125L con θ dados <a href="#ej-j">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2021</td><td>Tabla DH del robot KUKA KR 3 con ejes auxiliares</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Julio 2021</td><td>Tabla DH de un robot de 6 GDL con d₂, q₃, d₄, q₅, q₆ en positivo <a href="#ej-i">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial 1 · 2022</td><td>Tabla DH de un robot de 6 GDL y matriz homogénea para θ dados</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2022</td><td>Tabla DH del robot de la figura (cotas en mm) y posición de los orígenes de los sistemas</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial 1 · 2023</td><td>Tabla DH con x₁, x₂, y₂, x₆ y z₆ dadas</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2023</td><td>Tabla DH y matriz de un robot de 6 GDL con términos desconocidos</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Julio 2023</td><td>Tabla DH de un robot de 6 GDL con criterios de signo</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial 1 · 2024</td><td>Ejes auxiliares y tabla DH de un robot de 6 GDL</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2024</td><td>Tabla DH con las orientaciones de x₀, x₂, z₃, x₄ y x₆ dadas <a href="#ej-h">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Parcial 1 · 2025</td><td>Ejes intermedios y tabla DH de un robot de 6 GDL a partir de una tabla dada</td></tr>
+      <tr class="ex-row" data-t="DH"><td>Tabla DH</td><td>Junio 2025</td><td>Matriz homogénea de un robot de 5 articulaciones con engranajes</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Septiembre 2016</td><td>Pantógrafo: DH y ángulos de los motores para alcanzar un punto dado</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Febrero 2017</td><td>θ₂(t) para que el extremo recorra una circunferencia con θ̇₁ = 1 rad/s</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Septiembre 2017</td><td>Robot de 2 eslabones con articulaciones esféricas: coordenadas del punto B</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2018</td><td>Pinza de dos dedos: θ₁ … θ₆ para llegar a los centros de dos lados de un triángulo</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Septiembre 2018</td><td>Robot con muñeca: θ₄, θ₅, θ₆ en t = 1, 2 y 3 s para una velocidad dada</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Septiembre 2019</td><td>θ del robot de 6 GDL para ajustar una tuerca en (1, 2, 1) con orientación dada</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2020</td><td>Cinemática inversa, Jacobiana y configuraciones singulares de un robot de 3 GDL</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Septiembre 2020</td><td>Cinemática inversa de un robot de 4 GDL, aplicada a un punto y a una componente de n</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2021</td><td>q₁, d₂, q₃, q₄ con q₄ = 2 q₃ para un punto dado</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Julio 2021</td><td>Px y Py para que el extremo pueda tocar el punto A con q₁ = 20,7° <a href="#ej-i">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Julio 2022</td><td>IRB 1400: q₄, q₅, q₆ con q₁, q₂, q₃ dados, posición y cuaternio dados</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Parcial 2 · 2022</td><td>q₁, q₂, q₃ del IRB 1400 para una posición y un cuaternio dados</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2022</td><td>Robot que sube escaleras: valores finales de q₁ … q₄ para que el pie describa una circunferencia</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Parcial 2 · 2023</td><td>Robot de 4 GDL: rango de θ₂, ecuaciones de θ₂(t), d₃(t), θ₄(t) con el extremo fijo y velocidad angular constante</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2023</td><td>θ₁, d₂, θ₃, θ₄ a partir de velocidades articulares y de la posición del extremo</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Julio 2023</td><td>θ₁, d₂, θ₃ para una posición dada (sumando cuadrados y resolviendo)</td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2024</td><td>Cazamariposas: tiempo de recogida y θ₁ … θ₄ para atrapar un objeto que llega con velocidad dada <a href="#ej-h">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="CI"><td>Cinemática inversa</td><td>Junio 2025</td><td>q₁, d₂, q₅, q₃, q₄ para una orientación y posición dadas</td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Junio 2018</td><td>Jacobiana de velocidades angulares y módulo de ω en t = 1 s</td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Junio 2019</td><td>Velocidad de 2 m/s, velocidad mínima y aceleración en t = 1,823 s de un 2R en movimiento (Ejercicio K) <a href="#ej-f">Ver ejercicio F</a> <a href="#ej-k">Ver ejercicio K</a></td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Parcial 2 · 2021</td><td>Jacobiana de velocidades lineales y velocidades articulares sin pseudoinversa (Ejercicio E) <a href="#ej-e">Ver resuelto</a></td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Parcial 2 · 2024</td><td>Velocidad lineal en el sistema del extremo y su módulo tras 1 s</td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Julio 2024</td><td>Cazamariposas: recogida de un objeto en (−1,43 ; 1,43 ; 1) con θ₁ … θ₄</td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Parcial 2 · 2025</td><td>Velocidad lineal y angular del extremo con interpolador lineal y matriz de orientación dada</td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Parcial 2 · 2025</td><td>Trayectoria circular con el tercer eslabón perpendicular: posiciones inicial y final y θ en t = 0,5 s</td></tr>
+      <tr class="ex-row" data-t="J"><td>Velocidades</td><td>Junio 2025</td><td>Billar con un robot planar de 3 eslabones: θ en el golpeo y velocidades articulares</td></tr>
+      <tr class="ex-row" data-t="D"><td>Dinámica</td><td>Febrero 2018</td><td>Fuerza que ejerce el extremo sobre un obstáculo con el modelo dinámico dado</td></tr>
+      <tr class="ex-row" data-t="D"><td>Dinámica</td><td>Parcial 2 · 2023</td><td>Dinámica de un robot de 2 GDL con actuadores dados: posición y velocidad en t = 0,2 s</td></tr>
+      <tr class="ex-row" data-t="D"><td>Dinámica</td><td>Parcial 2 · 2024</td><td>Longitud de la herramienta a partir de un ensayo de par estático (TCP)</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Buscar un examen</h3>
+  <p>Filtra por tipo de examen o escribe una palabra (por ejemplo «splines», «cuaternio» o «2024»).</p>
+  <div class="chips" role="group" aria-label="Filtrar por tipo" id="filtro-tipo">
+    <button type="button" data-k="todos" aria-pressed="true">Todos</button>
+    <button type="button" data-k="p1" aria-pressed="false">Parcial 1</button>
+    <button type="button" data-k="p2" aria-pressed="false">Parcial 2</button>
+    <button type="button" data-k="pn" aria-pressed="false">Parcial sin número</button>
+    <button type="button" data-k="fin" aria-pressed="false">Final</button>
+    <button type="button" data-k="res" aria-pressed="false">Con resolución</button>
+  </div>
+  <input type="search" id="buscar-examen" placeholder="Buscar en los exámenes…" aria-label="Buscar en los exámenes" class="busq">
+  <p class="muted" id="cont-buscar" style="font-size:14px"></p>
+  <details class="yr" data-year="2025" open>
+    <summary>2025 <span class="muted">(3 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="p1" data-res="0" data-text="⁰t₁, ¹t₂, ²t₃ y ⁰t₃ con cuaternio y r₂ dados ejes intermedios y tabla dh de un robot de 6 gdl a partir de una tabla dada parcial 1 · 2025">
+        <p><b>Parcial 1 · 2025</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> ⁰T₁, ¹T₂, ²T₃ y ⁰T₃ con cuaternio y R₂ dados</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Ejes intermedios y tabla DH de un robot de 6 GDL a partir de una tabla dada</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="p2" data-res="0" data-text="velocidad lineal y angular del extremo con interpolador lineal y matriz de orientación dada trayectoria circular con el tercer eslabón perpendicular: posiciones inicial y final y θ en t = 0,5 s parcial 2 · 2025">
+        <p><b>Parcial 2 · 2025</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Velocidad lineal y angular del extremo con interpolador lineal y matriz de orientación dada</li>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Trayectoria circular con el tercer eslabón perpendicular: posiciones inicial y final y θ en t = 0,5 s</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz r para atrapar un objeto que llega con v = (1, 2, 3) (cazamariposas) matriz homogénea de un robot de 5 articulaciones con engranajes billar con un robot planar de 3 eslabones: θ en el golpeo y velocidades articulares q₁, d₂, q₅, q₃, q₄ para una orientación y posición dadas junio 2025">
+        <p><b>Junio 2025</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz R para atrapar un objeto que llega con v = (1, 2, 3) (cazamariposas)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea de un robot de 5 articulaciones con engranajes</li>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Billar con un robot planar de 3 eslabones: θ en el golpeo y velocidades articulares</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> q₁, d₂, q₅, q₃, q₄ para una orientación y posición dadas</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2024" open>
+    <summary>2024 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="p1" data-res="0" data-text="cuaternios para que un irb 120 meta un objeto en los huecos a, b, c y d de una pirámide ejes auxiliares y tabla dh de un robot de 6 gdl parcial 1 · 2024">
+        <p><b>Parcial 1 · 2024</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuaternios para que un IRB 120 meta un objeto en los huecos A, B, C y D de una pirámide</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Ejes auxiliares y tabla DH de un robot de 6 GDL</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="p2" data-res="0" data-text="longitud de la herramienta a partir de un ensayo de par estático (tcp) velocidad lineal en el sistema del extremo y su módulo tras 1 s parcial 2 · 2024">
+        <p><b>Parcial 2 · 2024</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Dinámica</span> Longitud de la herramienta a partir de un ensayo de par estático (TCP)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Velocidad lineal en el sistema del extremo y su módulo tras 1 s</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="1" data-text="matrices de cambio de sistema con giros alrededor de vectores: ¹t₂, ¹t₃, ⁰r₃, ⁰t₃ tabla dh con las orientaciones de x₀, x₂, z₃, x₄ y x₆ dadas cazamariposas: tiempo de recogida y θ₁ … θ₄ para atrapar un objeto que llega con velocidad dada trayectoria a-b-c: ¿alcanza el extremo más de 0,6 m/s en algún punto? (ejercicio h) junio 2024">
+        <p><b>Junio 2024</b> <a href="#ej-h">Ver resuelto</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matrices de cambio de sistema con giros alrededor de vectores: ¹T₂, ¹T₃, ⁰R₃, ⁰T₃</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH con las orientaciones de x₀, x₂, z₃, x₄ y x₆ dadas</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Cazamariposas: tiempo de recogida y θ₁ … θ₄ para atrapar un objeto que llega con velocidad dada</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Trayectoria A-B-C: ¿alcanza el extremo más de 0,6 m/s en algún punto? (Ejercicio H)</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="cazamariposas: recogida de un objeto en (−1,43 ; 1,43 ; 1) con θ₁ … θ₄ spline cúbico de θ₁ y tramos de θ₂ con velocidad del extremo dada en t = 1 s julio 2024">
+        <p><b>Julio 2024</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Cazamariposas: recogida de un objeto en (−1,43 ; 1,43 ; 1) con θ₁ … θ₄</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Spline cúbico de θ₁ y tramos de θ₂ con velocidad del extremo dada en t = 1 s</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2023" open>
+    <summary>2023 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="p1" data-res="0" data-text="ángulo θ, eje k₁ y ⁰t₂ a partir de ⁰t₁, ⁰t₃ y relaciones entre sistemas tabla dh con x₁, x₂, y₂, x₆ y z₆ dadas parcial 1 · 2023">
+        <p><b>Parcial 1 · 2023</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Ángulo θ, eje k₁ y ⁰T₂ a partir de ⁰T₁, ⁰T₃ y relaciones entre sistemas</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH con x₁, x₂, y₂, x₆ y z₆ dadas</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="p2" data-res="0" data-text="robot de 4 gdl: rango de θ₂, ecuaciones de θ₂(t), d₃(t), θ₄(t) con el extremo fijo y velocidad angular constante dinámica de un robot de 2 gdl con actuadores dados: posición y velocidad en t = 0,2 s parcial 2 · 2023">
+        <p><b>Parcial 2 · 2023</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Robot de 4 GDL: rango de θ₂, ecuaciones de θ₂(t), d₃(t), θ₄(t) con el extremo fijo y velocidad angular constante</li>
+          <li><span class="kick" style="--tc:var(--c8)">Dinámica</span> Dinámica de un robot de 2 GDL con actuadores dados: posición y velocidad en t = 0,2 s</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz de rotación r a partir de un cuaternio, un vector v y la componente ox tabla dh y matriz de un robot de 6 gdl con términos desconocidos θ₁, d₂, θ₃, θ₄ a partir de velocidades articulares y de la posición del extremo splines cúbicos de 2 articulaciones, codo abajo, con velocidades dadas en t = 1 s junio 2023">
+        <p><b>Junio 2023</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de rotación R a partir de un cuaternio, un vector v y la componente ox</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH y matriz de un robot de 6 GDL con términos desconocidos</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> θ₁, d₂, θ₃, θ₄ a partir de velocidades articulares y de la posición del extremo</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Splines cúbicos de 2 articulaciones, codo abajo, con velocidades dadas en t = 1 s</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="ángulos y matriz de rotación a partir de un cuaternio y ox = −0,1342 tabla dh de un robot de 6 gdl con criterios de signo θ₁, d₂, θ₃ para una posición dada (sumando cuadrados y resolviendo) julio 2023">
+        <p><b>Julio 2023</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Ángulos y matriz de rotación a partir de un cuaternio y ox = −0,1342</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH de un robot de 6 GDL con criterios de signo</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> θ₁, d₂, θ₃ para una posición dada (sumando cuadrados y resolviendo)</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2022" open>
+    <summary>2022 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="fin" data-res="0" data-text="cadena de sistemas s₀ … s₄ con cuaterniones irb 1400: q₄, q₅, q₆ con q₁, q₂, q₃ dados, posición y cuaternio dados robot que sube escaleras: q₁, q₃ y q₄ en t = 0,5 s (q₁ con interpolador lineal) julio 2022">
+        <p><b>Julio 2022</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cadena de sistemas S₀ … S₄ con cuaterniones</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> IRB 1400: q₄, q₅, q₆ con q₁, q₂, q₃ dados, posición y cuaternio dados</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Robot que sube escaleras: q₁, q₃ y q₄ en t = 0,5 s (q₁ con interpolador lineal)</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="p1" data-res="0" data-text="¹r₃, ¹p₃, ⁰t₃ y ⁰t₂ a partir de ⁰t₁, ⁰r₂ y un giro de 30° alrededor de r = (1, 1, 1) tabla dh de un robot de 6 gdl y matriz homogénea para θ dados parcial 1 · 2022">
+        <p><b>Parcial 1 · 2022</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> ¹R₃, ¹P₃, ⁰T₃ y ⁰T₂ a partir de ⁰T₁, ⁰R₂ y un giro de 30° alrededor de r = (1, 1, 1)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH de un robot de 6 GDL y matriz homogénea para θ dados</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="p2" data-res="0" data-text="q₁, q₂, q₃ del irb 1400 para una posición y un cuaternio dados tiempo de a a b y trayectorias de splines cúbicos síncronos con codo abajo parcial 2 · 2022">
+        <p><b>Parcial 2 · 2022</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> q₁, q₂, q₃ del IRB 1400 para una posición y un cuaternio dados</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Tiempo de A a B y trayectorias de splines cúbicos síncronos con codo abajo</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="tabla dh del robot de la figura (cotas en mm) y posición de los orígenes de los sistemas recorrido recto a-b con spline cúbico en q₂: posición del extremo, q₁ y velocidad en t = 0,75 s robot que sube escaleras: valores finales de q₁ … q₄ para que el pie describa una circunferencia cuaterniones y rotaciones de un sistema con un giro de 30° alrededor de rxyz = (1, 2, 3) junio 2022">
+        <p><b>Junio 2022</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH del robot de la figura (cotas en mm) y posición de los orígenes de los sistemas</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Recorrido recto A-B con spline cúbico en q₂: posición del extremo, q₁ y velocidad en t = 0,75 s</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Robot que sube escaleras: valores finales de q₁ … q₄ para que el pie describa una circunferencia</li>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuaterniones y rotaciones de un sistema con un giro de 30° alrededor de rxyz = (1, 2, 3)</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2021" open>
+    <summary>2021 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="p2" data-res="1" data-text="jacobiana de velocidades lineales y velocidades articulares sin pseudoinversa (ejercicio e) spline cúbico de q₁ para un recorrido recto a-b en 1 s con codo abajo parcial 2 · 2021">
+        <p><b>Parcial 2 · 2021</b> <a href="#ej-e">Ver resuelto</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Jacobiana de velocidades lineales y velocidades articulares sin pseudoinversa (Ejercicio E)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Spline cúbico de q₁ para un recorrido recto A-B en 1 s con codo abajo</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="p1" data-res="0" data-text="matrices y cuaterniones que orientan la herramienta perpendicular a una cara de un octaedro parcial 1 · 2021">
+        <p><b>Parcial 1 · 2021</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matrices y cuaterniones que orientan la herramienta perpendicular a una cara de un octaedro</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="cuaterniones q₁, q₂ y matriz r con o₄ = −0,231 (dos soluciones) tabla dh del robot kuka kr 3 con ejes auxiliares q₁, d₂, q₃, q₄ con q₄ = 2 q₃ para un punto dado junio 2021">
+        <p><b>Junio 2021</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuaterniones Q₁, Q₂ y matriz R con o₄ = −0,231 (dos soluciones)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH del robot KUKA KR 3 con ejes auxiliares</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> q₁, d₂, q₃, q₄ con q₄ = 2 q₃ para un punto dado</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="1" data-text="matriz de rotación de {ouvw} a partir de la matriz a y el vector r tabla dh de un robot de 6 gdl con d₂, q₃, d₄, q₅, q₆ en positivo px y py para que el extremo pueda tocar el punto a con q₁ = 20,7° dos interpoladores lineales por a, b y c (ejercicio i) julio 2021">
+        <p><b>Julio 2021</b> <a href="#ej-i">Ver resuelto</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de rotación de {OUVW} a partir de la matriz A y el vector r</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH de un robot de 6 GDL con d₂, q₃, d₄, q₅, q₆ en positivo</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Px y Py para que el extremo pueda tocar el punto A con q₁ = 20,7°</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Dos interpoladores lineales por A, B y C (Ejercicio I)</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2020" open>
+    <summary>2020 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="pn" data-res="0" data-text="cuaternio de un sistema final igual a (1, 0, 0, 0) y cuaternio perpendicular a un lado de un triángulo (robot planar) parcial · 2020">
+        <p><b>Parcial · 2020</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuaternio de un sistema final igual a (1, 0, 0, 0) y cuaternio perpendicular a un lado de un triángulo (robot planar)</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="1" data-text="qué cuaternio orienta la herramienta hacia una de las ocho zonas de una esfera posición y matriz de orientación de un fanuc r-2000ic/125l con θ dados spline cúbico de 0 a 2 s y interpolador lineal de 2 a 3 s, de 0 a 1 rad (ejercicio j) febrero 2020">
+        <p><b>Febrero 2020</b> <a href="#ej-j">Ver resuelto</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Qué cuaternio orienta la herramienta hacia una de las ocho zonas de una esfera</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Posición y matriz de orientación de un FANUC R-2000iC/125L con θ dados</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Spline cúbico de 0 a 2 s y interpolador lineal de 2 a 3 s, de 0 a 1 rad (Ejercicio J)</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="cinemática inversa, jacobiana y configuraciones singulares de un robot de 3 gdl tres splines cúbicos desde (0, 0, l₁ + l₂) hasta (3, 0, 0) en 2 s pasando por (2, 2, 1) en t = 1 s junio 2020">
+        <p><b>Junio 2020</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Cinemática inversa, Jacobiana y configuraciones singulares de un robot de 3 GDL</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Tres splines cúbicos desde (0, 0, l₁ + l₂) hasta (3, 0, 0) en 2 s pasando por (2, 2, 1) en t = 1 s</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="cinemática inversa de un robot de 4 gdl, aplicada a un punto y a una componente de n septiembre 2020">
+        <p><b>Septiembre 2020</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Cinemática inversa de un robot de 4 GDL, aplicada a un punto y a una componente de n</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2019" open>
+    <summary>2019 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="pn" data-res="0" data-text="matriz de rotación que lleva un triángulo a una proyección dada sobre zy matriz homogénea n-0 de un robot de 6 gdl con prismáticas d₂, d₃, d₄ parcial · 9-04-2019">
+        <p><b>Parcial · 9-04-2019</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de rotación que lleva un triángulo a una proyección dada sobre ZY</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea n-0 de un robot de 6 GDL con prismáticas d₂, d₃, d₄</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="1" data-text="distancia de un punto a la segunda articulación con interpoladores lineales (ejercicio f) velocidad de 2 m/s, velocidad mínima y aceleración en t = 1,823 s de un 2r en movimiento (ejercicio k) matriz homogénea de un irb 1400 con θ dados junio 2019">
+        <p><b>Junio 2019</b> <a href="#ej-f">Ver ejercicio F</a> <a href="#ej-k">Ver ejercicio K</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Distancia de un punto a la segunda articulación con interpoladores lineales (Ejercicio F)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Velocidad de 2 m/s, velocidad mínima y aceleración en t = 1,823 s de un 2R en movimiento (Ejercicio K)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea de un IRB 1400 con θ dados</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz de rotación con proyecciones de u y v y a_z = −0,408 θ₁(t) y θ₂(t) para seguir una lámina ondulada en una cinta transportadora cuaternio para orientar la herramienta perpendicular a una esfera (con cuaterniones, no con matrices) splines de 2 articulaciones y contacto con un muro febrero 2019">
+        <p><b>Febrero 2019</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de rotación con proyecciones de U y V y a_z = −0,408</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> θ₁(t) y θ₂(t) para seguir una lámina ondulada en una cinta transportadora</li>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuaternio para orientar la herramienta perpendicular a una esfera (con cuaterniones, no con matrices)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Splines de 2 articulaciones y contacto con un muro</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="θ del robot de 6 gdl para ajustar una tuerca en (1, 2, 1) con orientación dada qué cuaternios representan una matriz de rotación dada coordenada x en t = 0,5 s de un extremo que recorre un cuadrado con interpolador lineal reorientar un vector con tres giros a partir de coordenadas esféricas septiembre 2019">
+        <p><b>Septiembre 2019</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> θ del robot de 6 GDL para ajustar una tuerca en (1, 2, 1) con orientación dada</li>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Qué cuaternios representan una matriz de rotación dada</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Coordenada x en t = 0,5 s de un extremo que recorre un cuadrado con interpolador lineal</li>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Reorientar un vector con tres giros a partir de coordenadas esféricas</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2018" open>
+    <summary>2018 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="pn" data-res="0" data-text="cuál de cinco matrices orienta w perpendicular a un casquete esférico y en qué sector matriz homogénea n-0 particularizada para θ₁, θ₃, θ₅, θ₆ y α parcial · 10-04-2018">
+        <p><b>Parcial · 10-04-2018</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuál de cinco matrices orienta W perpendicular a un casquete esférico y en qué sector</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea n-0 particularizada para θ₁, θ₃, θ₅, θ₆ y α</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="elementos que faltan en una matriz de rotación tabla dh del robot de la figura fuerza que ejerce el extremo sobre un obstáculo con el modelo dinámico dado ajuste parabólico de una articulación con tiempos y aceleración dados febrero 2018">
+        <p><b>Febrero 2018</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Elementos que faltan en una matriz de rotación</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH del robot de la figura</li>
+          <li><span class="kick" style="--tc:var(--c8)">Dinámica</span> Fuerza que ejerce el extremo sobre un obstáculo con el modelo dinámico dado</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Ajuste parabólico de una articulación con tiempos y aceleración dados</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz de rotación de {ouvw} a partir de r, α, β, θ y φ jacobiana de velocidades angulares y módulo de ω en t = 1 s velocidad de una articulación en t = 3,36 s a partir del perfil de aceleraciones pinza de dos dedos: θ₁ … θ₆ para llegar a los centros de dos lados de un triángulo junio 2018">
+        <p><b>Junio 2018</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de rotación de {OUVW} a partir de r, α, β, θ y φ</li>
+          <li><span class="kick" style="--tc:var(--c8)">Velocidades</span> Jacobiana de velocidades angulares y módulo de ω en t = 1 s</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Velocidad de una articulación en t = 3,36 s a partir del perfil de aceleraciones</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Pinza de dos dedos: θ₁ … θ₆ para llegar a los centros de dos lados de un triángulo</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="posibles matrices de rotación de {ouvw} con w a 100° de una recta tabla dh y cinemática directa con cuaterniones robot con muñeca: θ₄, θ₅, θ₆ en t = 1, 2 y 3 s para una velocidad dada triángulo equilátero que gira 30° alrededor de c septiembre 2018">
+        <p><b>Septiembre 2018</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Posibles matrices de rotación de {OUVW} con W a 100° de una recta</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH y cinemática directa con cuaterniones</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Robot con muñeca: θ₄, θ₅, θ₆ en t = 1, 2 y 3 s para una velocidad dada</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Triángulo equilátero que gira 30° alrededor de C</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2017" open>
+    <summary>2017 <span class="muted">(4 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz de orientación final desde la matriz a mitad de recorrido θ₂(t) para que el extremo recorra una circunferencia con θ̇₁ = 1 rad/s robot paralelo delta: matriz homogénea en función de θ₂ y θ₄ febrero 2017">
+        <p><b>Febrero 2017</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de orientación final desde la matriz a mitad de recorrido</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> θ₂(t) para que el extremo recorra una circunferencia con θ̇₁ = 1 rad/s</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Robot paralelo Delta: matriz homogénea en función de θ₂ y θ₄</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="pn" data-res="0" data-text="matriz homogénea de {x₀, y₀, z₀} a {xn, yn, zn} con sistema definido por un plano tabla dh y matriz final de un robot de 5 articulaciones con θ = π/2 parcial · 28-03-2017">
+        <p><b>Parcial · 28-03-2017</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea de {X₀, Y₀, Z₀} a {Xn, Yn, Zn} con sistema definido por un plano</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH y matriz final de un robot de 5 articulaciones con θ = π/2</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz a entre {ouvw} y {oxyz} a partir de α, β, γ, θ (igual que septiembre de 2017) matriz de un robot de 5 articulaciones; piezas sobre una mesa paralela al eje y₀ y valores de las articulaciones junio 2017">
+        <p><b>Junio 2017</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz A entre {OUVW} y {OXYZ} a partir de α, β, γ, θ (igual que septiembre de 2017)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz de un robot de 5 articulaciones; piezas sobre una mesa paralela al eje Y₀ y valores de las articulaciones</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz a entre {ouvw} y {oxyz} a partir de α, β, γ, θ robot de 2 eslabones con articulaciones esféricas: coordenadas del punto b cuaternio: ¿zₙ es perpendicular a alguna cara lateral de la pirámide? matriz homogénea del robot irb 8700 con θ dados septiembre 2017">
+        <p><b>Septiembre 2017</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz A entre {OUVW} y {OXYZ} a partir de α, β, γ, θ</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Robot de 2 eslabones con articulaciones esféricas: coordenadas del punto B</li>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Cuaternio: ¿zₙ es perpendicular a alguna cara lateral de la pirámide?</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea del robot IRB 8700 con θ dados</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <details class="yr" data-year="2016" open>
+    <summary>2016 <span class="muted">(3 exámenes)</span></summary>
+    <div class="inner">
+      <div class="exb" data-k="fin" data-res="1" data-text="relación entre ángulos de euler zxz y coordenadas articulares matrices entre {ouvw} y {oxyz} con r = (2, 3, 4) y giro de 60° matriz homogénea de un robot particularizada para θ₁, θ₃, θ₄, θ₆ dados instantes en que el extremo pasa por a₁ y a₂ con spline cúbico (ver ejercicio g) febrero 2016">
+        <p><b>Febrero 2016</b> <a href="#ej-g">Ver resuelto</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Relación entre ángulos de Euler ZXZ y coordenadas articulares</li>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matrices entre {OUVW} y {OXYZ} con r = (2, 3, 4) y giro de 60°</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea de un robot particularizada para θ₁, θ₃, θ₄, θ₆ dados</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Instantes en que el extremo pasa por A₁ y A₂ con spline cúbico (ver Ejercicio G)</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="1" data-text="matriz de orientación desde un giro de 90° alrededor de r = (2, 2, 1) instantes a₁ y a₂ con interpolador lineal (variante de la guía, ejercicio g) tabla dh, cinemática directa con cuaterniones y cinemática inversa de un robot de 3 gdl dibujar un robot cuya matriz de transformación homogénea se da junio 2016">
+        <p><b>Junio 2016</b> <a href="#ej-g">Ver resuelto</a></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de orientación desde un giro de 90° alrededor de r = (2, 2, 1)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Trayectorias</span> Instantes A₁ y A₂ con interpolador lineal (variante de la guía, Ejercicio G)</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Tabla DH, cinemática directa con cuaterniones y cinemática inversa de un robot de 3 GDL</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Dibujar un robot cuya matriz de transformación homogénea se da</li>
+        </ul>
+      </div>
+      <div class="exb" data-k="fin" data-res="0" data-text="matriz de rotación a partir de giros de 90° alrededor de dos vectores y ángulo α matriz homogénea entre {xn, yn, zn} y {x0, y0, z0} de un robot de 5 gdl pantógrafo: dh y ángulos de los motores para alcanzar un punto dado septiembre 2016">
+        <p><b>Septiembre 2016</b></p>
+        <ul>
+          <li><span class="kick" style="--tc:var(--c8)">Rotaciones</span> Matriz de rotación a partir de giros de 90° alrededor de dos vectores y ángulo α</li>
+          <li><span class="kick" style="--tc:var(--c8)">Tabla DH</span> Matriz homogénea entre {xn, yn, zn} y {X0, Y0, Z0} de un robot de 5 GDL</li>
+          <li><span class="kick" style="--tc:var(--c8)">Cinemática inversa</span> Pantógrafo: DH y ángulos de los motores para alcanzar un punto dado</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <p class="muted" style="font-size:14px">Los enunciados son los de cursos anteriores. Cuando un examen tenga una solución en esta guía, el enlace te lleva al ejercicio resuelto.</p>
+</section>
+
+<!-- AUTOEVALUACIÓN -->
+<section class="sec" id="autoevaluacion" style="--tc:var(--c8)">
+  <div class="sh"><span class="badge" aria-hidden="true">?</span><div class="shx"><p class="kick">Repaso</p><h2>Autoevaluación</h2></div></div>
+  <p>Piensa la respuesta antes de abrirla.</p>
+  <details><summary>1. ¿Cuántas filas y columnas tiene una matriz de transformación homogénea?</summary>
+    <div class="inner"><p>4 × 4: la rotación 3 × 3, la traslación en una columna y la fila [0 0 0 1].</p></div></details>
+  <details><summary>2. Para el 2R plano, ¿cuándo es singular la Jacobiana?</summary>
+    <div class="inner"><p>Cuando det J = l₁ l₂ sin θ₂ = 0, es decir, θ₂ = 0 o θ₂ = π.</p></div></details>
+  <details><summary>3. Un 2R llega a un punto alcanzable. ¿Cuántas soluciones de cinemática inversa hay?</summary>
+    <div class="inner"><p>Dos, codo arriba y codo abajo, salvo que el punto esté en el borde del alcance (una sola).</p></div></details>
+  <details><summary>4. ¿Cuál es el spline cúbico con θ(0) = 0, θ(1) = π/2 y velocidades nulas en los extremos?</summary>
+    <div class="inner"><p>θ(t) = (3π/2) t² − π t³.</p></div></details>
+  <details><summary>5. En la regla de Denavit-Hartenberg, ¿en qué orden se encadenan las cuatro operaciones de cada eslabón?</summary>
+    <div class="inner"><p>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ).</p></div></details>
+  <details><summary>6. Un cuaternión unitario de una rotación de 120° alrededor del eje x, ¿cuál es?</summary>
+    <div class="inner"><p>q = (cos 60°, sin 60°, 0, 0) = (0,5 ; 0,866 ; 0 ; 0).</p></div></details>
+</section>
+
+<!-- FORMULARIO -->
+<section class="sec" id="formulario" style="--tc:var(--c7)">
+  <div class="sh"><span class="badge" aria-hidden="true">F</span><div class="shx"><p class="kick">Referencia</p><h2>Formulario por tema</h2></div></div>
+  <div class="tw"><table>
+    <thead><tr><th>Tema</th><th>Fórmula</th></tr></thead>
+    <tbody>
+      <tr><td>T3 · Rotación en z</td><td><code>Rz(θ) = [cos θ, −sin θ, 0; sin θ, cos θ, 0; 0, 0, 1]</code></td></tr>
+      <tr><td>T3 · Cuaternión</td><td><code>q = (cos φ/2, sin φ/2 · u)</code></td></tr>
+      <tr><td>T4 · Denavit-Hartenberg</td><td><code>Aᵢ = Rz(θ) Tz(d) Tx(a) Rx(α)</code></td></tr>
+      <tr><td>T4 · Directa 2R</td><td><code>x = l₁ cos θ₁ + l₂ cos(θ₁+θ₂), y = l₁ sin θ₁ + l₂ sin(θ₁+θ₂)</code></td></tr>
+      <tr><td>T4 · Inversa 2R</td><td><code>cos θ₂ = (x²+y²−l₁²−l₂²)/(2l₁l₂)</code></td></tr>
+      <tr><td>T4 · Jacobiana 2R</td><td><code>det J = l₁ l₂ sin θ₂</code></td></tr>
+      <tr><td>T5 · Modelo dinámico</td><td><code>τ = M(q) q̈ + C(q,q̇) q̇ + G(q)</code></td></tr>
+      <tr><td>T6 · Spline cúbico</td><td><code>θ(t) = a₀ + a₁t + a₂t² + a₃t³</code></td></tr>
+      <tr><td>T6 · Control PD con gravedad</td><td><code>τ = Kp(qd−q) + Kd(q̇d−q̇) + G(q)</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- GLOSARIO -->
+<section class="sec" id="glosario" style="--tc:var(--c7)">
+  <div class="sh"><span class="badge" aria-hidden="true">G</span><div class="shx"><p class="kick">Referencia</p><h2>Glosario</h2></div></div>
+  <dl>
+    <dt><b>Articulación</b></dt><dd>Unión entre dos eslabones que permite un grado de libertad.</dd>
+    <dt><b>Cinemática directa</b></dt><dd>Calcular la posición del extremo a partir de los ángulos articulares.</dd>
+    <dt><b>Cinemática inversa</b></dt><dd>Calcular los ángulos articulares para llegar a una posición del extremo.</dd>
+    <dt><b>Cuaternión</b></dt><dd>Cuatro números que representan una rotación de forma compacta.</dd>
+    <dt><b>Jacobiana</b></dt><dd>Matriz que relaciona velocidades articulares con velocidad del extremo.</dd>
+    <dt><b>Singularidad</b></dt><dd>Configuración en la que la Jacobiana pierde rango y el robot pierde movilidad.</dd>
+    <dt><b>Spline</b></dt><dd>Polinomio a trozos que une varias posiciones con continuidad.</dd>
+    <dt><b>Par</b></dt><dd>Esfuerzo de giro que aplica un actuador a una articulación.</dd>
+  </dl>
+</section>
+
+<!-- PLAN -->
+<section class="sec" id="plan" style="--tc:var(--c7)">
+  <div class="sh"><span class="badge" aria-hidden="true">✓</span><div class="shx"><p class="kick">Organización</p><h2>Plan de estudio</h2></div></div>
+  <p>Una secuencia de cuatro semanas antes del examen. Marca lo que completes; se guarda en este navegador.</p>
+  <h3>Semana 1 · Matemáticas</h3>
+  <div class="check"><input type="checkbox" id="p1"><label for="p1">Rotaciones, Rz y comprobación de ortogonalidad (T3).</label></div>
+  <div class="check"><input type="checkbox" id="p2"><label for="p2">Cuaterniones: paso a matriz y de matriz a cuaternión (T3).</label></div>
+  <h3>Semana 2 · Cinemática</h3>
+  <div class="check"><input type="checkbox" id="p3"><label for="p3">Tabla DH y cinemática directa (T4, práctica P4).</label></div>
+  <div class="check"><input type="checkbox" id="p4"><label for="p4">Cinemática inversa del 2R y elección de codo (T4).</label></div>
+  <div class="check"><input type="checkbox" id="p5"><label for="p5">Jacobiana y singularidades (T4).</label></div>
+  <h3>Semana 3 · Dinámica y trayectorias</h3>
+  <div class="check"><input type="checkbox" id="p6"><label for="p6">Ecuaciones de Lagrange del 2R (T5).</label></div>
+  <div class="check"><input type="checkbox" id="p7"><label for="p7">Splines cúbicos con condiciones de contorno (T6, práctica P7).</label></div>
+  <h3>Semana 4 · Práctica y examen</h3>
+  <div class="check"><input type="checkbox" id="p8"><label for="p8">Resolver un examen de cursos anteriores cronometrado y corregirlo con las comprobaciones numéricas.</label></div>
+  <div class="check"><input type="checkbox" id="p9"><label for="p9">Terminar la memoria de prácticas y entregarla.</label></div>
+  <div class="bar" aria-hidden="true"><i id="barra-p"></i></div>
+  <p class="muted" id="cont-p" style="font-size:14px"></p>
+</section>
+
+<!-- BIBLIOGRAFÍA -->
+<section class="sec" id="bibliografia" style="--tc:var(--c7)">
+  <div class="sh"><span class="badge" aria-hidden="true">B</span><div class="shx"><p class="kick">Recursos</p><h2>Bibliografía y recursos</h2></div></div>
+  <h3>Libro de referencia</h3>
+  <ul>
+    <li>Barrientos, Antonio y otros. <em>Fundamentos de robótica</em> (2.ª ed.). McGraw-Hill, 2007. ISBN 9788448156367. Capítulos 3 (herramientas matemáticas), 4 (cinemática), 5 (dinámica), 6 (control cinemático) y 7 (control dinámico).</li>
+  </ul>
+  <h3>Bibliografía complementaria</h3>
+  <ul>
+    <li>Craig, John J. <em>Introduction to Robotics: Mechanics and Control</em> (3.ª ed.). Pearson, 2004. ISBN 978-0201543612.</li>
+    <li>Spong, Mark W. <em>Robot Dynamics and Control</em>. Wiley, 1989. ISBN 0471503525.</li>
+  </ul>
+  <h3>Recursos en red</h3>
+  <p>Para los ejercicios de cada tema, usa las tablas de «Exámenes de cursos anteriores» y los ejercicios de práctica de esta guía. Las dos referencias de libro de arriba cubren la teoría con más detalle.</p>
+</section>
+
+</main>
+</div>
+
+<footer>
+  Guía de estudio · Sistemas Robotizados · Curso 2026-27 · Los cálculos numéricos de la guía se han comprobado con código.
+</footer>
+
+<script>
+(function(){
+  /* --- progreso: examen y plan --- */
+  function track(prefix, ids, barId, contId, key){
+    var est={}; try{est=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+    function act(){
+      var n=0; ids.forEach(function(id){var el=document.getElementById(id); if(el&&el.checked)n++;});
+      var b=document.getElementById(barId); if(b) b.style.width=(n/ids.length*100)+'%';
+      var c=document.getElementById(contId); if(c) c.textContent=n+' de '+ids.length+' completados';
+    }
+    ids.forEach(function(id){
+      var el=document.getElementById(id); if(!el) return;
+      el.checked=!!est[id];
+      el.addEventListener('change',function(){est[id]=el.checked; try{localStorage.setItem(key,JSON.stringify(est))}catch(e){} act();});
+    });
+    act();
+  }
+  track('c',['c1','c2','c3','c4','c5','c6','c7','c8'],'barra-c','cont-c','robotizados-examen');
+  track('p',['p1','p2','p3','p4','p5','p6','p7','p8','p9'],'barra-p','cont-p','robotizados-plan');
+
+  /* --- filtro de exámenes por tema --- */
+  /* --- filtro de ejercicios por tema --- */
+  var ct=document.querySelectorAll('#filtro-tema button');
+  ct.forEach(function(b){b.addEventListener('click',function(){
+    ct.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    var f=b.getAttribute('data-f');
+    document.querySelectorAll('#tabla-tema .ex-row').forEach(function(r){
+      r.hidden=!(f==='todos'||r.getAttribute('data-t')===f);
+    });
+  });});
+
+  /* --- buscar un examen: tipo + texto --- */
+  var tipo='todos', q='';
+  var cb=document.querySelectorAll('#filtro-tipo button');
+  function aplicarBusqueda(){
+    var vis=0;
+    document.querySelectorAll('#practicar .exb').forEach(function(e){
+      var okTipo = tipo==='todos' || (tipo==='res' ? e.getAttribute('data-res')==='1' : e.getAttribute('data-k')===tipo);
+      var okTxt = !q || (e.getAttribute('data-text')||'').indexOf(q)>=0 || e.textContent.toLowerCase().indexOf(q)>=0;
+      e.hidden = !(okTipo && okTxt);
+      if(!e.hidden) vis++;
+    });
+    document.querySelectorAll('#practicar details.yr').forEach(function(d){
+      d.hidden = d.querySelectorAll('.exb:not([hidden])').length===0;
+    });
+    var c=document.getElementById('cont-buscar');
+    if(c) c.textContent = vis+' examen(es) con los filtros actuales';
+  }
+  cb.forEach(function(b){b.addEventListener('click',function(){
+    cb.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    tipo=b.getAttribute('data-k'); aplicarBusqueda();
+  });});
+  var inp=document.getElementById('buscar-examen');
+  if(inp) inp.addEventListener('input',function(){ q=inp.value.trim().toLowerCase(); aplicarBusqueda(); });
+  aplicarBusqueda();
+
+  /* --- simulador 2R plano --- */
+  var D=Math.PI/180, NS='http://www.w3.org/2000/svg';
+  function fk(t1,t2,l1,l2){
+    var x1=l1*Math.cos(t1), y1=l1*Math.sin(t1);
+    return [x1,y1, x1+l2*Math.cos(t1+t2), y1+l2*Math.sin(t1+t2)];
+  }
+  function ik(x,y,l1,l2){
+    var c2=(x*x+y*y-l1*l1-l2*l2)/(2*l1*l2);
+    if(Math.abs(c2)>1) return null;
+    var s=Math.acos(Math.max(-1,Math.min(1,c2))), out=[];
+    [s,-s].forEach(function(t2){
+      var t1=Math.atan2(y,x)-Math.atan2(l2*Math.sin(t2), l1+l2*Math.cos(t2));
+      out.push([t1,t2]);
+    });
+    return out;
+  }
+  function brazo(t1,t2,l1,l2,col){
+    var p=fk(t1,t2,l1,l2);
+    return '<line x1="0" y1="0" x2="'+p[0]+'" y2="'+p[1]+'" stroke="'+col+'" stroke-width="0.09" stroke-linecap="round"/>'+
+           '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+p[2]+'" y2="'+p[3]+'" stroke="'+col+'" stroke-width="0.09" stroke-linecap="round"/>'+
+           '<circle cx="'+p[2]+'" cy="'+p[3]+'" r="0.08" fill="'+col+'"/>';
+  }
+  var $=function(id){return document.getElementById(id)};
+  function leerL(){return [parseFloat($('l1').value)||1, parseFloat($('l2').value)||1]}
+  function dibujarFK(){
+    var t1=parseFloat($('s-t1').value)*D, t2=parseFloat($('s-t2').value)*D, L=leerL();
+    $('o-t1').textContent=$('s-t1').value+'°'; $('o-t2').textContent=$('s-t2').value+'°';
+    $('g2r').innerHTML=brazo(t1,t2,L[0],L[1],'var(--accent)');
+    var p=fk(t1,t2,L[0],L[1]);
+    var detJ=L[0]*L[1]*Math.sin(t2);
+    $('out-fk').textContent='Extremo: x = '+p[2].toFixed(3).replace('.',',')+' ; y = '+p[3].toFixed(3).replace('.',',')+
+      '\ndet J = '+detJ.toFixed(3).replace('.',',')+(Math.abs(detJ)<1e-3?'  ← singular':'');
+  }
+  function calcularIK(){
+    var L=leerL(), x=parseFloat($('tx').value), y=parseFloat($('ty').value);
+    var sol=ik(x,y,L[0],L[1]);
+    if(!sol){ $('out-ik').textContent='Punto fuera de alcance: no hay solución.'; $('g2r').innerHTML=brazo(parseFloat($('s-t1').value)*D,parseFloat($('s-t2').value)*D,L[0],L[1],'var(--accent)'); return; }
+    var txt='';
+    sol.forEach(function(s,i){
+      txt+=(i===0?'Codo arriba':'Codo abajo')+': θ₁ = '+(s[0]/D).toFixed(2).replace('.',',')+'° , θ₂ = '+(s[1]/D).toFixed(2).replace('.',',')+'°\n';
+    });
+    $('out-ik').textContent=txt.trim();
+    $('g2r').innerHTML=brazo(sol[0][0],sol[0][1],L[0],L[1],'var(--accent)')+brazo(sol[1][0],sol[1][1],L[0],L[1],'var(--c7)');
+  }
+  ['s-t1','s-t2','l1','l2'].forEach(function(id){$(id).addEventListener('input',dibujarFK)});
+  $('btn-ik').addEventListener('click',calcularIK);
+  dibujarFK();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="es">
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#b9561a">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sistemas Robotizados · Ejercicios resueltos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#fbf5ef; --surface:#ffffff; --fg:#2b1a0e; --muted:#7a5a46; --line:#ecd9c7;
+  --accent:#b9561a; --accent-soft:#fbe6d6; --warn:#7a3510; --warn-soft:#f6dccb;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --c0:#b9561a; --c0s:#fbe6d6; --c1:#e0701f; --c1s:#fdeedf; --c2:#c8641a; --c2s:#fbe8d8;
+  --c3:#f08a3c; --c3s:#fef0e3; --c4:#a8481a; --c4s:#f7e3d6; --c5:#e9a23b; --c5s:#fdf3e0;
+  --c6:#d9772b; --c6s:#fbeadb; --c7:#7a4a2b; --c7s:#f1e5da; --c8:#c25a10; --c8s:#fae5d4;
+  --shadow:0 1px 2px rgba(80,40,10,.06),0 8px 26px rgba(80,40,10,.07);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#1a120c; --surface:#241a12; --fg:#f6e7da; --muted:#c09c84; --line:#3c2a1d;
+  --accent:#f0893f; --accent-soft:#3a2415; --warn:#ffad7a; --warn-soft:#3d2719;
+  --c0:#f0893f; --c0s:#3a2415; --c1:#f5a05a; --c1s:#3b2616; --c2:#ef8a4a; --c2s:#37231a;
+  --c3:#ffb27a; --c3s:#3c2a1c; --c4:#e07a3c; --c4s:#34210f; --c5:#f7c060; --c5s:#3b2d13;
+  --c6:#f29a52; --c6s:#372315; --c7:#c79a7a; --c7s:#2c2119; --c8:#f57f3a; --c8s:#3a2214;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.3); } }
+
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.65;padding:0 16px 64px}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display)}
+code,pre{font-family:var(--mono)}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;font-size:13.5px;line-height:1.5}
+
+/* portada */
+header.hero{background:linear-gradient(135deg,var(--accent-soft),var(--bg) 72%);border-bottom:1px solid var(--line);margin:0 -16px 36px}
+.hero-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center;padding:48px 16px 44px}
+@media (max-width:760px){.hero-in{grid-template-columns:minmax(0,1fr);padding-block:32px 28px}.hero-art{display:none}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+header.hero h1{font-size:clamp(38px,6.4vw,64px);line-height:1.02;margin:10px 0 4px;letter-spacing:-.01em;font-weight:700}
+header.hero h1 span{color:var(--accent)}
+header.hero .sub{font-family:var(--display);font-size:clamp(20px,2.6vw,26px);font-weight:500;color:var(--muted);margin:0 0 14px}
+.fecha{font:13px/1.45 system-ui,sans-serif;color:var(--muted);margin:6px 0 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 18px;max-width:640px}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stats div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+.stats b{display:block;font-family:var(--display);font-size:28px;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stats span{font-size:12.5px;color:var(--muted);line-height:1.3;display:block}
+.cta{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-block;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;font-weight:600;font-size:14px}
+.btn:hover,.btn:focus-visible{border-color:var(--accent);outline:none}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.zart{width:100%;height:auto;max-width:300px}
+.art-cap{font-size:13px;color:var(--muted);text-align:center;margin:6px 0 0}
+
+/* rejilla */
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);gap:0}.toc{display:none}}
+main{min-width:0;display:flex;flex-direction:column;gap:28px}
+.toc{position:sticky;top:0;align-self:start;padding-top:8px;max-height:100vh;overflow:auto}
+.toc .grp{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:18px 0 6px}
+.toc a{display:block;color:var(--muted);text-decoration:none;font-size:14px;padding:4px 0 4px 10px;border-left:2px solid var(--line)}
+.toc a:hover,.toc a:focus-visible{color:var(--fg);border-left-color:var(--tc,var(--accent));outline:none}
+
+/* secciones */
+section.sec{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px 32px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-width:0;scroll-margin-top:16px}
+section.sec::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--tc,var(--accent))}
+@media (max-width:640px){section.sec{padding:6px 18px 22px;border-radius:14px}}
+.sh{display:flex;gap:16px;align-items:center;margin:24px 0 10px}
+.badge{flex:none;min-width:58px;height:58px;padding:0 10px;border-radius:16px;background:var(--tc,var(--accent));color:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:22px;box-shadow:0 4px 14px color-mix(in srgb,var(--tc,var(--accent)) 35%,transparent)}
+.shx{min-width:0}
+.kick{margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--tc,var(--accent))}
+h2{font-size:28px;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h3{font-size:20px;margin:28px 0 8px;font-weight:500;text-wrap:balance}
+h4{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:22px 0 6px;font-weight:500}
+p,li{max-width:70ch}
+.muted{color:var(--muted)}
+.ojo{color:var(--warn);font-weight:600}
+
+/* cajas */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:16px 0}
+.box.key{border-left:4px solid var(--accent)}
+.box.trap{border-left:4px solid var(--warn)}
+.box > :first-child{margin-top:0}.box > :last-child{margin-bottom:0}
+.zero{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:16px 0}
+.zero > :first-child{margin-top:0}.zero > :last-child{margin-bottom:0}
+.zero .ft{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin:2px 6px 2px 0}
+.pill{font-family:var(--mono);font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.formula{font-family:var(--mono);font-size:14.5px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:10px 0;overflow-x:auto;white-space:pre-wrap}
+
+/* mapa */
+.map{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.map a{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);text-decoration:none;font-size:14px}
+.map a:hover,.map a:focus-visible{border-color:var(--accent);outline:none}
+.map a b{color:var(--accent);font-family:var(--mono);font-weight:500;margin-right:4px}
+.map span{color:var(--muted);font-family:var(--mono)}
+
+/* tarjetas */
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:12px 0}
+.fcards .box{margin:0;border-top:3px solid var(--tc,var(--accent))}
+.fcards ul,.fcards ol{padding-left:18px;margin:0}
+.fcards li{margin:4px 0}
+
+/* tablas */
+.tw{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+td.c,th.c{text-align:center}
+
+/* evaluación */
+.pesos{display:flex;gap:14px;margin:10px 0 6px}
+@media (max-width:640px){.pesos{flex-direction:column}}
+.peso{flex:1;background:linear-gradient(160deg,var(--c1),var(--c4));color:#fff;border-radius:12px;padding:18px;text-align:center}
+.peso .porc{font-family:var(--display);font-size:38px;font-weight:700;line-height:1}
+.peso .lbl{font-size:13px;margin-top:6px;opacity:.95}
+
+/* checklists */
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.check label{cursor:pointer}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:8px 0 4px;max-width:420px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+
+/* desplegables */
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:14px 0}
+details>summary{cursor:pointer;padding:12px 18px;font-weight:600;list-style:none;display:flex;gap:10px;align-items:baseline}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--mono);color:var(--accent);width:1ch}
+details[open]>summary::before{content:"−"}
+details .inner{padding:0 20px 16px;border-top:1px solid var(--line)}
+details .inner > :first-child{margin-top:12px}
+
+/* filtros de examen */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chips button{font:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);color:var(--accent);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.ex-row[hidden]{display:none}
+
+/* simulador */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin:16px 0}
+.sim .ctrl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px;margin-bottom:8px}
+.sim .ctrl label{display:flex;gap:8px;align-items:center}
+.sim input[type=range]{width:170px;max-width:55vw;accent-color:var(--accent)}
+.sim input[type=number]{width:90px;font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.sim output{font-family:var(--mono);font-size:13px;min-width:6ch}
+.sim button{font:inherit;font-size:14px;padding:6px 14px;border:1px solid var(--accent);border-radius:6px;background:var(--accent);color:var(--surface);cursor:pointer}
+.sim svg{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:var(--bg);border-radius:8px}
+.readout{font-family:var(--mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;white-space:pre-wrap}
+
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:14px}
+.busq{width:100%;max-width:520px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);margin:8px 0}
+.exb{border-top:1px solid var(--line);padding:10px 0}
+.exb[hidden],details.yr[hidden]{display:none}
+details.yr{margin:10px 0}
+ul.start{padding-left:20px}ul.start li{margin:6px 0}
+</style>
+
+</head>
+<body>
+
+<div class="gsearch" style="max-width:1100px;margin:12px auto 0;padding:0 16px"><input id="q-global" type="search" placeholder="Buscar en toda la guía…" aria-label="Buscar en toda la guía" style="width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)"><div id="q-res" hidden class="qres"></div></div><style>#q-res[hidden]{display:none}#q-res.qres{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:6px}#q-res a{color:var(--accent)}</style>
+<div class="wrap">
+<nav class="toc" aria-label="Índice">
+  <div class="grp">Empezar</div>
+  <a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a>
+  <a href="index.html#examen" style="--tc:var(--c0)">El examen y cómo estudiar</a>
+  <a href="index.html#mapa" style="--tc:var(--c0)">Mapa del temario</a>
+  <div class="grp">Teoría</div>
+  <a href="t1.html#t1" style="--tc:var(--c1)">T1 Introducción</a>
+  <a href="t2.html#t2" style="--tc:var(--c2)">T2 Morfología</a>
+  <a href="t3.html#t3" style="--tc:var(--c3)">T3 Herramientas matemáticas</a>
+  <a href="t4.html#t4" style="--tc:var(--c4)">T4 Cinemática</a>
+  <a href="t5.html#t5" style="--tc:var(--c5)">T5 Dinámica</a>
+  <a href="t6.html#t6" style="--tc:var(--c6)">T6 Control</a>
+  <div class="grp">Prácticas</div>
+  <a href="practicas.html#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
+  <div class="grp">Problemas</div>
+  <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
+  <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
+  <div class="grp">Referencia</div>
+  <a href="formulario.html#formulario" style="--tc:var(--c7)">Formulario</a>
+  <a href="glosario.html#glosario" style="--tc:var(--c7)">Glosario</a>
+  <a href="plan.html#plan" style="--tc:var(--c7)">Plan de estudio</a>
+  <a href="bibliografia.html#bibliografia" style="--tc:var(--c7)">Bibliografía</a>
+</nav>
+<main>
+<section class="sec" id="resueltos" style="--tc:var(--c8)">
+  <div class="sh"><span class="badge" aria-hidden="true">R</span><div class="shx"><p class="kick">Problemas</p><h2>Ejercicios resueltos</h2></div></div>
+  <p>Estos ejercicios están resueltos paso a paso y comprobados con código. Están pensados como plantilla para los ejercicios del examen, no como copia de ellos.</p>
+
+  <h3>Ejercicios de práctica (A–D)</h3>
+
+  <details open>
+    <summary>Ejercicio A · Cinemática inversa de un 2R plano (dos soluciones)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot plano de dos eslabones con l₁ = l₂ = 1. Calcula las articulaciones para llevar el extremo al punto (1, 1) y al punto (0,5 ; 0,5). Indica las dos soluciones.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> qué piden (θ₁ y θ₂) y qué teoría usas (ley de cosenos para θ₂, atan2 para θ₁; las dos soluciones son codo arriba y codo abajo).</div>
+      <details><summary>Paso 1 · Calcular cos θ₂</summary>
+        <div class="inner"><p>cos θ₂ = (x² + y² − l₁² − l₂²) / (2 l₁ l₂). Para (1, 1): cos θ₂ = (1 + 1 − 1 − 1)/2 = 0, así que θ₂ = ±90°.</p></div>
+      </details>
+      <details><summary>Paso 2 · Calcular θ₁ para cada θ₂</summary>
+        <div class="inner"><p>θ₁ = atan2(y, x) − atan2(l₂ sin θ₂, l₁ + l₂ cos θ₂).</p><p>Para θ₂ = +90°: atan2(1, 1) = 45° y atan2(1, 1 + 0) = 45°, así que θ₁ = 45° − 45° = 0°.</p><p>Para θ₂ = −90°: atan2(−1, 1 + 0) = −45°, así que θ₁ = 45° − (−45°) = 90°.</p><p class="ojo">Ojo: el signo es fácil de equivocar. Comprueba siempre el resultado sustituyendo en la cinemática directa, como en el paso 3.</p></div>
+      </details>
+      <details><summary>Paso 3 · Comprobar sustituyendo</summary>
+        <div class="inner"><p>Codo arriba: θ₁ = 0°, θ₂ = 90° → x = cos 0° + cos 90° = 1, y = sin 0° + sin 90° = 1. ✔</p><p>Codo abajo: θ₁ = 90°, θ₂ = −90° → x = cos 90° + cos 0° = 1, y = sin 90° + sin 0° = 1. ✔</p></div>
+      </details>
+      <details><summary>Paso 4 · Punto (0,5 ; 0,5)</summary>
+        <div class="inner"><p>cos θ₂ = (0,25 + 0,25 − 2)/2 = −0,75, así que θ₂ ≈ ±138,59°. Con el cálculo completo: codo arriba θ₁ ≈ −24,30°, θ₂ ≈ 138,59°; codo abajo θ₁ ≈ 114,30°, θ₂ ≈ −138,59°. Ambas llevan el extremo a (0,5 ; 0,5).</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> (1, 1) → codo arriba (0°, 90°) o codo abajo (90°, −90°). (0,5 ; 0,5) → codo arriba (−24,30°, 138,59°) o codo abajo (114,30°, −138,59°).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Ejercicio B · Jacobiana y singularidad del 2R plano</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Halla la Jacobiana del 2R plano con l₁ = l₂ = 1 y encuentra en qué configuraciones es singular.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> derivar x e y respecto a θ₁ y θ₂ y ordenar los resultados en una matriz 2 × 2. Una configuración es singular cuando det J = 0.</div>
+      <details><summary>Paso 1 · Derivar</summary>
+        <div class="inner"><p>∂x/∂θ₁ = −l₁ sin θ₁ − l₂ sin(θ₁+θ₂), ∂x/∂θ₂ = −l₂ sin(θ₁+θ₂), ∂y/∂θ₁ = l₁ cos θ₁ + l₂ cos(θ₁+θ₂), ∂y/∂θ₂ = l₂ cos(θ₁+θ₂).</p></div>
+      </details>
+      <details><summary>Paso 2 · Determinante</summary>
+        <div class="inner"><p>Al calcular el determinante, sale det J = l₁ l₂ sin θ₂. Comprobado con código para θ₁ = 0,3 rad y θ₂ = 0,8 rad.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> J singular cuando sin θ₂ = 0, es decir, θ₂ = 0 o θ₂ = π.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Ejercicio C · Spline cúbico con velocidad nula en los extremos</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Una articulación pasa de θ = 0 a θ = π/2 en el intervalo t ∈ [0, 1] s, con velocidad cero al inicio y al final. Halla el polinomio cúbico.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> son 4 condiciones y 4 incógnitas.</div>
+      <details><summary>Paso 1 · Escribir las condiciones</summary>
+        <div class="inner"><p>θ(0) = a₀ = 0. θ̇(0) = a₁ = 0. θ(1) = a₂ + a₃ = π/2. θ̇(1) = 2a₂ + 3a₃ = 0.</p></div>
+      </details>
+      <details><summary>Paso 2 · Resolver</summary>
+        <div class="inner"><p>De la última ecuación, a₂ = −3a₃/2. Sustituyendo: −3a₃/2 + a₃ = π/2, luego a₃ = −π y a₂ = 3π/2.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> θ(t) = (3π/2) t² − π t³. Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</div>
+    </div>
+  </details>
+
+  <h3>Ejercicio D · Dinámica (resumen)</h3>
+  <details>
+    <summary>Ejercicio D · Matriz de inercia de un 2R con masas en los extremos</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Con m₁ = 2, m₂ = 1, l₁ = l₂ = 1 y θ₂ = 0,8 rad, calcula la matriz M(q).</p>
+      <div class="box key"><strong>Antes de empezar:</strong> usa las expresiones de M₁₁, M₁₂ y M₂₂ de la unidad 5.</div>
+      <div class="box"><strong>Resultado final:</strong> M₁₁ = 5,393 ; M₁₂ = M₂₁ = 1,697 ; M₂₂ = 1. Comprobado con código.</div>
+    </div>
+  </details>
+
+  <h3>Ejercicios de examen resueltos</h3>
+  <p>Estos cinco ejercicios vienen de exámenes de cursos anteriores. Están resueltos con los datos del enunciado y comprobados con código. Si el examen cambia algún dato, repite los mismos pasos.</p>
+  <div class="box trap"><strong>Convención de codo:</strong> en esta guía, con el robot plano de 2 eslabones, <b>codo arriba</b> es θ₂ &gt; 0 y <b>codo abajo</b> es θ₂ &lt; 0. Si una figura de examen usa otra convención, cambia el signo de θ₂ y revisa el resultado.</div>
+
+  <details id="ej-e">
+    <summary>Ejercicio E · Jacobiana y velocidades de un robot de 2 articulaciones (parcial de 2021)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> La posición del extremo es x = cos θ₁ (1 + cos θ₂), y = sen θ₁ (1 + cos θ₂), z = −sen θ₂. La coordenada z es siempre positiva. Calcula: a) la Jacobiana de velocidades lineales; b) las velocidades articulares cuando x = y = 1 m, ẋ = 2 m/s y ż = 1 m/s, sin usar la pseudoinversa; c) ẏ en ese caso.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> primero hay que encontrar la configuración (θ₁, θ₂) a partir de la posición. Después se deriva para obtener J, y con ẋ y ż se resuelve un sistema 2 × 2. La velocidad ẏ se obtiene al final, sustituyendo.</div>
+      <details><summary>Paso 1 · Encontrar la configuración</summary>
+        <div class="inner"><p>Si x = y = 1, entonces x² + y² = (1 + cos θ₂)² · (cos²θ₁ + sen²θ₁) = 2, así que 1 + cos θ₂ = √2 y cos θ₂ = √2 − 1 ≈ 0,4142. Como z = −sen θ₂ &gt; 0, sen θ₂ &lt; 0: sen θ₂ = −√(1 − 0,4142²) ≈ −0,9102, luego θ₂ ≈ −65,53°. Además cos θ₁ = sen θ₁ = 1/√2 y θ₁ = 45°. Comprobación: z = 0,9102 &gt; 0. ✔</p></div>
+      </details>
+      <details><summary>Paso 2 · Jacobiana</summary>
+        <div class="inner"><p>Derivando: ∂x/∂θ₁ = −sen θ₁ (1 + cos θ₂), ∂x/∂θ₂ = −cos θ₁ sen θ₂; ∂y/∂θ₁ = cos θ₁ (1 + cos θ₂), ∂y/∂θ₂ = −sen θ₁ sen θ₂; ∂z/∂θ₁ = 0, ∂z/∂θ₂ = −cos θ₂.</p>
+        <p>Evaluada en el punto: J = [[−1 ; 0,6436], [1 ; 0,6436], [0 ; −0,4142]].</p></div>
+      </details>
+      <details><summary>Paso 3 · Resolver ẋ y ż</summary>
+        <div class="inner"><p>Con ż = −0,4142 θ̇₂ = 1 sale θ̇₂ = −2,4142 rad/s. Con ẋ = −θ̇₁ + 0,6436 θ̇₂ = 2 sale θ̇₁ = −3,5538 rad/s.</p><p>La matriz 2 × 2 de las filas x y z tiene determinante 0,4142 ≠ 0, así que la solución es única.</p></div>
+      </details>
+      <details><summary>Paso 4 · Calcular ẏ</summary>
+        <div class="inner"><p>ẏ = θ̇₁ + 0,6436 θ̇₂ = −3,5538 + 0,6436 · (−2,4142) = −5,1075 m/s.</p><p>Comprobación: sustituyendo en la fila x, −(−3,5538) + 0,6436 · (−2,4142) = 2,0000. ✔</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> θ̇₁ ≈ −3,554 rad/s, θ̇₂ ≈ −2,414 rad/s, ẏ ≈ −5,11 m/s.<br><span class="ojo">Ojo:</span> el enunciado prohíbe la pseudoinversa. Con dos ecuaciones y dos incógnitas no hace falta: basta resolver el sistema directamente.</div>
+    </div>
+  </details>
+
+  <details id="ej-f">
+    <summary>Ejercicio F · Distancia a la segunda articulación en un 2R con interpoladores lineales (junio de 2019)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot plano de 2 eslabones de 1 m. La articulación 1 gira 90° en 3 s y la 2 gira 45° en 2 s, con interpolador lineal. Cuando el segundo eslabón pasa por el punto (1,2 ; 0,5), calcula la distancia a entre ese punto y la segunda articulación.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> la figura no está en el texto. Supón que la configuración inicial es el robot estirado sobre el eje x (θ₁ = θ₂ = 0). Lo que piden es a = |P − p₂|, donde p₂ es la posición de la articulación 2. El punto P está sobre el segundo eslabón cuando P − p₂ es paralelo a la dirección del eslabón.</div>
+      <details><summary>Paso 1 · Leyes horarias</summary>
+        <div class="inner"><p>θ₁(t) = (π/2) · t/3 para 0 ≤ t ≤ 3 s, y θ₂(t) = (π/4) · t/2 para 0 ≤ t ≤ 2 s (después se queda en 45°).</p></div>
+      </details>
+      <details><summary>Paso 2 · Posición de la articulación 2 y dirección del segundo eslabón</summary>
+        <div class="inner"><p>p₂ = (cos θ₁, sen θ₁). La dirección del segundo eslabón es u = (cos(θ₁ + θ₂), sen(θ₁ + θ₂)).</p></div>
+      </details>
+      <details><summary>Paso 3 · Condición de alineación</summary>
+        <div class="inner"><p>Se busca t tal que el producto vectorial (P − p₂) × u sea cero, y que la proyección (P − p₂) · u esté entre 0 y 1 m. Como el movimiento es continuo, el cruce se localiza barriendo t en el intervalo.</p></div>
+      </details>
+      <details><summary>Paso 4 · Resolver y calcular a</summary>
+        <div class="inner"><p>Hay un único cruce en 0 ≤ t ≤ 3 s, en t ≈ 0,641 s. Allí θ₁ ≈ 19,24° y θ₂ ≈ 14,43°, p₂ ≈ (0,944 ; 0,330) y P − p₂ ≈ (0,256 ; 0,170). La proyección sobre u es 0,307 m (positiva y menor que 1, así que P está sobre el eslabón).</p><p>Entonces a = |P − p₂| ≈ 0,307 m.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> a ≈ 0,307 m, cuando t ≈ 0,641 s.</div>
+    </div>
+  </details>
+
+  <details id="ej-g">
+    <summary>Ejercicio G · Instantes en que el extremo pasa por dos puntos de una recta (febrero y junio de 2016)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> El extremo de un robot 2R con eslabones de 1 m sigue la recta que va de B (0,4 ; 0,4) a C (1,4 ; 1,4), es decir, y = x. El movimiento dura 1 s. Calcula los instantes en que pasa por A₁ (a 0,5 m de B) y por A₂ (a 0,3 m de C), y los ángulos θ₁ y θ₂ en esos instantes, con 0 ≤ θ₂ ≤ π. Hay dos variantes: en junio, la coordenada x(t) sigue un interpolador lineal; en febrero, un spline cúbico que empieza y acaba con velocidad cero.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> como la recta es y = x, la distancia sobre la recta se traduce en la coordenada x. Para A₁, x = 0,4 + 0,5/√2 ≈ 0,7536. Para A₂, x = 1,4 − 0,3/√2 ≈ 1,1879. La variante cambia solo los instantes, no los ángulos.</div>
+      <details><summary>Paso 1 · Coordenadas de A₁ y A₂</summary>
+        <div class="inner"><p>A₁ = (0,7536 ; 0,7536) y A₂ = (1,1879 ; 1,1879).</p></div>
+      </details>
+      <details><summary>Paso 2 · Instantes</summary>
+        <div class="inner"><p><b>Lineal:</b> x(t) = 0,4 + t, así que t₁ = 0,354 s y t₂ = 0,788 s.</p><p><b>Spline:</b> x(t) = 0,4 + (3t² − 2t³). Resolviendo numéricamente, t₁ ≈ 0,401 s y t₂ ≈ 0,703 s. Comprobación: 3 · 0,401² − 2 · 0,401³ = 0,354, que coincide con 0,7536 − 0,4.</p></div>
+      </details>
+      <details><summary>Paso 3 · θ₂ por la ley de cosenos</summary>
+        <div class="inner"><p>Con y = x: cos θ₂ = (x² + y² − 2)/2 = x² − 1. Para A₁: cos θ₂ ≈ −0,4319, θ₂ ≈ 115,61°. Para A₂: cos θ₂ ≈ 0,4116, θ₂ ≈ 65,73°. Los dos son positivos, así que cumplen 0 ≤ θ₂ ≤ π y la solución es la de codo arriba.</p></div>
+      </details>
+      <details><summary>Paso 4 · θ₁</summary>
+        <div class="inner"><p>θ₁ = atan2(y, x) − atan2(sen θ₂, 1 + cos θ₂). Para A₁: 45° − 57,80° = −12,80°. Para A₂: 45° − 32,86° = 12,14°.</p><p>Comprobación: sustituyendo en la cinemática directa se recupera (0,7536 ; 0,7536) y (1,1879 ; 1,1879). ✔</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong><br>A₁: t = 0,354 s (lineal) o 0,401 s (spline); θ₁ = −12,80°, θ₂ = 115,61°.<br>A₂: t = 0,788 s (lineal) o 0,703 s (spline); θ₁ = 12,14°, θ₂ = 65,73°.</div>
+    </div>
+  </details>
+
+  <details id="ej-h">
+    <summary>Ejercicio H · Velocidad del extremo en los puntos de paso A, B y C (junio de 2024)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> El extremo de un robot de 2 eslabones de 1 m sigue la trayectoria A (0,5 ; 1) → B (1 ; 1) → C (1,4 ; 0,7). Las articulaciones usan un interpolador lineal, 1 s por tramo, y el robot va en codo abajo. Comprueba si en algún punto de paso la velocidad del extremo supera 0,6 m/s.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> con interpolador lineal en articulaciones, q̇ es constante dentro de cada tramo y cambia de golpe en cada punto de paso. Por eso en cada punto hay dos velocidades, la del final del tramo anterior y la del inicio del siguiente. Hay que comprobar las dos.</div>
+      <details><summary>Paso 1 · Cinemática inversa en codo abajo</summary>
+        <div class="inner"><p>A: θ = (119,45° ; −112,02°). B: θ = (90,00° ; −90,00°). C: θ = (65,06° ; −77,00°). Comprobación: la cinemática directa devuelve los tres puntos.</p></div>
+      </details>
+      <details><summary>Paso 2 · Velocidades articulares en cada tramo</summary>
+        <div class="inner"><p>Tramo AB (1 s): q̇ = (−0,514 ; 0,384) rad/s. Tramo BC (1 s): q̇ = (−0,435 ; 0,227) rad/s.</p></div>
+      </details>
+      <details><summary>Paso 3 · Velocidad del extremo v = J(θ) q̇</summary>
+        <div class="inner"><p>Con J = [[−sen θ₁ − sen θ₁₂ , −sen θ₁₂], [cos θ₁ + cos θ₁₂ , cos θ₁₂]]:</p>
+        <p>En A (tramo AB): |v| ≈ 0,481 m/s. En B, final de AB: |v| ≈ 0,530 m/s. En B, inicio de BC: |v| ≈ 0,483 m/s. En C, final de BC: |v| ≈ 0,523 m/s.</p></div>
+      </details>
+      <details><summary>Paso 4 · Máximo dentro de cada tramo</summary>
+        <div class="inner"><p>Barriendo el tramo, el máximo se alcanza al final: 0,530 m/s en AB y 0,523 m/s en BC. No hay ningún punto por encima de 0,6 m/s.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> ningún punto de paso supera 0,6 m/s. La mayor velocidad es 0,53 m/s, en B.<br><span class="ojo">Ojo:</span> si el examen define el codo de otra forma, los valores de θ cambian (y también la velocidad). Comprueba la convención antes de dar el resultado.</div>
+    </div>
+  </details>
+
+  <details id="ej-i">
+    <summary>Ejercicio I · Interpolador articular que pasa por un punto (julio de 2021)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot 2R con eslabones de 1 m. El extremo parte de A (0,7 ; 1,1), pasa por B (1,5 ; 0,2) y termina en C en 1 s, en codo abajo. Las dos articulaciones se mueven con interpoladores lineales, en un único tramo. Al acabar, θ₁ = −50°. Calcula el instante en que pasa por B, las ecuaciones de θ₁(t) y θ₂(t) y las coordenadas de C.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> las incógnitas son el instante s en que se pasa por B y el valor final θ₂C (que es lo que define C). Son dos incógnitas y dos ecuaciones, las coordenadas de B. Hay que resolverlas juntas.</div>
+      <details><summary>Paso 1 · Configuración inicial</summary>
+        <div class="inner"><p>Con codo abajo, θ_A = (106,84° ; −98,63°). Comprobación: la cinemática directa devuelve A = (0,7 ; 1,1).</p></div>
+      </details>
+      <details><summary>Paso 2 · Interpolador lineal</summary>
+        <div class="inner"><p>q(s) = θ_A + s (θ_C − θ_A), con 0 ≤ s ≤ 1 y t = s. Como θ₁C = −50°, la primera articulación es θ₁(t) = 106,84° − 156,84° · t.</p></div>
+      </details>
+      <details><summary>Paso 3 · Pasar por B</summary>
+        <div class="inner"><p>Hay que cumplir cinemática directa(q(s)) = (1,5 ; 0,2). Con dos ecuaciones y dos incógnitas (s y θ₂C), se resuelve numéricamente (Newton). Solución: s ≈ 0,3725 y θ₂C ≈ −53,08°.</p><p>La otra solución que aparece tiene θ₂C ≈ +103°, es decir, codo arriba al final. Se descarta porque el enunciado pide codo abajo.</p></div>
+      </details>
+      <details><summary>Paso 4 · Ecuaciones y C</summary>
+        <div class="inner"><p>θ₂(t) = −98,63° + 45,55° · t, que se mantiene negativo en todo el movimiento (codo abajo).</p><p>En radianes: θ₁(t) = 1,865 − 2,737 t y θ₂(t) = −1,721 + 0,795 t. Comprobación: θ₂(0,3725) ≈ −81,65°, y la cinemática directa da (1,499 ; 0,207) ≈ B. ✔</p><p>C = cinemática directa(−50°, −53,08°) = (0,417 ; −1,740) m.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> el extremo pasa por B en t ≈ 0,372 s. θ₁(t) = 1,865 − 2,737 t (rad), θ₂(t) = −1,721 + 0,795 t (rad). C ≈ (0,417 ; −1,740) m.</div>
+    </div>
+  </details>
+
+  <details id="ej-j">
+    <summary>Ejercicio J · Spline cúbico seguido de interpolador lineal en una articulación (febrero de 2020)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Una articulación gira de 0 a 1 rad en 3 s. Entre 0 y 2 s se ajusta un spline cúbico q₁(t), y entre 2 y 3 s un interpolador lineal q₂(t). En t = 2 s hay continuidad de posición y de velocidad. La velocidad inicial es cero y la velocidad máxima que alcanza es 5 rad/s. Elige la solución que cumple q(2) &gt; 1 rad.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> llama a = q(2) y v = q̇(2). El interpolador lineal vale q₂(t) = a + v (t − 2), y debe cumplir q₂(3) = 1. El spline con q(0) = 0 y q̇(0) = 0 es q(t) = b t² + c t³. Hay que imponer tres condiciones: el valor de velocidad en t = 2, la condición de q₂(3) = 1 y que la velocidad máxima del spline sea 5 rad/s.</div>
+      <details><summary>Paso 1 · Condiciones de continuidad</summary>
+        <div class="inner"><p>q(2) = 4b + 8c = a. q̇(t) = 2bt + 3ct², así que q̇(2) = 4b + 12c = v.</p><p>El lineal tiene pendiente v, y por continuidad de velocidad, q₂(3) = a + v = 1. Entonces 4b + 12c = 1 − (4b + 8c), es decir, 8b + 20c = 1, o bien b = 1/8 − 5c/2.</p></div>
+      </details>
+      <details><summary>Paso 2 · Velocidad máxima</summary>
+        <div class="inner"><p>q̈ = 2b + 6ct = 0 da t* = −b/(3c). Sustituyendo en q̇: q̇(t*) = −b²/(3c). Imponiendo |q̇| = 5 con q̇ máxima en [0, 2]: −b²/(3c) = 5, es decir b² = −15c.</p><p>Sustituyendo b = 1/8 − 5c/2: 400c² + 920c + 1 = 0. Sus raíces son c = −(23 + 4√33)/20 ≈ −2,2989 y c ≈ −0,0011.</p></div>
+      </details>
+      <details><summary>Paso 3 · Elegir la raíz</summary>
+        <div class="inner"><p>Con c ≈ −0,0011, b ≈ 0,1277 y t* ≈ 39 s, fuera de [0, 2]. Esa raíz no da un máximo dentro del intervalo y se descarta.</p><p>Con c = −(23 + 4√33)/20: b = (6 + √33)/2 ≈ 5,8723 y t* ≈ 0,851 s, dentro de [0, 2]. Además a = q(2) = 2,8 + 0,4√33 ≈ 5,098 &gt; 1, que es la condición del enunciado.</p></div>
+      </details>
+      <details><summary>Paso 4 · Ecuaciones y comprobación</summary>
+        <div class="inner"><p>q₁(t) = ((6 + √33)/2) t² − ((23 + 4√33)/20) t³ para 0 ≤ t ≤ 2 (rad).</p><p>q₂(t) = a + (1 − a)(t − 2) = (2,8 + 0,4√33) − (1,8 + 0,4√33)(t − 2) para 2 ≤ t ≤ 3 (rad), es decir, q₂(t) ≈ 5,098 − 4,098 (t − 2).</p><p>Comprobación: q₂(3) = 1 ✔; q₁(2) = q₂(2) ≈ 5,098 ✔; q̇₁(2) = −4,098 = pendiente de q₂ ✔; |q̇₁| máxima = 5,000 en t ≈ 0,851 s ✔.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> q₁(t) ≈ 5,872 t² − 2,299 t³ (0 ≤ t ≤ 2 s) y q₂(t) ≈ 5,098 − 4,098 (t − 2) (2 ≤ t ≤ 3 s).<br><span class="ojo">Ojo:</span> la articulación sobrepasa 1 rad y vuelve a 1 rad en t = 3 s. Es lo que el enunciado pide al elegir q(2) &gt; 1 rad; no es un error de cálculo.</div>
+    </div>
+  </details>
+
+  <details id="ej-k">
+    <summary>Ejercicio K · Velocidad, mínimo y aceleración en un 2R con velocidades articulares constantes (junio de 2019)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Robot plano de 2 eslabones que se mueve en un plano horizontal durante 4 s con velocidad angular constante de 1 rad/s en ambas articulaciones. Calcula: a) el instante en que el extremo alcanza 2 m/s; b) el valor mínimo de la velocidad y el instante en que se alcanza; c) las componentes de la aceleración lineal del extremo en t = 1,823 s, respecto a la base.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> supón que el robot empieza estirado sobre el eje x y que θ₁ = θ₂ = t. Con esa suposición, la velocidad al cuadrado se simplifica mucho y la respuesta del apartado a) se confirma con el propio 1,823 s del enunciado.</div>
+      <details><summary>Paso 1 · Posición del extremo</summary>
+        <div class="inner"><p>x(t) = cos t + cos 2t, y(t) = sen t + sen 2t.</p></div>
+      </details>
+      <details><summary>Paso 2 · Módulo de la velocidad</summary>
+        <div class="inner"><p>ẋ = −sen t − 2 sen 2t y ẏ = cos t + 2 cos 2t. Entonces |v|² = ẋ² + ẏ² = 5 + 4 cos t.</p><p>Esto sale de expandir los cuadrados y usar que sen²+cos² = 1, y que cos 2t·cos t + sen 2t·sen t = cos t.</p></div>
+      </details>
+      <details><summary>Paso 3 · Apartado a) |v| = 2 m/s</summary>
+        <div class="inner"><p>4 = 5 + 4 cos t, así que cos t = −1/4. En [0, 4] s hay una sola solución: t = arccos(−1/4) ≈ 1,823 s. (La otra, 4,460 s, queda fuera del intervalo.)</p></div>
+      </details>
+      <details><summary>Paso 4 · Apartado b) mínimo</summary>
+        <div class="inner"><p>|v|² = 5 + 4 cos t es mínimo cuando cos t = −1, es decir t = π ≈ 3,142 s. Entonces |v|² = 1 y |v|_min = 1 m/s.</p><p>En t = 0, la velocidad es 3 m/s (máximo).</p></div>
+      </details>
+      <details><summary>Paso 5 · Apartado c) aceleración</summary>
+        <div class="inner"><p>Como las velocidades articulares son constantes, la aceleración es la derivada de la velocidad: a = d/dt (ẋ, ẏ).</p><p>a_x = −cos t − 4 cos 2t y a_y = −(8 cos t + 1) sen t.</p><p>En t = 1,823 s, cos t = −1/4, cos 2t = −7/8 y sen t = √15/4 ≈ 0,968. Entonces a_x = 0,25 + 3,5 = 3,750 m/s² y a_y = 0,968 m/s².</p><p>Comprobación: sustituyendo t = 1,823 s en las expresiones simbólicas se obtiene (3,751 ; 0,965) m/s², que coincide con la forma exacta dentro del redondeo.</p></div>
+      </details>
+      <div class="box"><strong>Resultado final:</strong> a) t ≈ 1,823 s. b) |v| mínimo = 1 m/s en t ≈ 3,142 s. c) a ≈ (3,75 ; 0,968) m/s² en la base.</div>
+    </div>
+  </details>
+
+  <div class="box trap">
+    <strong>Qué falta:</strong> hay 38 exámenes distintos de cursos anteriores. Aquí tienes resueltos siete ejercicios (de la E a la K), todos comprobados con código. El resto está listado en «Practicar por tema» y «Buscar un examen», pero sin resolver. Para resolver otro, usa la misma plantilla: primero la configuración, luego la cinemática o la Jacobiana, y al final sustituir para comprobar.
+  </div>
+</section>
+</main>
+</div>
+<footer>
+  Guía de estudio · Sistemas Robotizados · Curso 2026-27 · Los cálculos numéricos de la guía se han comprobado con código.
+</footer>
+<script>
+
+(function(){
+  /* --- progreso: examen y plan --- */
+  function track(prefix, ids, barId, contId, key){
+    var est={}; try{est=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+    function act(){
+      var n=0; ids.forEach(function(id){var el=document.getElementById(id); if(el&&el.checked)n++;});
+      var b=document.getElementById(barId); if(b) b.style.width=(n/ids.length*100)+'%';
+      var c=document.getElementById(contId); if(c) c.textContent=n+' de '+ids.length+' completados';
+    }
+    ids.forEach(function(id){
+      var el=document.getElementById(id); if(!el) return;
+      el.checked=!!est[id];
+      el.addEventListener('change',function(){est[id]=el.checked; try{localStorage.setItem(key,JSON.stringify(est))}catch(e){} act();});
+    });
+    act();
+  }
+  track('c',['c1','c2','c3','c4','c5','c6','c7','c8'],'barra-c','cont-c','robotizados-examen');
+  track('p',['p1','p2','p3','p4','p5','p6','p7','p8','p9'],'barra-p','cont-p','robotizados-plan');
+
+  /* --- filtro de exámenes por tema --- */
+  /* --- filtro de ejercicios por tema --- */
+  var ct=document.querySelectorAll('#filtro-tema button');
+  ct.forEach(function(b){b.addEventListener('click',function(){
+    ct.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    var f=b.getAttribute('data-f');
+    document.querySelectorAll('#tabla-tema .ex-row').forEach(function(r){
+      r.hidden=!(f==='todos'||r.getAttribute('data-t')===f);
+    });
+  });});
+
+  /* --- buscar un examen: tipo + texto --- */
+  var tipo='todos', q='';
+  var cb=document.querySelectorAll('#filtro-tipo button');
+  function aplicarBusqueda(){
+    var vis=0;
+    document.querySelectorAll('#practicar .exb').forEach(function(e){
+      var okTipo = tipo==='todos' || (tipo==='res' ? e.getAttribute('data-res')==='1' : e.getAttribute('data-k')===tipo);
+      var okTxt = !q || (e.getAttribute('data-text')||'').indexOf(q)>=0 || e.textContent.toLowerCase().indexOf(q)>=0;
+      e.hidden = !(okTipo && okTxt);
+      if(!e.hidden) vis++;
+    });
+    document.querySelectorAll('#practicar details.yr').forEach(function(d){
+      d.hidden = d.querySelectorAll('.exb:not([hidden])').length===0;
+    });
+    var c=document.getElementById('cont-buscar');
+    if(c) c.textContent = vis+' examen(es) con los filtros actuales';
+  }
+  cb.forEach(function(b){b.addEventListener('click',function(){
+    cb.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    tipo=b.getAttribute('data-k'); aplicarBusqueda();
+  });});
+  var inp=document.getElementById('buscar-examen');
+  if(inp) inp.addEventListener('input',function(){ q=inp.value.trim().toLowerCase(); aplicarBusqueda(); });
+  aplicarBusqueda();
+
+  if(document.getElementById('s-t1')){
+  /* --- simulador 2R plano --- */
+  var D=Math.PI/180, NS='http://www.w3.org/2000/svg';
+  function fk(t1,t2,l1,l2){
+    var x1=l1*Math.cos(t1), y1=l1*Math.sin(t1);
+    return [x1,y1, x1+l2*Math.cos(t1+t2), y1+l2*Math.sin(t1+t2)];
+  }
+  function ik(x,y,l1,l2){
+    var c2=(x*x+y*y-l1*l1-l2*l2)/(2*l1*l2);
+    if(Math.abs(c2)>1) return null;
+    var s=Math.acos(Math.max(-1,Math.min(1,c2))), out=[];
+    [s,-s].forEach(function(t2){
+      var t1=Math.atan2(y,x)-Math.atan2(l2*Math.sin(t2), l1+l2*Math.cos(t2));
+      out.push([t1,t2]);
+    });
+    return out;
+  }
+  function brazo(t1,t2,l1,l2,col){
+    var p=fk(t1,t2,l1,l2);
+    return '<line x1="0" y1="0" x2="'+p[0]+'" y2="'+p[1]+'" stroke="'+col+'" stroke-width="0.09" stroke-linecap="round"/>'+
+           '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+p[2]+'" y2="'+p[3]+'" stroke="'+col+'" stroke-width="0.09" stroke-linecap="round"/>'+
+           '<circle cx="'+p[2]+'" cy="'+p[3]+'" r="0.08" fill="'+col+'"/>';
+  }
+  var $=function(id){return document.getElementById(id)};
+  function leerL(){return [parseFloat($('l1').value)||1, parseFloat($('l2').value)||1]}
+  function dibujarFK(){
+    var t1=parseFloat($('s-t1').value)*D, t2=parseFloat($('s-t2').value)*D, L=leerL();
+    $('o-t1').textContent=$('s-t1').value+'°'; $('o-t2').textContent=$('s-t2').value+'°';
+    $('g2r').innerHTML=brazo(t1,t2,L[0],L[1],'var(--accent)');
+    var p=fk(t1,t2,L[0],L[1]);
+    var detJ=L[0]*L[1]*Math.sin(t2);
+    $('out-fk').textContent='Extremo: x = '+p[2].toFixed(3).replace('.',',')+' ; y = '+p[3].toFixed(3).replace('.',',')+
+      '\ndet J = '+detJ.toFixed(3).replace('.',',')+(Math.abs(detJ)<1e-3?'  ← singular':'');
+  }
+  function calcularIK(){
+    var L=leerL(), x=parseFloat($('tx').value), y=parseFloat($('ty').value);
+    var sol=ik(x,y,L[0],L[1]);
+    if(!sol){ $('out-ik').textContent='Punto fuera de alcance: no hay solución.'; $('g2r').innerHTML=brazo(parseFloat($('s-t1').value)*D,parseFloat($('s-t2').value)*D,L[0],L[1],'var(--accent)'); return; }
+    var txt='';
+    sol.forEach(function(s,i){
+      txt+=(i===0?'Codo arriba':'Codo abajo')+': θ₁ = '+(s[0]/D).toFixed(2).replace('.',',')+'° , θ₂ = '+(s[1]/D).toFixed(2).replace('.',',')+'°\n';
+    });
+    $('out-ik').textContent=txt.trim();
+    $('g2r').innerHTML=brazo(sol[0][0],sol[0][1],L[0],L[1],'var(--accent)')+brazo(sol[1][0],sol[1][1],L[0],L[1],'var(--c7)');
+  }
+  ['s-t1','s-t2','l1','l2'].forEach(function(id){$(id).addEventListener('input',dibujarFK)});
+  $('btn-ik').addEventListener('click',calcularIK);
+  dibujarFK();
+  }
+})();
+
+/* --- búsqueda global --- */
+(function(){
+  var box=document.getElementById('q-global'), res=document.getElementById('q-res');
+  if(!box||!res) return;
+  var idx=null;
+  function cargar(cb){ if(idx) return cb(idx); fetch('search-index.json').then(function(r){return r.json()}).then(function(j){idx=j; cb(j)}).catch(function(){res.textContent='La búsqueda necesita abrir la guía desde su dirección web.'; res.hidden=false;}); }
+  box.addEventListener('input',function(){
+    var q=box.value.trim().toLowerCase();
+    if(q.length<2){res.hidden=true; res.innerHTML=''; return;}
+    cargar(function(j){
+      var out=[];
+      j.forEach(function(e){ if(e.text.toLowerCase().indexOf(q)>=0) out.push(e); });
+      res.innerHTML = out.slice(0,12).map(function(e){return '<a href="'+e.url+'">'+e.title+'</a>'}).join('') || '<span>Sin resultados</span>';
+      res.hidden=false;
+    });
+  });
+})();
+if('serviceWorker' in navigator){ try{ navigator.serviceWorker.register('sw.js'); }catch(e){} }
+
+</script>
+</body>
+</html>
