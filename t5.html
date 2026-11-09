@@ -204,6 +204,11 @@ summary:hover{color:var(--tc,var(--accent))}
 @keyframes fxfall{to{transform:translateY(640px) rotate(600deg);opacity:0}}
 @media print{.rv{opacity:1!important;transform:none!important}.fx-prog,.fx-theme,.fx-cf{display:none!important}}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.badge,.sec .box,.xp-bar i{transition:none}.sh:hover .badge,.sec .box:hover{transform:none}.fx-cf{display:none}}
+
+.fg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:16px 0}
+.fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
+.fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
+.fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
 </style>
 
 </head>
@@ -302,6 +307,11 @@ summary:hover{color:var(--tc,var(--accent))}
   <div class="fcards">
     <div class="box"><h4>Temas</h4><ul><li>Introducción</li><li>Algoritmo de Lagrange-Euler</li><li>Algoritmo de Newton-Euler</li><li>Modelo dinámico directo</li><li>Modelo dinámico en el espacio de tarea</li></ul></div>
     <div class="box key"><h4>Qué pregunta responde</h4><p>Dadas las posiciones, velocidades y aceleraciones de las articulaciones, ¿qué pares hacen falta? Es el paso previo al control dinámico.</p></div>
+  </div>
+
+  <h3>En imágenes</h3>
+  <div class="fg-grid">
+    <figure class="fg-card"><svg viewBox="0 0 330 200" role="img" aria-label="Las tres partes del modelo dinámico que suman el par del motor"><text x="165" y="16" font-size="13" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="700" style="fill:var(--accent)">τ = M(q)·q̈ + C(q,q̇)·q̇ + G(q)</text><rect x="14" y="38" width="112" height="40" rx="8" style="fill:var(--surface);stroke:var(--accent);stroke-width:2"/><text x="70" y="54" font-size="12" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="600" style="fill:var(--fg)">M(q) · q̈</text><text x="70" y="70" font-size="9.5" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--muted)">inercia</text><rect x="14" y="90" width="112" height="40" rx="8" style="fill:var(--surface);stroke:var(--c5);stroke-width:2"/><text x="70" y="106" font-size="12" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="600" style="fill:var(--fg)">C(q,q̇) · q̇</text><text x="70" y="122" font-size="9.5" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--muted)">Coriolis y centrífuga</text><rect x="14" y="142" width="112" height="40" rx="8" style="fill:var(--surface);stroke:var(--c1);stroke-width:2"/><text x="70" y="158" font-size="12" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="600" style="fill:var(--fg)">G(q)</text><text x="70" y="174" font-size="9.5" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--muted)">gravedad</text><circle cx="196" cy="110" r="19" style="fill:var(--surface);stroke:var(--fg);stroke-width:2"/><text x="196" y="116" font-size="20" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="700" style="fill:var(--fg)">+</text><line x1="126" y1="58" x2="169.58" y2="97.95" style="stroke:var(--fg);stroke-width:2.2;stroke-linecap:round"/><polygon points="174,102 167.87,99.8 171.28,96.09" style="fill:var(--fg)"/><line x1="126" y1="110" x2="170" y2="110" style="stroke:var(--fg);stroke-width:2.2;stroke-linecap:round"/><polygon points="176,110 170,112.52 170,107.48" style="fill:var(--fg)"/><line x1="126" y1="162" x2="169.48" y2="123.95" style="stroke:var(--fg);stroke-width:2.2;stroke-linecap:round"/><polygon points="174,120 171.14,125.85 167.83,122.05" style="fill:var(--fg)"/><line x1="215" y1="110" x2="261" y2="110" style="stroke:var(--accent);stroke-width:2.6;stroke-linecap:round"/><polygon points="268,110 261,112.94 261,107.06" style="fill:var(--accent)"/><text x="292" y="116" font-size="20" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="700" style="fill:var(--accent)">τ</text><text x="292" y="138" font-size="9.5" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--muted)">par del motor</text></svg><figcaption><b>Las tres partes del par</b><br>Inercia, términos de Coriolis y centrífugos, y gravedad. Sumados dan el par que debe aplicar cada motor.</figcaption></figure>
   </div>
 
   <h3>La forma general</h3>

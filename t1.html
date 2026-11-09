@@ -204,6 +204,11 @@ summary:hover{color:var(--tc,var(--accent))}
 @keyframes fxfall{to{transform:translateY(640px) rotate(600deg);opacity:0}}
 @media print{.rv{opacity:1!important;transform:none!important}.fx-prog,.fx-theme,.fx-cf{display:none!important}}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.badge,.sec .box,.xp-bar i{transition:none}.sh:hover .badge,.sec .box:hover{transform:none}.fx-cf{display:none}}
+
+.fg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:16px 0}
+.fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
+.fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
+.fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
 </style>
 
 </head>
@@ -301,6 +306,11 @@ summary:hover{color:var(--tc,var(--accent))}
     <div class="box"><h4>Idea clave</h4><p>Un robot manipulador es un conjunto de <b>eslabones</b> conectados por <b>articulaciones</b>. Cada articulación tiene un <b>grado de libertad</b>: rotación (articulación de revolución) o desplazamiento (prismática).</p></div>
     <div class="box"><h4>Configuraciones habituales</h4><ul><li>Cartesiano: tres desplazamientos.</li><li>Cilíndrico y esférico: combinan desplazamientos y giros.</li><li>SCARA: útil para montaje en plano.</li><li>Antropomórfico: tres giros, como un brazo humano.</li></ul></div>
   </div>
+  <h3>En imágenes</h3>
+  <div class="fg-grid">
+    <figure class="fg-card"><svg viewBox="0 0 320 150" role="img" aria-label="Articulación de rotación y articulación prismática"><line x1="160" y1="18" x2="160" y2="132" style="stroke:var(--line);stroke-width:1.3" stroke-dasharray="4 4"/><line x1="26" y1="104" x2="78" y2="104" style="fill:none;stroke:var(--fg);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/><line x1="78" y1="104" x2="124" y2="62" style="fill:none;stroke:var(--fg);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="78" cy="104" r="9" style="fill:var(--surface);stroke:var(--fg);stroke-width:2.4"/><circle cx="78" cy="104" r="2.6" style="fill:var(--fg)"/><path d="M112 104 A 34 34 0 0 0 98 78" style="fill:none;stroke:var(--accent);stroke-width:2.2"/><line x1="99" y1="79" x2="98.44" y2="78.29" style="stroke:var(--accent);stroke-width:2.2;stroke-linecap:round"/><polygon points="95,74 100.24,76.85 96.63,79.74" style="fill:var(--accent)"/><text x="112" y="122" font-size="13" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--accent)">θ</text><text x="78" y="32" font-size="12" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="600" style="fill:var(--fg)">Rotación</text><text x="78" y="47" font-size="10.5" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--muted)">gira un ángulo θ</text><rect x="196" y="92" width="104" height="24" rx="5" style="stroke:var(--line);stroke-width:1.3" style="fill:none;stroke:var(--line);stroke-width:1.6"/><rect x="208" y="96" width="34" height="16" rx="3" style="fill:var(--accent-soft);stroke:var(--accent);stroke-width:2"/><line x1="196" y1="104" x2="208" y2="104" style="fill:none;stroke:var(--fg);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/><line x1="242" y1="104" x2="296" y2="104" style="fill:none;stroke:var(--fg);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/><line x1="250" y1="74" x2="286" y2="74" style="stroke:var(--accent);stroke-width:2.2;stroke-linecap:round"/><polygon points="292,74 286,76.52 286,71.48" style="fill:var(--accent)"/><text x="268" y="66" font-size="12" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--accent)">d</text><text x="248" y="32" font-size="12" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-weight="600" style="fill:var(--fg)">Prismática</text><text x="248" y="47" font-size="10.5" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" style="fill:var(--muted)">se desliza una distancia d</text></svg><figcaption><b>Articulación de rotación y articulación prismática</b><br>La de rotación gira un ángulo θ; la prismática se desliza una distancia d. Son los dos tipos que aparecen en la tabla DH.</figcaption></figure>
+  </div>
+
   <h3>Criterios de implantación</h3>
   <p>Antes de elegir un robot se mira la carga que tiene que mover, el alcance que necesita, la precisión, el espacio de trabajo y el coste de la instalación. Esos criterios explican por qué hay tantos tipos distintos.</p>
 </section>

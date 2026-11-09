@@ -204,6 +204,11 @@ summary:hover{color:var(--tc,var(--accent))}
 @keyframes fxfall{to{transform:translateY(640px) rotate(600deg);opacity:0}}
 @media print{.rv{opacity:1!important;transform:none!important}.fx-prog,.fx-theme,.fx-cf{display:none!important}}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.badge,.sec .box,.xp-bar i{transition:none}.sh:hover .badge,.sec .box:hover{transform:none}.fx-cf{display:none}}
+
+.fg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:16px 0}
+.fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
+.fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
+.fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
 </style>
 
 </head>
