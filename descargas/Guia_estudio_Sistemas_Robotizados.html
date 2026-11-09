@@ -1483,16 +1483,23 @@ print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
       <div class="box"><strong>Ojo:</strong> la solución de referencia redondea a 3,69 rad/s y 2,13 m/s en el paso 5, cuando los valores sin redondear son 3,6978 y 2,1386. Con ese redondeo sale |v| = 5,42 m/s; sin él, 5,43 m/s. La diferencia es pequeña, pero conviene conservar decimales en cada paso. El resultado depende además del método numérico (Euler con Δt = 0,1 s).</div>
     </div>
   </details>
-  <div class="box key"><strong>Soluciones de referencia revisadas:</strong> he comprobado con código, sustituyendo cada resultado en la cinemática directa o repitiendo el cálculo, las soluciones de Trayectorias 4 y 5, la de Dinámica, las tres de Jacobiana y las seis de Cinemática inversa. Todas son correctas. Detalles a tener en cuenta:
+  <div class="box key"><strong>Soluciones de referencia revisadas: las 23, todas.</strong> He comprobado cada una con código, sustituyendo el resultado en la cinemática directa, repitiendo el cálculo o deduciendo los datos de partida a partir del propio resultado. <b>Solo hay un error de verdad, y está en Cuaternios 1.</b>
     <ul>
-      <li><b>Jacobiana 2.</b> El determinante es −l₁l₃ cos θ₃ sen θ₂ (l₂ + l₃ cos θ₃). La tercera familia de singularidades es θ₃ = ±arccos(−l₂/l₃) y solo existe si l₃ ≥ l₂. <b>Ojo:</b> la referencia no escribe el ±.</li>
-      <li><b>Jacobiana 3.</b> ω = (θ̇₁ + θ̇₂ ; −θ̇₃ sen θ₁₂ ; θ̇₃ cos θ₁₂). Con las tres velocidades a 1 rad/s, |ω| = √5 ≈ 2,236 rad/s en cualquier instante. <b>Ojo:</b> la referencia llama φ̇, θ̇, ψ̇ a las componentes de ω, pero son componentes de la velocidad angular, no derivadas de ángulos de Euler.</li>
-      <li><b>Cinemática inversa 1.</b> Soluciones válidas: (θ₁ = 30°, θ₂ = 15°) y (θ₁ = 59,46°, θ₂ = −45°). <b>Ojo:</b> en la versión a máquina aparece 59,5° y un pie de figura pone θ₃ donde es θ₂.</li>
-      <li><b>Cinemática inversa 3.</b> θ₁ = 63,43°; las dos soluciones válidas son (θ₂, θ₃, θ₄) = (67,6°; −87,1°; 43,5°) y (−19,5°; 87,1°; −43,5°). <b>Ojo:</b> la coordenada y de la matriz lleva un desplazamiento de +2 añadido como corrección.</li>
-      <li><b>Cinemática inversa 5.</b> θ₄ = 180°, θ₃ = 108,4°, d₂ = −0,733 m. <b>Ojo:</b> d₁ vale 0,844 m (0,843 sin redondeos intermedios); la referencia da 0,846.</li>
-      <li><b>Cinemática inversa 6.</b> De las cuatro combinaciones de signos, solo θ₁ = 2,075 rad, θ₂ = 0,448 rad, θ₃ = −0,983 rad reproduce la matriz de Euler completa. Comprueba siempre todos los elementos, no solo los que usaste para despejar.</li>
+      <li><b>Cuaternios 1. Esto sí es un error:</b> la hoja da Rot(z, −3π/2) = (−0,7071 ; 0 ; 0 ; <b>+</b>0,7071). Lo correcto es (−0,7071 ; 0 ; 0 ; <b>−</b>0,7071). Se ve enseguida con una comprobación: Rot(z, −3π/2) y Rot(z, π/2) se diferencian en una vuelta completa, así que uno tiene que ser el opuesto del otro, componente a componente. Los otros siete cuaterniones de esa hoja están bien.</li>
+      <li><b>Cuaternios 3.</b> Las cuatro expresiones del cuaternión son correctas. El resultado final sale h = 0,364·r; la hoja escribe 0,365 porque redondea α a 0,35 rad cuando el valor exacto es 0,349.</li>
+      <li><b>Cinemática directa 2.</b> El resultado final es correcto, pero solo reproduce esa matriz si en la tabla se leen α₁ = −α y θ₃ = α − π/2. Si al copiarla te salen −(π − α) o −(α − π/2), el resultado cambia. Mira bien esos dos signos en la figura.</li>
+      <li><b>Cinemática directa 3.</b> Es solo una tabla DH, sin matriz final: no hay nada que comprobar numéricamente.</li>
+      <li><b>Jacobiana 2.</b> La tercera familia de singularidades es θ₃ = ±arccos(−l₂/l₃), y solo existe si l₃ ≥ l₂. La hoja no escribe el ±.</li>
+      <li><b>Jacobiana 3.</b> |ω| = √5 ≈ 2,236 rad/s, y vale lo mismo en cualquier instante. La hoja llama φ̇, θ̇ y ψ̇ a las componentes de ω, pero no son derivadas de ángulos de Euler.</li>
+      <li><b>Cinemática inversa 5.</b> d₁ vale 0,844 m; la hoja da 0,846 por redondeos intermedios.</li>
+      <li><b>Cinemática inversa 6.</b> De las cuatro combinaciones de signos, solo una reproduce la matriz de Euler entera. Comprueba siempre todos los elementos, no solo los que usaste para despejar.</li>
+      <li><b>Trayectorias 1.</b> Correcta. El valor exacto es a = 0,8976 rad/s²; la hoja lo redondea a 0,9, y de ahí vienen el 0,45 y el −0,9.</li>
+      <li><b>Trayectorias 2.</b> Exacta, sin una sola diferencia. Los datos de partida son q₀ = 0, q₁ = π/6, q₂ = π/2, con T₁ = 1 s, T₂ = 2 s y velocidades nulas en los extremos; de ahí sale q̇₁ = π/4.</li>
+      <li><b>Trayectorias 3.</b> Llega al resultado clásico del perfil trapezoidal, T = Δ/V + V/a, y es correcto.</li>
+      <li><b>Las demás</b> (Cinemática directa 1, 4 y 5; Cinemática inversa 1 a 4; Jacobiana 1; Trayectorias 4 y 5; Dinámica) no tienen nada que señalar más allá de redondeos.</li>
     </ul>
-    Sin revisar todavía: las soluciones de Cinemática directa, las de Cuaternios y las de Trayectorias 1 a 3.</div>
+    <b>Conclusión práctica:</b> puedes fiarte de las soluciones de referencia. Donde difieren de un cálculo exacto es casi siempre por redondear a dos decimales a mitad de camino, así que arrastra decimales hasta el final.</div>
+  
   <div class="box trap">
     <strong>Qué falta:</strong> hay 38 exámenes distintos de cursos anteriores. Aquí tienes resueltos siete ejercicios (de la E a la K), todos comprobados con código. El resto está listado en «Practicar por tema» y «Buscar un examen», pero sin resolver. Para resolver otro, usa la misma plantilla: primero la configuración, luego la cinemática o la Jacobiana, y al final sustituir para comprobar.
   </div>
