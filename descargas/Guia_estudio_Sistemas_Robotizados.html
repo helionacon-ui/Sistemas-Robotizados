@@ -204,6 +204,13 @@ summary:hover{color:var(--tc,var(--accent))}
 .fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
 .fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
 .fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
+
+@media print{
+  .an-ctl,.ix-ctl,.qx-ctl,.sx-ctl,.dx-ctl,.cx-ctl,.cx-btn,.dk-nav,.dk-top,.rx-chk,.sim-b,.gsearch,.chips,.busq,.qz-o,.qz-nav,.fx-prog,.fx-theme,.hub-bar{display:none!important}
+  .cx table input,.cx table select{border:none;background:none;padding:0}
+  .sim-t{font-size:1.2rem}
+  .an::after,.ix::after,.qz::after{content:"Esta parte es interactiva: ábrela en la versión web de la guía.";display:block;margin-top:8px;font-size:11px;color:#777;font-style:italic}
+}
 </style>
 </head>
 <body>
@@ -262,11 +269,13 @@ summary:hover{color:var(--tc,var(--accent))}
   <a href="#t4" style="--tc:var(--c4)">T4 Cinemática</a>
   <a href="#t5" style="--tc:var(--c5)">T5 Dinámica</a>
   <a href="#t6" style="--tc:var(--c6)">T6 Control</a>
+  <a href="#demostraciones" style="--tc:var(--c3)">Demostraciones</a>
   <div class="grp">Prácticas</div>
   <a href="#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
   <div class="grp">Problemas</div>
   <a href="#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="#simulacros" style="--tc:var(--c8)">Simulacros de examen</a>
   <a href="#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
   <div class="grp">Interactivo</div>
   <a href="#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
@@ -369,6 +378,7 @@ summary:hover{color:var(--tc,var(--accent))}
   </table></div>
 
   <h3>Qué cae más</h3>
+  <p class="muted">Cómo se hizo este recuento: clasifiqué a mano los 38 exámenes distintos leyendo su enunciado. En varios no se podía leer alguna figura, así que tómalo como una orientación y no como una estadística exacta.</p>
   <p>He clasificado a mano cada ejercicio de los 38 exámenes distintos de cursos anteriores (algunos aparecían repetidos y aquí cuentan una sola vez). Un ejercicio puede tener más de un tema; la tabla cuenta en cuántos exámenes aparece cada uno. Las tablas de la sección «Practicar por tema» tienen el detalle.</p>
   <div class="tw"><table>
     <thead><tr><th>Tema</th><th class="c">Exámenes en los que aparece</th></tr></thead>
@@ -488,6 +498,34 @@ summary:hover{color:var(--tc,var(--accent))}
 
   <h3>Criterios de implantación</h3>
   <p>Antes de elegir un robot se mira la carga que tiene que mover, el alcance que necesita, la precisión, el espacio de trabajo y el coste de la instalación. Esos criterios explican por qué hay tantos tipos distintos.</p>
+  <h3>Qué es exactamente un robot industrial</h3>
+  <p>Un <b>manipulador industrial</b> es una máquina de varios grados de libertad, <b>reprogramable</b> y de <b>uso general</b>, capaz de mover materiales o herramientas siguiendo movimientos programados. Las dos palabras en negrita son las que lo separan de una máquina automática corriente: una prensa hace siempre lo mismo, un robot cambia de tarea cambiando el programa.</p>
+  <h3>Las piezas que lo forman</h3>
+  <div class="fcards">
+    <div class="box"><h4>Estructura mecánica</h4><p>Eslabones rígidos unidos por articulaciones. Define el alcance y el espacio de trabajo.</p></div>
+    <div class="box"><h4>Actuadores</h4><p>Dan el par o la fuerza en cada articulación: eléctricos, hidráulicos o neumáticos.</p></div>
+    <div class="box"><h4>Transmisiones</h4><p>Llevan el movimiento del motor a la articulación y cambian velocidad por par.</p></div>
+    <div class="box"><h4>Sensores</h4><p>Miden la posición y la velocidad de cada articulación para cerrar el lazo de control.</p></div>
+    <div class="box"><h4>Controlador</h4><p>Calcula las trayectorias y las consignas que recibe cada motor.</p></div>
+    <div class="box"><h4>Elemento terminal</h4><p>La pinza o la herramienta. Es lo que hace el trabajo; el resto solo la coloca.</p></div>
+  </div>
+  <h3>Tipos de actuador</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Tipo</th><th>A favor</th><th>En contra</th><th>Dónde se usa</th></tr>
+    <tr><td><b>Eléctrico</b></td><td>Preciso, limpio, fácil de controlar</td><td>Par limitado sin reductor</td><td>La mayoría de robots actuales</td></tr>
+    <tr><td><b>Hidráulico</b></td><td>Mucha fuerza, aguanta cargas grandes</td><td>Fugas, mantenimiento, ruido</td><td>Cargas muy pesadas</td></tr>
+    <tr><td><b>Neumático</b></td><td>Barato, rápido, sencillo</td><td>Aire compresible: difícil parar en un punto intermedio</td><td>Movimientos entre topes y pinzas</td></tr>
+  </table></div>
+  <h3>Precisión, repetibilidad y resolución</h3>
+  <p>Son tres cosas distintas y en el examen se confunden con facilidad:</p>
+  <ul>
+    <li><b>Precisión (o exactitud):</b> distancia entre el punto al que el robot va y el punto que le has ordenado. Mide el <i>error sistemático</i>.</li>
+    <li><b>Repetibilidad:</b> dispersión de los puntos que alcanza al repetir muchas veces la misma orden. Mide el <i>error aleatorio</i>.</li>
+    <li><b>Resolución:</b> incremento más pequeño que el robot puede medir u ordenar. La fija el sensor y la electrónica.</li>
+  </ul>
+  <div class="box key"><strong>Regla práctica:</strong> un robot puede ser muy repetible y poco preciso. Va siempre al mismo sitio, pero no al que le pediste. Para soldar por puntos basta con repetibilidad; para montar piezas nuevas hace falta precisión.</div>
+  <h3>Cuántos grados de libertad hacen falta</h3>
+  <p>Para colocar un objeto en el espacio con una orientación cualquiera hacen falta <b>seis</b> grados de libertad: tres para la posición (x, y, z) y tres para la orientación. Con menos de seis, el robot llega a los puntos pero no con cualquier orientación. Con más de seis, el robot es <b>redundante</b>: hay infinitas combinaciones de articulaciones para la misma posición del extremo, lo que permite esquivar obstáculos.</p>
+
 </section>
 
 <!-- T2 -->
@@ -557,6 +595,41 @@ summary:hover{color:var(--tc,var(--accent))}
 
   <h3>Por qué importa para el examen</h3>
   <p>No se pide memorizar catálogos, pero sí entender qué efecto tiene un reductor. Un reductor de relación <i>n</i> divide la velocidad entre <i>n</i> y multiplica el par por <i>n</i>, aproximadamente, sin contar pérdidas.</p>
+  <h3>Tipos de articulación</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Articulación</th><th>Movimiento</th><th>Grados de libertad</th></tr>
+    <tr><td><b>Rotación</b> (revolución)</td><td>Giro alrededor de un eje</td><td>1</td></tr>
+    <tr><td><b>Prismática</b></td><td>Desplazamiento a lo largo de un eje</td><td>1</td></tr>
+    <tr><td><b>Cilíndrica</b></td><td>Giro y desplazamiento sobre el mismo eje</td><td>2</td></tr>
+    <tr><td><b>Planar</b></td><td>Dos desplazamientos y un giro en un plano</td><td>3</td></tr>
+    <tr><td><b>Esférica</b> (rótula)</td><td>Tres giros alrededor de un punto</td><td>3</td></tr>
+  </table></div>
+  <p>En los robots industriales casi solo se usan las dos primeras. Las demás se construyen combinando varias de rotación o prismáticas, porque así cada eje tiene su motor y su sensor.</p>
+  <h3>Las cinco configuraciones, comparadas</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Configuración</th><th>Ejes</th><th>Espacio de trabajo</th><th>Característica</th></tr>
+    <tr><td><b>Cartesiana</b></td><td>PPP</td><td>Prisma</td><td>Muy precisa y fácil de programar; ocupa mucho</td></tr>
+    <tr><td><b>Cilíndrica</b></td><td>RPP</td><td>Cilindro hueco</td><td>Buena para cargar y descargar máquinas</td></tr>
+    <tr><td><b>Esférica</b> (polar)</td><td>RRP</td><td>Esfera hueca</td><td>Alcance grande con poca ocupación en el suelo</td></tr>
+    <tr><td><b>Angular</b> (antropomórfica)</td><td>RRR</td><td>Volumen complejo</td><td>La más versátil; cinemática inversa más difícil</td></tr>
+    <tr><td><b>SCARA</b></td><td>RRP</td><td>Cilindro de poca altura</td><td>Rígida en vertical y rápida en el plano: montaje</td></tr>
+  </table></div>
+  <p>Las letras indican el tipo de las tres primeras articulaciones: <b>R</b> de rotación y <b>P</b> de prismática. Fíjate en que la esférica y la SCARA comparten notación RRP: lo que cambia es la orientación de los ejes.</p>
+  <h3>La muñeca: quién pone la orientación</h3>
+  <p>Los tres primeros ejes colocan el extremo en un punto; la <b>muñeca</b> le da la orientación, normalmente con tres giros más. Cuando esos tres ejes se cortan en un mismo punto se llama <b>muñeca esférica</b>, y tiene una ventaja importante: permite separar el problema en dos, resolver primero la posición y después la orientación. Por eso casi todos los robots industriales la llevan.</p>
+  <h3>Transmisiones y reductores</h3>
+  <ul>
+    <li><b>Reductor de engranajes:</b> una relación n divide la velocidad entre n y multiplica el par por n, descontando el rendimiento.</li>
+    <li><b>Reductor armónico:</b> mucha reducción en poco espacio y con muy poco juego. Muy usado en robots.</li>
+    <li><b>Husillo de bolas:</b> convierte el giro del motor en desplazamiento. Es la transmisión típica de los ejes prismáticos.</li>
+    <li><b>Correa dentada:</b> permite alejar el motor de la articulación y así aligerar el brazo.</li>
+  </ul>
+  <div class="box key"><strong>Por qué importa:</strong> el reductor es lo que hace que un motor pequeño mueva un brazo pesado. A cambio introduce juego y rozamiento, que luego aparecen como error en el control.</div>
+  <h3>Sensores de posición</h3>
+  <ul>
+    <li><b>Encoder incremental:</b> cuenta pulsos. Barato, pero pierde la referencia al apagar; hay que buscar el origen cada vez.</li>
+    <li><b>Encoder absoluto:</b> da directamente la posición. No necesita buscar el origen.</li>
+    <li><b>Resolver:</b> sensor analógico, muy robusto frente a vibración y temperatura.</li>
+  </ul>
+
 </section>
 
 <!-- T3 -->
@@ -841,6 +914,49 @@ M₁₂ = m₂ l₂ (l₁ cos θ₂ + l₂)
 M₂₂ = m₂ l₂²</div>
   <p>Comprobado con código (m₁ = 2, m₂ = 1, θ₂ = 0,8 rad): M₁₁ = 5,393 ; M₁₂ = 1,697 ; M₂₂ = 1.</p>
   <div class="box trap"><strong>Ojo:</strong> M₁₂ es igual a M₂₁. Si al derivar obtienes matrices no simétricas, revisa el cálculo de la energía cinética.</div>
+  <h3>Para qué sirve el modelo dinámico</h3>
+  <p>Tres cosas, y conviene tenerlas claras antes de meterse en las ecuaciones:</p>
+  <ul>
+    <li><b>Dimensionar los motores:</b> saber qué par máximo hace falta en cada articulación.</li>
+    <li><b>Simular:</b> predecir cómo se moverá el robot ante unos pares dados, sin tocar el robot real.</li>
+    <li><b>Controlar:</b> los controladores avanzados usan el modelo para compensar la dinámica y responder mejor.</li>
+  </ul>
+  <h3>Modelo directo y modelo inverso</h3>
+  <div class="fcards">
+    <div class="box"><h4>Dinámico inverso</h4><p>De (q, q̇, q̈) a los pares τ. Es el que se pide en el examen y el que se usa para dimensionar motores.</p></div>
+    <div class="box key"><h4>Dinámico directo</h4><p>De los pares τ a la aceleración q̈. Se usa para simular: hay que despejar q̈ = M⁻¹ (τ − C q̇ − G).</p></div>
+  </div>
+  <h3>Lagrange-Euler, paso a paso</h3>
+  <ol>
+    <li>Escribe la <b>energía cinética</b> K de cada eslabón y súmalas.</li>
+    <li>Escribe la <b>energía potencial</b> U, que normalmente es solo la gravitatoria.</li>
+    <li>Forma el lagrangiano <b>L = K − U</b>.</li>
+    <li>Aplica la ecuación de Lagrange a cada articulación.</li>
+    <li>Agrupa los términos: los que multiplican a q̈ forman M, los que llevan productos de velocidades forman C, y lo que queda sin velocidades es G.</li>
+  </ol>
+  <div class="formula">d/dt ( ∂L / ∂q̇ᵢ ) − ∂L / ∂qᵢ = τᵢ</div>
+  <h3>Propiedades que conviene conocer</h3>
+  <ul>
+    <li><b>M es simétrica y definida positiva</b> para cualquier configuración. Si te sale una M no simétrica, hay un error en la energía cinética. Comprobado con código sobre el 2R con masas en los extremos.</li>
+    <li><b>M depende de q</b>, no de q̇. La inercia que ve un motor cambia según cómo esté plegado el brazo.</li>
+    <li><b>G no depende de la velocidad</b>: es el par que hay que hacer solo para sostener el brazo parado.</li>
+    <li>Los términos de <b>C</b> son de dos clases: <b>centrífugos</b>, que van con q̇ᵢ², y de <b>Coriolis</b>, que van con productos q̇ᵢ q̇ⱼ de articulaciones distintas.</li>
+  </ul>
+  <h3>Newton-Euler frente a Lagrange-Euler</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th></th><th>Lagrange-Euler</th><th>Newton-Euler</th></tr>
+    <tr><td><b>De dónde parte</b></td><td>De las energías</td><td>Del equilibrio de fuerzas y pares</td></tr>
+    <tr><td><b>Cómo se resuelve</b></td><td>Derivando el lagrangiano</td><td>Recorriendo la cadena hacia fuera y luego hacia dentro</td></tr>
+    <tr><td><b>Resultado</b></td><td>Expresiones de M, C y G, cómodas para analizar</td><td>Los pares numéricos, sin las matrices explícitas</td></tr>
+    <tr><td><b>Coste</b></td><td>Crece muy deprisa con el número de articulaciones</td><td>Proporcional al número de articulaciones</td></tr>
+  </table></div>
+  <p>En la práctica se usa Lagrange para estudiar robots de pocos ejes, como en los ejercicios, y Newton-Euler dentro del controlador, porque hay que calcularlo miles de veces por segundo.</p>
+  <h3>El caso estático</h3>
+  <p>Con el robot parado desaparecen M y C, y solo queda la gravedad. Si además el extremo empuja con una fuerza F, el par necesario en las articulaciones es:</p>
+  <div class="formula">τ = G(q) + Jᵀ · F</div>
+  <p>Esa relación sale del principio de los trabajos virtuales y está demostrada en la sección de demostraciones.</p>
+  <h3>Rozamiento</h3>
+  <p>Los modelos de examen suelen despreciarlo, pero en un robot real hay rozamiento <b>viscoso</b>, proporcional a la velocidad, y rozamiento <b>seco</b> o de Coulomb, de signo contrario al movimiento. El segundo es el que hace que un brazo se quede parado aunque le apliques un par pequeño.</p>
+
 </section>
 
 <!-- T6 -->
@@ -918,9 +1034,135 @@ M₂₂ = m₂ l₂²</div>
   <div class="formula">θ(t) = (3π/2) t² − π t³</div>
   <p>Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</p>
   <div class="box key"><strong>Método de resolución:</strong> escribe las cuatro condiciones como un sistema 4 × 4 en (a₀, a₁, a₂, a₃) y resuélvelo. Si te dan velocidades del extremo en vez de velocidades articulares, pasa primero por la Jacobiana.</div>
+  <h3>Qué decide el control cinemático</h3>
+  <p>Le das al robot unos puntos por los que pasar y él tiene que decidir <b>qué hace cada articulación en cada instante</b>. Eso implica tres decisiones:</p>
+  <ol>
+    <li>Si el camino entre puntos importa o solo importa llegar.</li>
+    <li>Cuánto tiempo se tarda en cada tramo.</li>
+    <li>Qué forma tiene la curva de posición frente al tiempo, es decir, qué interpolador se usa.</li>
+  </ol>
+  <h3>Tipos de trayectoria</h3>
+  <div class="fcards">
+    <div class="box"><h4>Punto a punto</h4><p>Cada articulación va a su ritmo y llega cuando puede. El camino del extremo no se controla. Es la más rápida.</p></div>
+    <div class="box"><h4>Coordinada o isócrona</h4><p>Todas las articulaciones tardan lo mismo: la más lenta marca el tiempo. El movimiento es más suave y gasta menos.</p></div>
+    <div class="box key"><h4>Continua</h4><p>El extremo sigue un camino definido en el espacio, por ejemplo una recta. Hay que resolver la cinemática inversa en muchos puntos.</p></div>
+  </div>
+  <h3>Qué interpolador usar</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Interpolador</th><th>Qué impone</th><th>Problema</th></tr>
+    <tr><td><b>Lineal</b></td><td>Solo las posiciones</td><td>La velocidad salta en cada punto de paso</td></tr>
+    <tr><td><b>Lineal con transiciones parabólicas</b></td><td>Posiciones y suaviza las esquinas</td><td>No pasa exactamente por los puntos intermedios</td></tr>
+    <tr><td><b>Cúbico</b> (spline)</td><td>Posiciones y velocidades</td><td>La aceleración salta entre tramos</td></tr>
+    <tr><td><b>De quinto orden</b></td><td>Posiciones, velocidades y aceleraciones</td><td>Más cálculo y más oscilación</td></tr>
+  </table></div>
+  <div class="box key"><strong>En el examen:</strong> casi siempre piden el cúbico. Cuenta las condiciones que te dan: cuatro condiciones, cuatro coeficientes. Si te dan también aceleraciones, son seis condiciones y toca el de quinto orden.</div>
+  <h3>Espacio articular o espacio cartesiano</h3>
+  <p>Se puede interpolar en los ángulos de las articulaciones o en la posición del extremo:</p>
+  <ul>
+    <li><b>En el espacio articular</b> el cálculo es barato y no hay problemas de singularidades, pero el extremo describe una curva cualquiera entre los puntos.</li>
+    <li><b>En el espacio cartesiano</b> el extremo hace exactamente el camino que quieres, pero hay que resolver la cinemática inversa en cada instante y la trayectoria puede pasar por una singularidad o salirse del alcance.</li>
+  </ul>
+  <h3>Control dinámico: del PID al par calculado</h3>
+  <ul>
+    <li><b>PID articular independiente:</b> cada articulación se controla por su cuenta, como si las demás no existieran. Sencillo y muy usado, pero empeora cuando el robot se mueve rápido, porque los acoplamientos dejan de ser despreciables.</li>
+    <li><b>PD con compensación de la gravedad:</b> añade G(q) a la salida del PD. Quita el error en régimen permanente sin necesidad de término integral.</li>
+    <li><b>Par calculado:</b> usa el modelo completo para cancelar la dinámica, de modo que el error se comporta como un sistema lineal sencillo.</li>
+  </ul>
+  <div class="formula">τ = M(q) · [ q̈d + Kd (q̇d − q̇) + Kp (qd − q) ] + C(q, q̇) · q̇ + G(q)</div>
+  <p>Si el modelo fuese exacto, el error de seguimiento cumpliría ë + Kd ė + Kp e = 0, es decir, una ecuación lineal cuyos polos eliges tú con Kp y Kd. En la práctica el modelo nunca es exacto y queda un error residual.</p>
+  <p>Puedes ver el efecto de Kp y Kd en la animación del control PD, al principio de este tema.</p>
+
 </section>
 
 <!-- PRÁCTICAS -->
+<section class="sec" id="demostraciones" style="--tc:var(--c3)">
+  <div class="sh"><span class="badge" aria-hidden="true">√</span><div class="shx"><p class="kick">Teoría</p><h2>Demostraciones</h2></div></div>
+  <p>Seis resultados que se usan todo el rato en los ejercicios, deducidos desde el principio. No hace falta que los memorices, pero entender de dónde salen evita confundir fórmulas en el examen. <b>Las seis están comprobadas con código.</b></p>
+
+  <details><summary>1 · La cinemática inversa del 2R plano</summary>
+    <div class="inner">
+      <p><b>Qué queremos:</b> dados un punto (x, y) y las longitudes l₁ y l₂, hallar θ₁ y θ₂.</p>
+      <p><b>Paso 1.</b> La cinemática directa dice x = l₁cos θ₁ + l₂cos(θ₁+θ₂) e y = l₁sen θ₁ + l₂sen(θ₁+θ₂). Elevamos al cuadrado y sumamos:</p>
+      <div class="formula">x² + y² = l₁² + l₂² + 2 l₁ l₂ [cos θ₁ cos(θ₁+θ₂) + sen θ₁ sen(θ₁+θ₂)]</div>
+      <p><b>Paso 2.</b> El corchete es el coseno de la diferencia de ángulos, y esa diferencia es (θ₁+θ₂) − θ₁ = θ₂. Es decir, el corchete vale cos θ₂. Así desaparece θ₁ de la ecuación:</p>
+      <div class="formula">cos θ₂ = ( x² + y² − l₁² − l₂² ) / ( 2 l₁ l₂ )</div>
+      <p><b>Paso 3.</b> El arcocoseno da dos soluciones, θ₂ y −θ₂. De ahí salen el codo arriba y el codo abajo. Si el valor queda fuera de [−1, 1], el punto no es alcanzable.</p>
+      <p><b>Paso 4.</b> Para θ₁, mira el triángulo: el ángulo del punto visto desde la base es atan2(y, x), y el segundo eslabón desvía el brazo un ángulo adicional atan2(l₂ sen θ₂, l₁ + l₂ cos θ₂). Restando:</p>
+      <div class="formula">θ₁ = atan2(y, x) − atan2( l₂ sen θ₂ , l₁ + l₂ cos θ₂ )</div>
+      <p><b>Ojo:</b> usa siempre atan2 y no la arcotangente normal. La arcotangente pierde el cuadrante y te deja el brazo apuntando justo al lado contrario.</p>
+    </div>
+  </details>
+
+  <details><summary>2 · La Jacobiana del 2R y su determinante</summary>
+    <div class="inner">
+      <p><b>Paso 1.</b> La Jacobiana es la matriz de derivadas parciales de la posición del extremo respecto a los ángulos. Derivando x e y:</p>
+      <div class="formula">J = [ −l₁ sen θ₁ − l₂ sen θ₁₂ ,  −l₂ sen θ₁₂ ]
+    [  l₁ cos θ₁ + l₂ cos θ₁₂ ,   l₂ cos θ₁₂ ]      con θ₁₂ = θ₁ + θ₂</div>
+      <p><b>Paso 2.</b> Calculamos el determinante:</p>
+      <div class="formula">det J = (−l₁ sen θ₁ − l₂ sen θ₁₂)(l₂ cos θ₁₂) + (l₂ sen θ₁₂)(l₁ cos θ₁ + l₂ cos θ₁₂)</div>
+      <p><b>Paso 3.</b> Los dos términos con l₂² se cancelan entre sí. Queda:</p>
+      <div class="formula">det J = l₁ l₂ ( sen θ₁₂ cos θ₁ − cos θ₁₂ sen θ₁ ) = l₁ l₂ sen( θ₁₂ − θ₁ )</div>
+      <p><b>Paso 4.</b> Y como θ₁₂ − θ₁ = θ₂:</p>
+      <div class="formula">det J = l₁ l₂ sen θ₂</div>
+      <p><b>Conclusión.</b> El determinante no depende de θ₁: da igual hacia dónde apunte el brazo. Se anula cuando θ₂ = 0° o θ₂ = 180°, es decir, con el brazo estirado o plegado. Esas son las dos únicas singularidades del 2R.</p>
+    </div>
+  </details>
+
+  <details><summary>3 · Los coeficientes del spline cúbico</summary>
+    <div class="inner">
+      <p><b>Qué queremos:</b> un polinomio q(t) = a + b·t + c·t² + d·t³ que cumpla cuatro condiciones, con t medido desde el principio del tramo y T su duración.</p>
+      <p><b>Paso 1.</b> En t = 0: q(0) = a, luego <b>a = q₀</b>.</p>
+      <p><b>Paso 2.</b> La derivada es q̇(t) = b + 2c·t + 3d·t². En t = 0 vale b, luego <b>b = v₀</b>.</p>
+      <p><b>Paso 3.</b> Quedan dos condiciones en t = T, con dos incógnitas:</p>
+      <div class="formula">q₀ + v₀T + cT² + dT³ = q_T
+v₀ + 2cT + 3dT² = v_T</div>
+      <p><b>Paso 4.</b> Llamamos Δ = q_T − q₀. De la primera, cT² + dT³ = Δ − v₀T. Resolviendo el sistema:</p>
+      <div class="formula">c = 3Δ/T² − (2v₀ + v_T)/T
+d = −2Δ/T³ + (v₀ + v_T)/T²</div>
+      <p><b>Caso más habitual.</b> Con velocidad nula en los dos extremos, c = 3Δ/T² y d = −2Δ/T³. Comprueba: con Δ = 2 y T = 1 sale q(t) = 6t² − 4t³, que es el ejemplo de la calculadora.</p>
+      <p><b>Ojo:</b> un spline puede salirse del intervalo [q₀, q_T] si las velocidades en los extremos no son nulas. Míralo en el diagrama interactivo del spline.</p>
+    </div>
+  </details>
+
+  <details><summary>4 · Por qué q·v·q* es una rotación</summary>
+    <div class="inner">
+      <p><b>Qué queremos:</b> ver que con q = (cos θ/2, sen θ/2 · n) y n unitario, la operación v′ = q·(0,v)·q* gira el vector v un ángulo θ alrededor de n.</p>
+      <p><b>Paso 1: el resultado es un vector.</b> La parte escalar del producto sale cero, así que v′ tiene solo parte vectorial y se puede interpretar como un vector del espacio.</p>
+      <p><b>Paso 2: conserva el módulo.</b> El módulo de un producto de cuaterniones es el producto de los módulos. Como q es unitario, también lo es q*, y por tanto |v′| = |v|. Una transformación lineal que conserva módulos es una rotación o una reflexión.</p>
+      <p><b>Paso 3: el eje no se mueve.</b> Si v es paralelo a n, los productos conmutan y queda v′ = q·q*·v = v. El eje n se queda fijo, que es lo que debe pasar en una rotación alrededor de n.</p>
+      <p><b>Paso 4: el ángulo es θ.</b> Si v es perpendicular a n, desarrollando el producto se llega a la fórmula de Rodrigues:</p>
+      <div class="formula">v′ = v cos θ + (n × v) sen θ + n (n · v)(1 − cos θ)</div>
+      <p>que es exactamente la rotación de ángulo θ alrededor de n.</p>
+      <p><b>Por qué la mitad del ángulo.</b> Porque el cuaternión aparece dos veces, una a cada lado. Cada uno aporta θ/2 y entre los dos suman θ. Es el error más repetido: poner θ en vez de θ/2 al construir q.</p>
+      <p>En el diagrama interactivo de cuaterniones puedes comparar el resultado del producto con la fórmula de Rodrigues: la diferencia que aparece es del orden de 10⁻¹⁶.</p>
+    </div>
+  </details>
+
+  <details><summary>5 · El par estático τ = Jᵀ F</summary>
+    <div class="inner">
+      <p><b>Qué queremos:</b> con el robot parado y una fuerza F aplicada en el extremo, hallar el par necesario en cada articulación.</p>
+      <p><b>Paso 1.</b> Imaginamos un desplazamiento muy pequeño de las articulaciones, δq. El extremo se mueve δx = J · δq.</p>
+      <p><b>Paso 2.</b> Si el robot está en equilibrio, el trabajo que hacen los motores tiene que ser igual al que hace la fuerza del extremo, para cualquier δq que elijamos:</p>
+      <div class="formula">τᵀ · δq = Fᵀ · δx = Fᵀ · J · δq</div>
+      <p><b>Paso 3.</b> Como la igualdad vale para cualquier δq, los factores que lo multiplican han de ser iguales: τᵀ = Fᵀ·J. Trasponiendo:</p>
+      <div class="formula">τ = Jᵀ · F</div>
+      <p><b>Lectura.</b> La misma matriz J que lleva velocidades articulares a velocidad del extremo, traspuesta, lleva fuerzas del extremo a pares articulares. Cerca de una singularidad hace falta un par enorme para dar fuerza en cierta dirección, que es la otra cara de no poder moverse en esa dirección.</p>
+    </div>
+  </details>
+
+  <details><summary>6 · Por qué la matriz DH es ese producto y en ese orden</summary>
+    <div class="inner">
+      <p><b>Qué queremos:</b> ver que Aᵢ = Rz(θ)·Tz(d)·Tx(a)·Rx(α) lleva el sistema i−1 al sistema i.</p>
+      <p><b>El punto de partida.</b> Denavit y Hartenberg eligieron los ejes con dos reglas: el eje z de cada articulación va en la dirección de su movimiento, y el eje x es la perpendicular común a los dos ejes z consecutivos. Con esas dos reglas bastan cuatro números para pasar de un sistema al siguiente, en vez de los seis que harían falta en general.</p>
+      <p><b>Paso 1 · Rz(θ).</b> Giramos alrededor de z i−1 hasta que x i−1 quede paralelo a x i. Ese giro es θ.</p>
+      <p><b>Paso 2 · Tz(d).</b> Nos desplazamos a lo largo de z i−1 hasta la altura donde está la perpendicular común. Esa distancia es d.</p>
+      <p><b>Paso 3 · Tx(a).</b> Avanzamos por la perpendicular común, que ya es el eje x, hasta llegar al eje z i. Esa distancia es a, la longitud del eslabón.</p>
+      <p><b>Paso 4 · Rx(α).</b> Giramos alrededor de x para que z i−1 acabe paralelo a z i. Ese giro es α.</p>
+      <p><b>Por qué no se puede cambiar el orden.</b> Cada operación se aplica sobre el sistema que dejó la anterior, así que multiplican por la derecha. Los dos primeros movimientos usan los ejes del sistema i−1 y los dos últimos ya usan el eje x nuevo. Si cambias el orden, los desplazamientos se miden sobre ejes distintos y el resultado es otro.</p>
+      <p><b>Comprobación.</b> Multiplicando las cuatro matrices sale exactamente la matriz DH que aparece en los formularios, con cos θ, −cos α sen θ, sen α sen θ y a cos θ en la primera fila. Comprobado con código.</p>
+    </div>
+  </details>
+</section>
+
 <section class="sec" id="practicas" style="--tc:var(--c7)">
   <div class="sh"><span class="badge" aria-hidden="true">P</span><div class="shx"><p class="kick">Aula de informática</p><h2>Las 7 prácticas</h2></div></div>
   <div class="tw"><table>
@@ -1752,6 +1994,113 @@ print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
 </section>
 
 <!-- AUTOEVALUACIÓN -->
+<section class="sec" id="simulacros" style="--tc:var(--c8)">
+  <div class="sh"><span class="badge" aria-hidden="true">⏱</span><div class="shx"><p class="kick">Entrenamiento</p><h2>Simulacros de examen</h2></div></div>
+  <p>Dos exámenes completos con el formato real y un cronómetro. Hazlos con papel, calculadora y el formulario, sin mirar las soluciones. Son la última prueba antes del examen de verdad: si aquí vas sobrado, vas preparado.</p>
+  <div class="box key"><strong>Cómo usarlos:</strong> pon el cronómetro en marcha, resuelve de corrido y solo entonces abre las soluciones. Si te atascas más de diez minutos en un ejercicio, pasa al siguiente y vuelve al final, que es lo que harías en el examen.</div>
+  <style>
+  .sim{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:16px;margin:16px 0;min-width:0}
+  .sim-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+  .sim-t{font-family:var(--mono);font-size:2rem;font-variant-numeric:tabular-nums;font-weight:700}
+  .sim-t.poco{color:var(--warn)}
+  .sim-t.fin{color:#b3261e}
+  .sim-b{display:flex;gap:8px;flex-wrap:wrap}
+  .sim-ej{border-left:4px solid var(--tc,var(--accent));padding:2px 0 2px 14px;margin:16px 0}
+  .sim-ej h4{margin:0 0 6px;font-size:1.02rem}
+  .sim-meta{font-size:.86rem;color:var(--muted);margin:0 0 6px}
+  </style>
+
+  <div class="sim" id="sim1">
+    <div class="sim-h">
+      <div><b>Simulacro 1 · Examen final</b><p class="sim-meta">4 ejercicios · 2 horas · cada ejercicio vale lo mismo</p></div>
+      <div style="text-align:right"><div class="sim-t" data-t>2:00:00</div><div class="sim-b"><button class="btn pri" data-go type="button">Empezar</button><button class="btn" data-rs type="button">Reiniciar</button></div></div>
+    </div>
+    <div class="sim-ej">
+      <h4>Ejercicio 1 · Relacionar sistemas con cuaterniones</h4>
+      <p>Una cadena de sistemas se construye así: desde el sistema 0 se avanza (0, 0, 1) y se gira 120° sobre z; desde ahí se avanza (0, 0, 1) y se gira −90° sobre x; y desde ahí se avanza (0, 0, 0,5) y se gira 30° sobre z. Calcula la posición y la orientación del último sistema respecto al primero.</p>
+      <details><summary>Ver la solución</summary><div class="inner">
+        <p>Se encadena saltando de sistema en sistema: cada desplazamiento se gira con la orientación acumulada hasta ese momento y luego se suma. La orientación total es el producto de los tres cuaterniones, en orden.</p>
+        <p>Puedes comprobarlo con la <b>calculadora 3</b>, que hace justo esta cadena, y con el guion <code>relacionar_sistemas.py</code> de la carpeta de scripts.</p>
+        <p><b>Ojo:</b> el error típico es sumar los desplazamientos sin girarlos. El desplazamiento está medido en el sistema anterior, así que hay que llevarlo primero al sistema de referencia.</p>
+      </div></details>
+    </div>
+    <div class="sim-ej">
+      <h4>Ejercicio 2 · Tabla DH y cinemática directa</h4>
+      <p>Un robot de tres articulaciones de rotación tiene esta tabla DH: fila 1, θ₁ = 30°, d = 475, a = 150, α = −90°; fila 2, θ₂ = −30°, d = 0, a = 600, α = 0°; fila 3, θ₃ = −15°, d = 0, a = 120, α = −90°. Calcula la matriz total y la posición del extremo.</p>
+      <details><summary>Ver la solución</summary><div class="inner">
+        <p>Se construye cada Aᵢ con la fórmula de la tabla DH y se multiplican en orden: T = A₁ · A₂ · A₃. La posición del extremo es la cuarta columna.</p>
+        <p><b>Resultado comprobado con código:</b> (653,39 ; 377,23 ; 859,85).</p>
+        <p>Compruébalo con la <b>calculadora 4</b>, que lleva esta misma tabla cargada de ejemplo.</p>
+      </div></details>
+    </div>
+    <div class="sim-ej">
+      <h4>Ejercicio 3 · Jacobiana y velocidades</h4>
+      <p>Un robot de dos articulaciones tiene x = cos θ₁ (1 + cos θ₂), y = sen θ₁ (1 + cos θ₂), z = −sen θ₂. Para la configuración θ₁ = 45°, θ₂ = −65,53°, obtén la Jacobiana y calcula la velocidad del extremo.</p>
+      <details><summary>Ver la solución</summary><div class="inner">
+        <p><b>Jacobiana comprobada:</b> J = [[−1 ; 0,6436], [1 ; 0,6436], [0 ; −0,4142]].</p>
+        <p>Está desarrollado paso a paso en el <b>ejercicio E</b> de los ejercicios resueltos, con la comprobación de cada derivada.</p>
+      </div></details>
+    </div>
+    <div class="sim-ej">
+      <h4>Ejercicio 4 · Trayectoria sobre una recta</h4>
+      <p>Un 2R con l₁ = l₂ = 1 m mueve el extremo sobre la recta y = x, desde B(0,4 ; 0,4) hasta C(1,4 ; 1,4) en 1 s, con un spline cúbico de velocidad nula en los extremos. Calcula en qué instante pasa por el punto situado a 0,5 m de B y por el situado a 0,3 m de C, y los ángulos en esos dos puntos.</p>
+      <details><summary>Ver la solución</summary><div class="inner">
+        <p><b>Resultados comprobados:</b> pasa por el primero en t = 0,401 s y por el segundo en t = 0,703 s. Con codo arriba, θ₂ = 115,6° en el primero y θ₂ = 65,73° en el segundo.</p>
+        <p>Desarrollado paso a paso, con comprobación de cada etapa, en el <b>ejercicio G</b>.</p>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="sim" id="sim2">
+    <div class="sim-h">
+      <div><b>Simulacro 2 · Segundo parcial</b><p class="sim-meta">2 ejercicios · 1 hora</p></div>
+      <div style="text-align:right"><div class="sim-t" data-t>1:00:00</div><div class="sim-b"><button class="btn pri" data-go type="button">Empezar</button><button class="btn" data-rs type="button">Reiniciar</button></div></div>
+    </div>
+    <div class="sim-ej">
+      <h4>Ejercicio 1 · Spline seguido de interpolador lineal</h4>
+      <p>Una articulación parte del reposo y sigue un spline cúbico entre 0 y 2 s, y un interpolador lineal entre 2 y 3 s. La velocidad máxima que alcanza es 5 rad/s y en t = 3 s llega a 1 rad. Halla las dos expresiones y comprueba que hay continuidad en t = 2 s.</p>
+      <details><summary>Ver la solución</summary><div class="inner">
+        <p><b>Comprobado:</b> los dos tramos valen 5,098 rad en t = 2 s, así que el movimiento es continuo.</p>
+        <p>Desarrollado en el <b>ejercicio J</b>, con la nota sobre el sobrepasamiento por encima de 1 rad.</p>
+      </div></details>
+    </div>
+    <div class="sim-ej">
+      <h4>Ejercicio 2 · Velocidad y aceleración del extremo</h4>
+      <p>Un 2R mueve las dos articulaciones a velocidad constante, de forma que θ₁ = θ₂ = t. Calcula en qué instante la rapidez del extremo vale 2 m/s, cuál es la rapidez mínima y cuánto vale la aceleración en el primero de esos instantes.</p>
+      <details><summary>Ver la solución</summary><div class="inner">
+        <p><b>Comprobado:</b> |v| = 2 m/s en t = 1,8235 s, que es arccos(−1/4). La rapidez mínima es 1 m/s, en t = π. La aceleración en t = 1,8235 s vale (3,75 ; 0,968) m/s².</p>
+        <p>Desarrollado en el <b>ejercicio K</b>.</p>
+      </div></details>
+    </div>
+  </div>
+
+  <script data-w="sim">
+  (function(){
+    document.querySelectorAll('.sim').forEach(function(box){
+      var disp=box.querySelector('[data-t]'), go=box.querySelector('[data-go]'), rs=box.querySelector('[data-rs]');
+      if(!disp||!go||!rs) return;
+      var total=disp.textContent.trim().split(':').reduce(function(a,v){return a*60+parseInt(v,10)},0);
+      var left=total, on=false, id=null;
+      function pinta(){
+        var v=Math.max(0,Math.round(left)), h=Math.floor(v/3600), m=Math.floor(v%3600/60), sg=v%60;
+        disp.textContent=h+':'+String(m).padStart(2,'0')+':'+String(sg).padStart(2,'0');
+        disp.classList.toggle('poco', v>0 && v<=600);
+        disp.classList.toggle('fin', v===0);
+      }
+      function tic(){ left-=1; if(left<=0){ left=0; parar(); } pinta(); }
+      function parar(){ on=false; if(id){clearInterval(id); id=null;} go.textContent = left>0 ? 'Seguir' : 'Se acabó el tiempo'; }
+      go.addEventListener('click',function(){
+        if(left<=0) return;
+        if(on){ parar(); return; }
+        on=true; go.textContent='Pausa'; id=setInterval(tic,1000);
+      });
+      rs.addEventListener('click',function(){ parar(); left=total; go.textContent='Empezar'; pinta(); });
+      pinta();
+    });
+  })();
+  </script>
+</section>
+
 <section class="sec" id="autoevaluacion" style="--tc:var(--c8)">
   <div class="sh"><span class="badge" aria-hidden="true">?</span><div class="shx"><p class="kick">Repaso</p><h2>Autoevaluación</h2></div></div>
   <p>Piensa la respuesta antes de abrirla.</p>

@@ -209,6 +209,13 @@ summary:hover{color:var(--tc,var(--accent))}
 .fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
 .fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
 .fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
+
+@media print{
+  .an-ctl,.ix-ctl,.qx-ctl,.sx-ctl,.dx-ctl,.cx-ctl,.cx-btn,.dk-nav,.dk-top,.rx-chk,.sim-b,.gsearch,.chips,.busq,.qz-o,.qz-nav,.fx-prog,.fx-theme,.hub-bar{display:none!important}
+  .cx table input,.cx table select{border:none;background:none;padding:0}
+  .sim-t{font-size:1.2rem}
+  .an::after,.ix::after,.qz::after{content:"Esta parte es interactiva: ábrela en la versión web de la guía.";display:block;margin-top:8px;font-size:11px;color:#777;font-style:italic}
+}
 </style>
 
 </head>
@@ -229,11 +236,13 @@ summary:hover{color:var(--tc,var(--accent))}
   <a href="t4.html#t4" style="--tc:var(--c4)">T4 Cinemática</a>
   <a href="t5.html#t5" style="--tc:var(--c5)">T5 Dinámica</a>
   <a href="t6.html#t6" style="--tc:var(--c6)">T6 Control</a>
+  <a href="demostraciones.html#demostraciones" style="--tc:var(--c3)">Demostraciones</a>
   <div class="grp">Prácticas</div>
   <a href="practicas.html#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
   <div class="grp">Problemas</div>
   <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="simulacros.html#simulacros" style="--tc:var(--c8)">Simulacros de examen</a>
   <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
   <div class="grp">Interactivo</div>
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
@@ -325,6 +334,49 @@ M₁₂ = m₂ l₂ (l₁ cos θ₂ + l₂)
 M₂₂ = m₂ l₂²</div>
   <p>Comprobado con código (m₁ = 2, m₂ = 1, θ₂ = 0,8 rad): M₁₁ = 5,393 ; M₁₂ = 1,697 ; M₂₂ = 1.</p>
   <div class="box trap"><strong>Ojo:</strong> M₁₂ es igual a M₂₁. Si al derivar obtienes matrices no simétricas, revisa el cálculo de la energía cinética.</div>
+  <h3>Para qué sirve el modelo dinámico</h3>
+  <p>Tres cosas, y conviene tenerlas claras antes de meterse en las ecuaciones:</p>
+  <ul>
+    <li><b>Dimensionar los motores:</b> saber qué par máximo hace falta en cada articulación.</li>
+    <li><b>Simular:</b> predecir cómo se moverá el robot ante unos pares dados, sin tocar el robot real.</li>
+    <li><b>Controlar:</b> los controladores avanzados usan el modelo para compensar la dinámica y responder mejor.</li>
+  </ul>
+  <h3>Modelo directo y modelo inverso</h3>
+  <div class="fcards">
+    <div class="box"><h4>Dinámico inverso</h4><p>De (q, q̇, q̈) a los pares τ. Es el que se pide en el examen y el que se usa para dimensionar motores.</p></div>
+    <div class="box key"><h4>Dinámico directo</h4><p>De los pares τ a la aceleración q̈. Se usa para simular: hay que despejar q̈ = M⁻¹ (τ − C q̇ − G).</p></div>
+  </div>
+  <h3>Lagrange-Euler, paso a paso</h3>
+  <ol>
+    <li>Escribe la <b>energía cinética</b> K de cada eslabón y súmalas.</li>
+    <li>Escribe la <b>energía potencial</b> U, que normalmente es solo la gravitatoria.</li>
+    <li>Forma el lagrangiano <b>L = K − U</b>.</li>
+    <li>Aplica la ecuación de Lagrange a cada articulación.</li>
+    <li>Agrupa los términos: los que multiplican a q̈ forman M, los que llevan productos de velocidades forman C, y lo que queda sin velocidades es G.</li>
+  </ol>
+  <div class="formula">d/dt ( ∂L / ∂q̇ᵢ ) − ∂L / ∂qᵢ = τᵢ</div>
+  <h3>Propiedades que conviene conocer</h3>
+  <ul>
+    <li><b>M es simétrica y definida positiva</b> para cualquier configuración. Si te sale una M no simétrica, hay un error en la energía cinética. Comprobado con código sobre el 2R con masas en los extremos.</li>
+    <li><b>M depende de q</b>, no de q̇. La inercia que ve un motor cambia según cómo esté plegado el brazo.</li>
+    <li><b>G no depende de la velocidad</b>: es el par que hay que hacer solo para sostener el brazo parado.</li>
+    <li>Los términos de <b>C</b> son de dos clases: <b>centrífugos</b>, que van con q̇ᵢ², y de <b>Coriolis</b>, que van con productos q̇ᵢ q̇ⱼ de articulaciones distintas.</li>
+  </ul>
+  <h3>Newton-Euler frente a Lagrange-Euler</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th></th><th>Lagrange-Euler</th><th>Newton-Euler</th></tr>
+    <tr><td><b>De dónde parte</b></td><td>De las energías</td><td>Del equilibrio de fuerzas y pares</td></tr>
+    <tr><td><b>Cómo se resuelve</b></td><td>Derivando el lagrangiano</td><td>Recorriendo la cadena hacia fuera y luego hacia dentro</td></tr>
+    <tr><td><b>Resultado</b></td><td>Expresiones de M, C y G, cómodas para analizar</td><td>Los pares numéricos, sin las matrices explícitas</td></tr>
+    <tr><td><b>Coste</b></td><td>Crece muy deprisa con el número de articulaciones</td><td>Proporcional al número de articulaciones</td></tr>
+  </table></div>
+  <p>En la práctica se usa Lagrange para estudiar robots de pocos ejes, como en los ejercicios, y Newton-Euler dentro del controlador, porque hay que calcularlo miles de veces por segundo.</p>
+  <h3>El caso estático</h3>
+  <p>Con el robot parado desaparecen M y C, y solo queda la gravedad. Si además el extremo empuja con una fuerza F, el par necesario en las articulaciones es:</p>
+  <div class="formula">τ = G(q) + Jᵀ · F</div>
+  <p>Esa relación sale del principio de los trabajos virtuales y está demostrada en la sección de demostraciones.</p>
+  <h3>Rozamiento</h3>
+  <p>Los modelos de examen suelen despreciarlo, pero en un robot real hay rozamiento <b>viscoso</b>, proporcional a la velocidad, y rozamiento <b>seco</b> o de Coulomb, de signo contrario al movimiento. El segundo es el que hace que un brazo se quede parado aunque le apliques un par pequeño.</p>
+
 </section>
 </main>
 </div>

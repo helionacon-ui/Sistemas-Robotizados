@@ -209,6 +209,13 @@ summary:hover{color:var(--tc,var(--accent))}
 .fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
 .fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
 .fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
+
+@media print{
+  .an-ctl,.ix-ctl,.qx-ctl,.sx-ctl,.dx-ctl,.cx-ctl,.cx-btn,.dk-nav,.dk-top,.rx-chk,.sim-b,.gsearch,.chips,.busq,.qz-o,.qz-nav,.fx-prog,.fx-theme,.hub-bar{display:none!important}
+  .cx table input,.cx table select{border:none;background:none;padding:0}
+  .sim-t{font-size:1.2rem}
+  .an::after,.ix::after,.qz::after{content:"Esta parte es interactiva: ábrela en la versión web de la guía.";display:block;margin-top:8px;font-size:11px;color:#777;font-style:italic}
+}
 </style>
 
 </head>
@@ -229,11 +236,13 @@ summary:hover{color:var(--tc,var(--accent))}
   <a href="t4.html#t4" style="--tc:var(--c4)">T4 Cinemática</a>
   <a href="t5.html#t5" style="--tc:var(--c5)">T5 Dinámica</a>
   <a href="t6.html#t6" style="--tc:var(--c6)">T6 Control</a>
+  <a href="demostraciones.html#demostraciones" style="--tc:var(--c3)">Demostraciones</a>
   <div class="grp">Prácticas</div>
   <a href="practicas.html#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
   <div class="grp">Problemas</div>
   <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="simulacros.html#simulacros" style="--tc:var(--c8)">Simulacros de examen</a>
   <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
   <div class="grp">Interactivo</div>
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
@@ -313,6 +322,34 @@ summary:hover{color:var(--tc,var(--accent))}
 
   <h3>Criterios de implantación</h3>
   <p>Antes de elegir un robot se mira la carga que tiene que mover, el alcance que necesita, la precisión, el espacio de trabajo y el coste de la instalación. Esos criterios explican por qué hay tantos tipos distintos.</p>
+  <h3>Qué es exactamente un robot industrial</h3>
+  <p>Un <b>manipulador industrial</b> es una máquina de varios grados de libertad, <b>reprogramable</b> y de <b>uso general</b>, capaz de mover materiales o herramientas siguiendo movimientos programados. Las dos palabras en negrita son las que lo separan de una máquina automática corriente: una prensa hace siempre lo mismo, un robot cambia de tarea cambiando el programa.</p>
+  <h3>Las piezas que lo forman</h3>
+  <div class="fcards">
+    <div class="box"><h4>Estructura mecánica</h4><p>Eslabones rígidos unidos por articulaciones. Define el alcance y el espacio de trabajo.</p></div>
+    <div class="box"><h4>Actuadores</h4><p>Dan el par o la fuerza en cada articulación: eléctricos, hidráulicos o neumáticos.</p></div>
+    <div class="box"><h4>Transmisiones</h4><p>Llevan el movimiento del motor a la articulación y cambian velocidad por par.</p></div>
+    <div class="box"><h4>Sensores</h4><p>Miden la posición y la velocidad de cada articulación para cerrar el lazo de control.</p></div>
+    <div class="box"><h4>Controlador</h4><p>Calcula las trayectorias y las consignas que recibe cada motor.</p></div>
+    <div class="box"><h4>Elemento terminal</h4><p>La pinza o la herramienta. Es lo que hace el trabajo; el resto solo la coloca.</p></div>
+  </div>
+  <h3>Tipos de actuador</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Tipo</th><th>A favor</th><th>En contra</th><th>Dónde se usa</th></tr>
+    <tr><td><b>Eléctrico</b></td><td>Preciso, limpio, fácil de controlar</td><td>Par limitado sin reductor</td><td>La mayoría de robots actuales</td></tr>
+    <tr><td><b>Hidráulico</b></td><td>Mucha fuerza, aguanta cargas grandes</td><td>Fugas, mantenimiento, ruido</td><td>Cargas muy pesadas</td></tr>
+    <tr><td><b>Neumático</b></td><td>Barato, rápido, sencillo</td><td>Aire compresible: difícil parar en un punto intermedio</td><td>Movimientos entre topes y pinzas</td></tr>
+  </table></div>
+  <h3>Precisión, repetibilidad y resolución</h3>
+  <p>Son tres cosas distintas y en el examen se confunden con facilidad:</p>
+  <ul>
+    <li><b>Precisión (o exactitud):</b> distancia entre el punto al que el robot va y el punto que le has ordenado. Mide el <i>error sistemático</i>.</li>
+    <li><b>Repetibilidad:</b> dispersión de los puntos que alcanza al repetir muchas veces la misma orden. Mide el <i>error aleatorio</i>.</li>
+    <li><b>Resolución:</b> incremento más pequeño que el robot puede medir u ordenar. La fija el sensor y la electrónica.</li>
+  </ul>
+  <div class="box key"><strong>Regla práctica:</strong> un robot puede ser muy repetible y poco preciso. Va siempre al mismo sitio, pero no al que le pediste. Para soldar por puntos basta con repetibilidad; para montar piezas nuevas hace falta precisión.</div>
+  <h3>Cuántos grados de libertad hacen falta</h3>
+  <p>Para colocar un objeto en el espacio con una orientación cualquiera hacen falta <b>seis</b> grados de libertad: tres para la posición (x, y, z) y tres para la orientación. Con menos de seis, el robot llega a los puntos pero no con cualquier orientación. Con más de seis, el robot es <b>redundante</b>: hay infinitas combinaciones de articulaciones para la misma posición del extremo, lo que permite esquivar obstáculos.</p>
+
 </section>
 </main>
 </div>

@@ -209,6 +209,13 @@ summary:hover{color:var(--tc,var(--accent))}
 .fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
 .fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
 .fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
+
+@media print{
+  .an-ctl,.ix-ctl,.qx-ctl,.sx-ctl,.dx-ctl,.cx-ctl,.cx-btn,.dk-nav,.dk-top,.rx-chk,.sim-b,.gsearch,.chips,.busq,.qz-o,.qz-nav,.fx-prog,.fx-theme,.hub-bar{display:none!important}
+  .cx table input,.cx table select{border:none;background:none;padding:0}
+  .sim-t{font-size:1.2rem}
+  .an::after,.ix::after,.qz::after{content:"Esta parte es interactiva: ábrela en la versión web de la guía.";display:block;margin-top:8px;font-size:11px;color:#777;font-style:italic}
+}
 </style>
 
 </head>
@@ -229,11 +236,13 @@ summary:hover{color:var(--tc,var(--accent))}
   <a href="t4.html#t4" style="--tc:var(--c4)">T4 Cinemática</a>
   <a href="t5.html#t5" style="--tc:var(--c5)">T5 Dinámica</a>
   <a href="t6.html#t6" style="--tc:var(--c6)">T6 Control</a>
+  <a href="demostraciones.html#demostraciones" style="--tc:var(--c3)">Demostraciones</a>
   <div class="grp">Prácticas</div>
   <a href="practicas.html#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
   <div class="grp">Problemas</div>
   <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="simulacros.html#simulacros" style="--tc:var(--c8)">Simulacros de examen</a>
   <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
   <div class="grp">Interactivo</div>
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
@@ -316,6 +325,41 @@ summary:hover{color:var(--tc,var(--accent))}
 
   <h3>Por qué importa para el examen</h3>
   <p>No se pide memorizar catálogos, pero sí entender qué efecto tiene un reductor. Un reductor de relación <i>n</i> divide la velocidad entre <i>n</i> y multiplica el par por <i>n</i>, aproximadamente, sin contar pérdidas.</p>
+  <h3>Tipos de articulación</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Articulación</th><th>Movimiento</th><th>Grados de libertad</th></tr>
+    <tr><td><b>Rotación</b> (revolución)</td><td>Giro alrededor de un eje</td><td>1</td></tr>
+    <tr><td><b>Prismática</b></td><td>Desplazamiento a lo largo de un eje</td><td>1</td></tr>
+    <tr><td><b>Cilíndrica</b></td><td>Giro y desplazamiento sobre el mismo eje</td><td>2</td></tr>
+    <tr><td><b>Planar</b></td><td>Dos desplazamientos y un giro en un plano</td><td>3</td></tr>
+    <tr><td><b>Esférica</b> (rótula)</td><td>Tres giros alrededor de un punto</td><td>3</td></tr>
+  </table></div>
+  <p>En los robots industriales casi solo se usan las dos primeras. Las demás se construyen combinando varias de rotación o prismáticas, porque así cada eje tiene su motor y su sensor.</p>
+  <h3>Las cinco configuraciones, comparadas</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Configuración</th><th>Ejes</th><th>Espacio de trabajo</th><th>Característica</th></tr>
+    <tr><td><b>Cartesiana</b></td><td>PPP</td><td>Prisma</td><td>Muy precisa y fácil de programar; ocupa mucho</td></tr>
+    <tr><td><b>Cilíndrica</b></td><td>RPP</td><td>Cilindro hueco</td><td>Buena para cargar y descargar máquinas</td></tr>
+    <tr><td><b>Esférica</b> (polar)</td><td>RRP</td><td>Esfera hueca</td><td>Alcance grande con poca ocupación en el suelo</td></tr>
+    <tr><td><b>Angular</b> (antropomórfica)</td><td>RRR</td><td>Volumen complejo</td><td>La más versátil; cinemática inversa más difícil</td></tr>
+    <tr><td><b>SCARA</b></td><td>RRP</td><td>Cilindro de poca altura</td><td>Rígida en vertical y rápida en el plano: montaje</td></tr>
+  </table></div>
+  <p>Las letras indican el tipo de las tres primeras articulaciones: <b>R</b> de rotación y <b>P</b> de prismática. Fíjate en que la esférica y la SCARA comparten notación RRP: lo que cambia es la orientación de los ejes.</p>
+  <h3>La muñeca: quién pone la orientación</h3>
+  <p>Los tres primeros ejes colocan el extremo en un punto; la <b>muñeca</b> le da la orientación, normalmente con tres giros más. Cuando esos tres ejes se cortan en un mismo punto se llama <b>muñeca esférica</b>, y tiene una ventaja importante: permite separar el problema en dos, resolver primero la posición y después la orientación. Por eso casi todos los robots industriales la llevan.</p>
+  <h3>Transmisiones y reductores</h3>
+  <ul>
+    <li><b>Reductor de engranajes:</b> una relación n divide la velocidad entre n y multiplica el par por n, descontando el rendimiento.</li>
+    <li><b>Reductor armónico:</b> mucha reducción en poco espacio y con muy poco juego. Muy usado en robots.</li>
+    <li><b>Husillo de bolas:</b> convierte el giro del motor en desplazamiento. Es la transmisión típica de los ejes prismáticos.</li>
+    <li><b>Correa dentada:</b> permite alejar el motor de la articulación y así aligerar el brazo.</li>
+  </ul>
+  <div class="box key"><strong>Por qué importa:</strong> el reductor es lo que hace que un motor pequeño mueva un brazo pesado. A cambio introduce juego y rozamiento, que luego aparecen como error en el control.</div>
+  <h3>Sensores de posición</h3>
+  <ul>
+    <li><b>Encoder incremental:</b> cuenta pulsos. Barato, pero pierde la referencia al apagar; hay que buscar el origen cada vez.</li>
+    <li><b>Encoder absoluto:</b> da directamente la posición. No necesita buscar el origen.</li>
+    <li><b>Resolver:</b> sensor analógico, muy robusto frente a vibración y temperatura.</li>
+  </ul>
+
 </section>
 </main>
 </div>

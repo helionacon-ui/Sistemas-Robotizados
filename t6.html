@@ -209,6 +209,13 @@ summary:hover{color:var(--tc,var(--accent))}
 .fg-card{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:12px;min-width:0}
 .fg-card svg{width:100%;height:auto;max-width:100%;display:block;background:var(--bg);border-radius:10px}
 .fg-card figcaption{font-size:.9rem;margin-top:8px;color:var(--muted)}
+
+@media print{
+  .an-ctl,.ix-ctl,.qx-ctl,.sx-ctl,.dx-ctl,.cx-ctl,.cx-btn,.dk-nav,.dk-top,.rx-chk,.sim-b,.gsearch,.chips,.busq,.qz-o,.qz-nav,.fx-prog,.fx-theme,.hub-bar{display:none!important}
+  .cx table input,.cx table select{border:none;background:none;padding:0}
+  .sim-t{font-size:1.2rem}
+  .an::after,.ix::after,.qz::after{content:"Esta parte es interactiva: ábrela en la versión web de la guía.";display:block;margin-top:8px;font-size:11px;color:#777;font-style:italic}
+}
 </style>
 
 </head>
@@ -229,11 +236,13 @@ summary:hover{color:var(--tc,var(--accent))}
   <a href="t4.html#t4" style="--tc:var(--c4)">T4 Cinemática</a>
   <a href="t5.html#t5" style="--tc:var(--c5)">T5 Dinámica</a>
   <a href="t6.html#t6" style="--tc:var(--c6)">T6 Control</a>
+  <a href="demostraciones.html#demostraciones" style="--tc:var(--c3)">Demostraciones</a>
   <div class="grp">Prácticas</div>
   <a href="practicas.html#practicas" style="--tc:var(--c7)">Las 7 prácticas</a>
   <div class="grp">Problemas</div>
   <a href="resueltos.html#resueltos" style="--tc:var(--c8)">Ejercicios resueltos</a>
   <a href="examenes.html#practicar" style="--tc:var(--c8)">Exámenes de cursos anteriores</a>
+  <a href="simulacros.html#simulacros" style="--tc:var(--c8)">Simulacros de examen</a>
   <a href="autoevaluacion.html#autoevaluacion" style="--tc:var(--c8)">Autoevaluación</a>
   <div class="grp">Interactivo</div>
   <a href="diapositivas.html#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
@@ -324,6 +333,43 @@ summary:hover{color:var(--tc,var(--accent))}
   <div class="formula">θ(t) = (3π/2) t² − π t³</div>
   <p>Comprobado: θ(1) = π/2 y θ̇(0) = θ̇(1) = 0.</p>
   <div class="box key"><strong>Método de resolución:</strong> escribe las cuatro condiciones como un sistema 4 × 4 en (a₀, a₁, a₂, a₃) y resuélvelo. Si te dan velocidades del extremo en vez de velocidades articulares, pasa primero por la Jacobiana.</div>
+  <h3>Qué decide el control cinemático</h3>
+  <p>Le das al robot unos puntos por los que pasar y él tiene que decidir <b>qué hace cada articulación en cada instante</b>. Eso implica tres decisiones:</p>
+  <ol>
+    <li>Si el camino entre puntos importa o solo importa llegar.</li>
+    <li>Cuánto tiempo se tarda en cada tramo.</li>
+    <li>Qué forma tiene la curva de posición frente al tiempo, es decir, qué interpolador se usa.</li>
+  </ol>
+  <h3>Tipos de trayectoria</h3>
+  <div class="fcards">
+    <div class="box"><h4>Punto a punto</h4><p>Cada articulación va a su ritmo y llega cuando puede. El camino del extremo no se controla. Es la más rápida.</p></div>
+    <div class="box"><h4>Coordinada o isócrona</h4><p>Todas las articulaciones tardan lo mismo: la más lenta marca el tiempo. El movimiento es más suave y gasta menos.</p></div>
+    <div class="box key"><h4>Continua</h4><p>El extremo sigue un camino definido en el espacio, por ejemplo una recta. Hay que resolver la cinemática inversa en muchos puntos.</p></div>
+  </div>
+  <h3>Qué interpolador usar</h3>
+  <div style="overflow-x:auto;max-width:100%"><table class="tw"><tr><th>Interpolador</th><th>Qué impone</th><th>Problema</th></tr>
+    <tr><td><b>Lineal</b></td><td>Solo las posiciones</td><td>La velocidad salta en cada punto de paso</td></tr>
+    <tr><td><b>Lineal con transiciones parabólicas</b></td><td>Posiciones y suaviza las esquinas</td><td>No pasa exactamente por los puntos intermedios</td></tr>
+    <tr><td><b>Cúbico</b> (spline)</td><td>Posiciones y velocidades</td><td>La aceleración salta entre tramos</td></tr>
+    <tr><td><b>De quinto orden</b></td><td>Posiciones, velocidades y aceleraciones</td><td>Más cálculo y más oscilación</td></tr>
+  </table></div>
+  <div class="box key"><strong>En el examen:</strong> casi siempre piden el cúbico. Cuenta las condiciones que te dan: cuatro condiciones, cuatro coeficientes. Si te dan también aceleraciones, son seis condiciones y toca el de quinto orden.</div>
+  <h3>Espacio articular o espacio cartesiano</h3>
+  <p>Se puede interpolar en los ángulos de las articulaciones o en la posición del extremo:</p>
+  <ul>
+    <li><b>En el espacio articular</b> el cálculo es barato y no hay problemas de singularidades, pero el extremo describe una curva cualquiera entre los puntos.</li>
+    <li><b>En el espacio cartesiano</b> el extremo hace exactamente el camino que quieres, pero hay que resolver la cinemática inversa en cada instante y la trayectoria puede pasar por una singularidad o salirse del alcance.</li>
+  </ul>
+  <h3>Control dinámico: del PID al par calculado</h3>
+  <ul>
+    <li><b>PID articular independiente:</b> cada articulación se controla por su cuenta, como si las demás no existieran. Sencillo y muy usado, pero empeora cuando el robot se mueve rápido, porque los acoplamientos dejan de ser despreciables.</li>
+    <li><b>PD con compensación de la gravedad:</b> añade G(q) a la salida del PD. Quita el error en régimen permanente sin necesidad de término integral.</li>
+    <li><b>Par calculado:</b> usa el modelo completo para cancelar la dinámica, de modo que el error se comporta como un sistema lineal sencillo.</li>
+  </ul>
+  <div class="formula">τ = M(q) · [ q̈d + Kd (q̇d − q̇) + Kp (qd − q) ] + C(q, q̇) · q̇ + G(q)</div>
+  <p>Si el modelo fuese exacto, el error de seguimiento cumpliría ë + Kd ė + Kp e = 0, es decir, una ecuación lineal cuyos polos eliges tú con Kp y Kd. En la práctica el modelo nunca es exacto y queda un error residual.</p>
+  <p>Puedes ver el efecto de Kp y Kd en la animación del control PD, al principio de este tema.</p>
+
 </section>
 </main>
 </div>
