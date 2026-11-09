@@ -221,6 +221,59 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
     <div class="inner"><p>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ).</p></div></details>
   <details><summary>6. Un cuaternión unitario de una rotación de 120° alrededor del eje x, ¿cuál es?</summary>
     <div class="inner"><p>q = (cos 60°, sin 60°, 0, 0) = (0,5 ; 0,866 ; 0 ; 0).</p></div></details>
+
+  <h3>Test rápido con puntuación</h3>
+  <p>Doce preguntas en orden aleatorio. Al responder ves si has acertado y por qué. Al final tienes tu nota y qué repasar.</p>
+  <style>
+  .qz{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:16px;margin:14px 0;min-width:0}
+  .qz-bar{height:8px;border-radius:99px;background:var(--accent-soft);overflow:hidden;margin:6px 0 12px}
+  .qz-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s ease}
+  .qz-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
+  .qz-q{font-family:var(--display);font-size:1.1rem;margin:4px 0 12px}
+  .qz-o{display:grid;gap:8px}
+  .qz-o button{font:inherit;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);cursor:pointer;min-width:0;overflow-wrap:anywhere}
+  .qz-o button:hover:not(:disabled){border-color:var(--accent)}
+  .qz-o button.ok{border-color:#2f7d32;background:rgba(47,125,50,.14)}
+  .qz-o button.ko{border-color:#b3261e;background:rgba(179,38,30,.12)}
+  .qz-fb{margin:12px 0 0;font-size:.95rem}
+  .qz-nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .qz-score{font-family:var(--display);font-size:2.2rem;margin:4px 0}
+  @media (prefers-reduced-motion: reduce){.qz-bar i{transition:none}}
+  </style>
+  <div class="qz" id="qz" aria-live="polite"></div>
+  <script data-w="qz">
+  (function(){
+    var root=document.getElementById('qz'); if(!root) return;
+    var Q=[["¿Qué tamaño tiene una matriz de transformación homogénea?", ["3 × 3", "4 × 4", "3 × 4", "6 × 6"], 1, "Es 4 × 4: rotación 3 × 3, una columna de posición y la fila [0 0 0 1]."], ["En el 2R plano, ¿cuándo es singular la Jacobiana?", ["Cuando θ₁ = 0°", "Cuando θ₂ = 90°", "Cuando θ₂ = 0° o 180°", "Nunca"], 2, "det J = l₁ l₂ sen θ₂, que se anula con el brazo estirado o plegado."], ["Un 2R alcanza un punto interior de su espacio de trabajo. ¿Cuántas soluciones tiene la cinemática inversa?", ["Una", "Dos", "Cuatro", "Infinitas"], 1, "Dos: codo arriba y codo abajo. En el borde del alcance coinciden en una."], ["¿En qué orden se encadenan las operaciones de Denavit-Hartenberg de un eslabón?", ["Rz(θ) · Tz(d) · Tx(a) · Rx(α)", "Rx(α) · Tx(a) · Tz(d) · Rz(θ)", "Tz(d) · Rz(θ) · Rx(α) · Tx(a)", "Rz(θ) · Rx(α) · Tz(d) · Tx(a)"], 0, "Aᵢ = Rz(θ) · Tz(d) · Tx(a) · Rx(α): primero lo del eje z, después lo del eje x."], ["¿Qué cuaternión representa un giro de 120° alrededor del eje x?", ["(0,5 ; 0,866 ; 0 ; 0)", "(0,866 ; 0,5 ; 0 ; 0)", "(−0,5 ; 0 ; 0,866 ; 0)", "(1 ; 120 ; 0 ; 0)"], 0, "q = (cos 60°, sen 60°, 0, 0): en el cuaternión entra la mitad del ángulo."], ["¿Cuál es el conjugado de q = (w, x, y, z)?", ["(−w, x, y, z)", "(w, −x, −y, −z)", "(−w, −x, −y, −z)", "(z, y, x, w)"], 1, "Solo cambia de signo la parte vectorial."], ["¿Cuántos coeficientes tiene cada tramo de un spline cúbico?", ["Dos", "Tres", "Cuatro", "Seis"], 2, "q(t) = a + b·t + c·t² + d·t³: cuatro coeficientes, que salen de cuatro condiciones."], ["Un spline cúbico va de q = 0 a q = 2 en 1 s con velocidad nula en los extremos. ¿Cuál es?", ["q = 2t", "q = 6t² − 4t³", "q = 3t² − 2t³", "q = 2t³"], 1, "c = 3Δ/T² = 6 y d = −2Δ/T³ = −4. Comprueba: q(1) = 2 y q̇(1) = 12 − 12 = 0."], ["Con el robot parado, ¿qué par equilibra una fuerza F en el extremo?", ["τ = J · F", "τ = Jᵀ · F", "τ = J⁻¹ · F", "τ = F / J"], 1, "El par estático es τ = Jᵀ F."], ["Un 2R tiene l₁ = 1 m y l₂ = 0,6 m. ¿Cuál es su espacio de trabajo?", ["Un círculo de radio 1,6 m", "Una corona entre 0,4 m y 1,6 m", "Una corona entre 0,6 m y 1 m", "Un cuadrado de lado 1,6 m"], 1, "El radio va de |l₁ − l₂| = 0,4 m a l₁ + l₂ = 1,6 m."], ["¿Qué le pasa a la velocidad en un interpolador lineal al pasar por un punto intermedio?", ["Es continua", "Vale siempre cero", "Cambia de golpe", "Se hace infinita"], 2, "La pendiente cambia de un tramo al siguiente, así que la velocidad salta. Por eso se usan splines o transiciones parabólicas."], ["Un 2R con l₁ = l₂ = 1 m debe llegar al punto (1 ; 1). ¿Cuánto vale θ₂?", ["±45°", "±60°", "±90°", "±120°"], 2, "cos θ₂ = (r² − 2)/2 = (2 − 2)/2 = 0, luego θ₂ = ±90°."]];
+    var order, i, score, fails;
+    function sh(a){ a=a.slice(); for(var k=a.length-1;k>0;k--){ var j=Math.floor(Math.random()*(k+1)), t=a[k]; a[k]=a[j]; a[j]=t; } return a; }
+    function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    function start(){ order=sh(Q.map(function(_,k){return k})); i=0; score=0; fails=[]; show(); }
+    function show(){
+      if(i>=order.length) return end();
+      var q=Q[order[i]], opts=sh(q[1].map(function(t,k){return [t,k===q[2]]}));
+      root.innerHTML='<div class="qz-top"><span>Pregunta '+(i+1)+' de '+order.length+'</span><span>Aciertos: '+score+'</span></div><div class="qz-bar"><i style="width:'+(i/order.length*100)+'%"></i></div>'
+        +'<p class="qz-q">'+esc(q[0])+'</p><div class="qz-o">'+opts.map(function(o,k){return '<button type="button" data-k="'+k+'">'+esc(o[0])+'</button>'}).join('')+'</div><p class="qz-fb" hidden></p><div class="qz-nav"></div>';
+      var bs=root.querySelectorAll('.qz-o button'), fb=root.querySelector('.qz-fb'), nav=root.querySelector('.qz-nav');
+      bs.forEach(function(b,k){ b.addEventListener('click',function(){
+        var ok=opts[k][1]; bs.forEach(function(x,j){ x.disabled=true; if(opts[j][1]) x.classList.add('ok'); }); if(!ok) b.classList.add('ko');
+        if(ok) score++; else fails.push(q[0]);
+        fb.hidden=false; fb.innerHTML='<b>'+(ok?'Correcto.':'No es esa.')+'</b> '+esc(q[3]);
+        nav.innerHTML='<button class="btn pri" type="button">'+(i+1<order.length?'Siguiente':'Ver la nota')+'</button>';
+        var nx=nav.querySelector('button'); nx.addEventListener('click',function(){ i++; show(); }); nx.focus();
+      }); });
+    }
+    function end(){
+      var n=order.length, nota=(score/n*10).toFixed(1).replace('.',',');
+      var msg=score===n?'Perfecto. Pasa a los ejercicios de examen.':(score>=n*0.7?'Buen nivel. Repasa los fallos y vuelve a intentarlo.':'Repasa los temas antes de seguir con los exámenes.');
+      root.innerHTML='<div class="qz-bar"><i style="width:100%"></i></div><p class="qz-top"><span>Resultado</span></p><p class="qz-score">'+score+' / '+n+' · nota '+nota+'</p><p>'+msg+'</p>'
+        +(fails.length?'<p><b>Preguntas falladas:</b></p><ul>'+fails.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul>':'')
+        +'<div class="qz-nav"><button class="btn pri" type="button">Repetir el test</button></div>';
+      root.querySelector('button').addEventListener('click',start);
+    }
+    start();
+  })();
+  </script>
 </section>
 </main>
 </div>

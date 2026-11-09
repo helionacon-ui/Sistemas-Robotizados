@@ -600,6 +600,63 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
     draw();
   })();
   </script>
+
+  <h3>8 · Robot en 3D: gíralo con el dedo</h3>
+  <div class="ix" id="v3-w">
+    <p>Brazo de tres articulaciones de giro. <b>Arrastra en horizontal</b> sobre el dibujo para girar la vista. La sombra gris es la proyección del brazo sobre el suelo.</p>
+    <div class="ix-ctl">
+      <label>θ₁ (°) giro de la base<input id="v3-1" type="range" min="-180" max="180" step="1" value="35"><span id="v3-1v">35</span></label>
+      <label>θ₂ (°) hombro<input id="v3-2" type="range" min="-30" max="120" step="1" value="50"><span id="v3-2v">50</span></label>
+      <label>θ₃ (°) codo<input id="v3-3" type="range" min="-150" max="150" step="1" value="-70"><span id="v3-3v">-70</span></label>
+      <label>Inclinación de la vista (°)<input id="v3-p" type="range" min="5" max="85" step="1" value="25"><span id="v3-pv">25</span></label>
+    </div>
+    <div class="ix-ctl"><button class="btn" id="v3-auto" type="button">Girar la vista sola</button></div>
+    <svg id="v3-svg" class="ix-svg" viewBox="-2.4 -2.6 4.8 4.4" style="touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none" role="img" aria-label="Brazo de tres articulaciones en perspectiva"></svg>
+    <div class="ix-out" id="v3-out"></div>
+  </div>
+  <script data-w="v3">
+  (function(){
+    var box=document.getElementById('v3-w'); if(!box) return;
+    var NS='http://www.w3.org/2000/svg', S=document.getElementById('v3-svg');
+    var L1=0.8, L2=1, L3=0.8, yaw=-0.6, auto=false, drag=null;
+    function f(v){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(3).replace('.',','); }
+    function g(id){ return parseFloat(document.getElementById(id).value); }
+    function el(tag,a,st){ var e=document.createElementNS(NS,tag); for(var k in a) e.setAttribute(k,a[k]); if(st) e.setAttribute('style',st); S.appendChild(e); return e; }
+    function draw(){
+      var t1=g('v3-1')*Math.PI/180, t2=g('v3-2')*Math.PI/180, t3=g('v3-3')*Math.PI/180, pit=g('v3-p')*Math.PI/180;
+      ['1','2','3','p'].forEach(function(k){ document.getElementById('v3-'+k+'v').textContent=g('v3-'+k); });
+      function P(p){ var x=p[0]*Math.cos(yaw)-p[1]*Math.sin(yaw), y=p[0]*Math.sin(yaw)+p[1]*Math.cos(yaw); return [x, -(p[2]*Math.cos(pit)+y*Math.sin(pit))]; }
+      function line(a,b,st){ var A=P(a),B=P(b); el('line',{x1:A[0],y1:A[1],x2:B[0],y2:B[1]},st); }
+      S.innerHTML='';
+      for(var k=-3;k<=3;k++){ line([k*0.5,-1.5,0],[k*0.5,1.5,0],'stroke:var(--line);stroke-width:0.012'); line([-1.5,k*0.5,0],[1.5,k*0.5,0],'stroke:var(--line);stroke-width:0.012'); }
+      var r=[Math.cos(t1),Math.sin(t1)], p0=[0,0,0], p1=[0,0,L1];
+      var p2=[L2*Math.cos(t2)*r[0], L2*Math.cos(t2)*r[1], L1+L2*Math.sin(t2)];
+      var p3=[p2[0]+L3*Math.cos(t2+t3)*r[0], p2[1]+L3*Math.cos(t2+t3)*r[1], p2[2]+L3*Math.sin(t2+t3)];
+      var pts=[p0,p1,p2,p3];
+      // sombra en el suelo
+      el('polyline',{points:pts.map(function(p){return P([p[0],p[1],0]).join(',')}).join(' ')},'fill:none;stroke:var(--muted);stroke-width:0.05;stroke-linecap:round;stroke-linejoin:round;opacity:.35');
+      line(p3,[p3[0],p3[1],0],'stroke:var(--muted);stroke-width:0.012;stroke-dasharray:0.05 0.04');
+      // ejes de la base
+      line([0,0,0],[0.6,0,0],'stroke:var(--accent);stroke-width:0.025'); line([0,0,0],[0,0.6,0],'stroke:var(--muted);stroke-width:0.025'); line([0,0,0],[0,0,0.45],'stroke:var(--fg);stroke-width:0.02;opacity:.5');
+      var lab=[['x',[0.7,0,0]],['y',[0,0.7,0]]]; lab.forEach(function(l){ var q=P(l[1]); el('text',{x:q[0],y:q[1],'font-size':0.16,'text-anchor':'middle'},'fill:var(--muted)').textContent=l[0]; });
+      el('polyline',{points:pts.map(function(p){return P(p).join(',')}).join(' ')},'fill:none;stroke:var(--fg);stroke-width:0.09;stroke-linecap:round;stroke-linejoin:round');
+      pts.forEach(function(p,i){ var q=P(p); el('circle',{cx:q[0],cy:q[1],r:i===3?0.11:0.08},i===3?'fill:var(--accent)':'fill:var(--surface);stroke:var(--fg);stroke-width:0.035'); });
+      document.getElementById('v3-out').innerHTML='<ol>'
+        +'<li><b>Alcance horizontal</b>: r = l₂ cos θ₂ + l₃ cos(θ₂ + θ₃) = '+f(L2*Math.cos(t2)+L3*Math.cos(t2+t3))+' m.</li>'
+        +'<li><b>x = r cos θ₁</b> = '+f(p3[0])+' m; <b>y = r sen θ₁</b> = '+f(p3[1])+' m.</li>'
+        +'<li><b>z = l₁ + l₂ sen θ₂ + l₃ sen(θ₂ + θ₃)</b> = '+f(p3[2])+' m.</li></ol>'
+        +'<p>Longitudes: l₁ = 0,8 m, l₂ = 1 m, l₃ = 0,8 m. θ₁ solo cambia la dirección en planta; θ₂ y θ₃ fijan el alcance y la altura, como un 2R en un plano vertical.</p>';
+    }
+    ['v3-1','v3-2','v3-3','v3-p'].forEach(function(id){ document.getElementById(id).addEventListener('input',draw); });
+    S.addEventListener('pointerdown',function(e){ drag={x:e.clientX,y:yaw}; S.style.cursor='grabbing'; try{S.setPointerCapture(e.pointerId);}catch(_){} });
+    S.addEventListener('pointermove',function(e){ if(!drag) return; yaw=drag.y+(e.clientX-drag.x)*0.012; draw(); });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(n){ S.addEventListener(n,function(){ drag=null; S.style.cursor='grab'; }); });
+    var btn=document.getElementById('v3-auto'), last=null;
+    btn.addEventListener('click',function(){ auto=!auto; btn.textContent=auto?'Parar el giro':'Girar la vista sola'; last=null; if(auto) requestAnimationFrame(spin); });
+    function spin(ts){ if(!auto) return; if(last===null) last=ts; yaw+=(ts-last)/1000*0.5; last=ts; draw(); requestAnimationFrame(spin); }
+    draw();
+  })();
+  </script>
 </section>
 </main>
 </div>

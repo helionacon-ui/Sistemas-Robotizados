@@ -244,7 +244,29 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <a href="bibliografia.html#bibliografia" style="--tc:var(--c7)">Bibliografía</a>
 </nav>
 <main>
-<section class="sec" id="cero" style="--tc:var(--c0)">
+<section class="sec" id="explora" style="--tc:var(--c0)">
+  <div class="sh"><span class="badge" aria-hidden="true">★</span><div class="shx"><p class="kick">Explorar</p><h2>Aprende tocando</h2></div></div>
+  <p>La guía no es solo para leer. Entra por donde quieras:</p>
+  <style>
+  .xg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr));gap:12px;margin:14px 0}
+  .xc{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--fg);text-decoration:none;min-width:0;transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease}
+  .xc:hover,.xc:focus-visible{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
+  .xc svg{width:44px;height:44px;color:var(--accent);background:var(--accent-soft);border-radius:12px;padding:8px;box-sizing:border-box}
+  .xc b{font-family:var(--display);font-size:1.05rem}
+  .xc span{font-size:.88rem;color:var(--muted)}
+  @media (prefers-reduced-motion: reduce){.xc{transition:none}.xc:hover{transform:none}}
+  </style>
+  <div class="xg">
+    <a class="xc" href="interactivos.html#interactivos"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 L20 24 L36 28" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><circle cx="8" cy="40" r="4" fill="currentColor"/><circle cx="20" cy="24" r="4" fill="currentColor"/><circle cx="36" cy="28" r="4" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Diagramas interactivos</b><span>Mueve los controles y lee cada paso con tus números.</span></a>
+    <a class="xc" href="animaciones.html#animaciones"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="18" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M20 16 L33 24 L20 32 Z" fill="currentColor"/></svg><b>Animaciones</b><span>Mira el movimiento: trayectorias, giros y splines.</span></a>
+    <a class="xc" href="calculadoras.html#calculadoras"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="6" width="28" height="36" rx="4" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M16 14 H32 M16 24 H20 M28 24 H32 M16 32 H20 M28 32 H32" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Calculadoras</b><span>Cuaterniones, DH, Jacobiana, inversa e interpoladores.</span></a>
+    <a class="xc" href="resolver.html#resolver"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 26 L18 36 L40 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Resolver exámenes</b><span>Ejercicios de examen paso a paso, con comprobación.</span></a>
+    <a class="xc" href="diapositivas.html#diapositivas"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="24" rx="3" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M24 34 V42 M16 42 H32" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Diapositivas</b><span>Repaso rápido: un concepto por diapositiva.</span></a>
+    <a class="xc" href="figuras.html#figuras"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><circle cx="24" cy="24" r="6" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M24 24 L36 14" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Figuras</b><span>La idea de cada tema en un dibujo.</span></a>
+    <a class="xc" href="resueltos.html#resueltos"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6 H30 L38 14 V42 H12 Z M18 22 H32 M18 30 H32" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Ejercicios resueltos</b><span>Trece ejercicios desarrollados y comprobados con código.</span></a>
+    <a class="xc" href="autoevaluacion.html#autoevaluacion"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M17 18 a7 7 0 1 1 10 6 c-2 1.5 -3 3 -3 6" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><circle cx="24" cy="38" r="2.5" fill="currentColor"/></svg><b>Test con puntuación</b><span>Doce preguntas con respuesta inmediata.</span></a>
+    </div>
+</section><section class="sec" id="cero" style="--tc:var(--c0)">
   <div class="sh"><span class="badge" aria-hidden="true">0</span><div class="shx"><p class="kick">Empezar</p><h2>Empieza aquí si partes de cero</h2></div></div>
   <div class="zero">
     <p class="ft">La asignatura en un párrafo</p>

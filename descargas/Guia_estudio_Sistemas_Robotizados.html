@@ -242,6 +242,30 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
 <main>
 
 <!-- 0 -->
+<section class="sec" id="explora" style="--tc:var(--c0)">
+  <div class="sh"><span class="badge" aria-hidden="true">★</span><div class="shx"><p class="kick">Explorar</p><h2>Aprende tocando</h2></div></div>
+  <p>La guía no es solo para leer. Entra por donde quieras:</p>
+  <style>
+  .xg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr));gap:12px;margin:14px 0}
+  .xc{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--fg);text-decoration:none;min-width:0;transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease}
+  .xc:hover,.xc:focus-visible{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
+  .xc svg{width:44px;height:44px;color:var(--accent);background:var(--accent-soft);border-radius:12px;padding:8px;box-sizing:border-box}
+  .xc b{font-family:var(--display);font-size:1.05rem}
+  .xc span{font-size:.88rem;color:var(--muted)}
+  @media (prefers-reduced-motion: reduce){.xc{transition:none}.xc:hover{transform:none}}
+  </style>
+  <div class="xg">
+    <a class="xc" href="#interactivos"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 L20 24 L36 28" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><circle cx="8" cy="40" r="4" fill="currentColor"/><circle cx="20" cy="24" r="4" fill="currentColor"/><circle cx="36" cy="28" r="4" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Diagramas interactivos</b><span>Mueve los controles y lee cada paso con tus números.</span></a>
+    <a class="xc" href="#animaciones"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="18" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M20 16 L33 24 L20 32 Z" fill="currentColor"/></svg><b>Animaciones</b><span>Mira el movimiento: trayectorias, giros y splines.</span></a>
+    <a class="xc" href="#calculadoras"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="6" width="28" height="36" rx="4" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M16 14 H32 M16 24 H20 M28 24 H32 M16 32 H20 M28 32 H32" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Calculadoras</b><span>Cuaterniones, DH, Jacobiana, inversa e interpoladores.</span></a>
+    <a class="xc" href="#resolver"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 26 L18 36 L40 12" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Resolver exámenes</b><span>Ejercicios de examen paso a paso, con comprobación.</span></a>
+    <a class="xc" href="#diapositivas"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="24" rx="3" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M24 34 V42 M16 42 H32" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Diapositivas</b><span>Repaso rápido: un concepto por diapositiva.</span></a>
+    <a class="xc" href="#figuras"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><circle cx="24" cy="24" r="6" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><path d="M24 24 L36 14" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Figuras</b><span>La idea de cada tema en un dibujo.</span></a>
+    <a class="xc" href="#resueltos"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6 H30 L38 14 V42 H12 Z M18 22 H32 M18 30 H32" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg><b>Ejercicios resueltos</b><span>Trece ejercicios desarrollados y comprobados con código.</span></a>
+    <a class="xc" href="#autoevaluacion"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M17 18 a7 7 0 1 1 10 6 c-2 1.5 -3 3 -3 6" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/><circle cx="24" cy="38" r="2.5" fill="currentColor"/></svg><b>Test con puntuación</b><span>Doce preguntas con respuesta inmediata.</span></a>
+    </div>
+</section>
+
 <section class="sec" id="cero" style="--tc:var(--c0)">
   <div class="sh"><span class="badge" aria-hidden="true">0</span><div class="shx"><p class="kick">Empezar</p><h2>Empieza aquí si partes de cero</h2></div></div>
   <div class="zero">
@@ -1663,6 +1687,59 @@ print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
     <div class="inner"><p>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ).</p></div></details>
   <details><summary>6. Un cuaternión unitario de una rotación de 120° alrededor del eje x, ¿cuál es?</summary>
     <div class="inner"><p>q = (cos 60°, sin 60°, 0, 0) = (0,5 ; 0,866 ; 0 ; 0).</p></div></details>
+
+  <h3>Test rápido con puntuación</h3>
+  <p>Doce preguntas en orden aleatorio. Al responder ves si has acertado y por qué. Al final tienes tu nota y qué repasar.</p>
+  <style>
+  .qz{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:16px;margin:14px 0;min-width:0}
+  .qz-bar{height:8px;border-radius:99px;background:var(--accent-soft);overflow:hidden;margin:6px 0 12px}
+  .qz-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s ease}
+  .qz-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
+  .qz-q{font-family:var(--display);font-size:1.1rem;margin:4px 0 12px}
+  .qz-o{display:grid;gap:8px}
+  .qz-o button{font:inherit;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);cursor:pointer;min-width:0;overflow-wrap:anywhere}
+  .qz-o button:hover:not(:disabled){border-color:var(--accent)}
+  .qz-o button.ok{border-color:#2f7d32;background:rgba(47,125,50,.14)}
+  .qz-o button.ko{border-color:#b3261e;background:rgba(179,38,30,.12)}
+  .qz-fb{margin:12px 0 0;font-size:.95rem}
+  .qz-nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .qz-score{font-family:var(--display);font-size:2.2rem;margin:4px 0}
+  @media (prefers-reduced-motion: reduce){.qz-bar i{transition:none}}
+  </style>
+  <div class="qz" id="qz" aria-live="polite"></div>
+  <script data-w="qz">
+  (function(){
+    var root=document.getElementById('qz'); if(!root) return;
+    var Q=[["¿Qué tamaño tiene una matriz de transformación homogénea?", ["3 × 3", "4 × 4", "3 × 4", "6 × 6"], 1, "Es 4 × 4: rotación 3 × 3, una columna de posición y la fila [0 0 0 1]."], ["En el 2R plano, ¿cuándo es singular la Jacobiana?", ["Cuando θ₁ = 0°", "Cuando θ₂ = 90°", "Cuando θ₂ = 0° o 180°", "Nunca"], 2, "det J = l₁ l₂ sen θ₂, que se anula con el brazo estirado o plegado."], ["Un 2R alcanza un punto interior de su espacio de trabajo. ¿Cuántas soluciones tiene la cinemática inversa?", ["Una", "Dos", "Cuatro", "Infinitas"], 1, "Dos: codo arriba y codo abajo. En el borde del alcance coinciden en una."], ["¿En qué orden se encadenan las operaciones de Denavit-Hartenberg de un eslabón?", ["Rz(θ) · Tz(d) · Tx(a) · Rx(α)", "Rx(α) · Tx(a) · Tz(d) · Rz(θ)", "Tz(d) · Rz(θ) · Rx(α) · Tx(a)", "Rz(θ) · Rx(α) · Tz(d) · Tx(a)"], 0, "Aᵢ = Rz(θ) · Tz(d) · Tx(a) · Rx(α): primero lo del eje z, después lo del eje x."], ["¿Qué cuaternión representa un giro de 120° alrededor del eje x?", ["(0,5 ; 0,866 ; 0 ; 0)", "(0,866 ; 0,5 ; 0 ; 0)", "(−0,5 ; 0 ; 0,866 ; 0)", "(1 ; 120 ; 0 ; 0)"], 0, "q = (cos 60°, sen 60°, 0, 0): en el cuaternión entra la mitad del ángulo."], ["¿Cuál es el conjugado de q = (w, x, y, z)?", ["(−w, x, y, z)", "(w, −x, −y, −z)", "(−w, −x, −y, −z)", "(z, y, x, w)"], 1, "Solo cambia de signo la parte vectorial."], ["¿Cuántos coeficientes tiene cada tramo de un spline cúbico?", ["Dos", "Tres", "Cuatro", "Seis"], 2, "q(t) = a + b·t + c·t² + d·t³: cuatro coeficientes, que salen de cuatro condiciones."], ["Un spline cúbico va de q = 0 a q = 2 en 1 s con velocidad nula en los extremos. ¿Cuál es?", ["q = 2t", "q = 6t² − 4t³", "q = 3t² − 2t³", "q = 2t³"], 1, "c = 3Δ/T² = 6 y d = −2Δ/T³ = −4. Comprueba: q(1) = 2 y q̇(1) = 12 − 12 = 0."], ["Con el robot parado, ¿qué par equilibra una fuerza F en el extremo?", ["τ = J · F", "τ = Jᵀ · F", "τ = J⁻¹ · F", "τ = F / J"], 1, "El par estático es τ = Jᵀ F."], ["Un 2R tiene l₁ = 1 m y l₂ = 0,6 m. ¿Cuál es su espacio de trabajo?", ["Un círculo de radio 1,6 m", "Una corona entre 0,4 m y 1,6 m", "Una corona entre 0,6 m y 1 m", "Un cuadrado de lado 1,6 m"], 1, "El radio va de |l₁ − l₂| = 0,4 m a l₁ + l₂ = 1,6 m."], ["¿Qué le pasa a la velocidad en un interpolador lineal al pasar por un punto intermedio?", ["Es continua", "Vale siempre cero", "Cambia de golpe", "Se hace infinita"], 2, "La pendiente cambia de un tramo al siguiente, así que la velocidad salta. Por eso se usan splines o transiciones parabólicas."], ["Un 2R con l₁ = l₂ = 1 m debe llegar al punto (1 ; 1). ¿Cuánto vale θ₂?", ["±45°", "±60°", "±90°", "±120°"], 2, "cos θ₂ = (r² − 2)/2 = (2 − 2)/2 = 0, luego θ₂ = ±90°."]];
+    var order, i, score, fails;
+    function sh(a){ a=a.slice(); for(var k=a.length-1;k>0;k--){ var j=Math.floor(Math.random()*(k+1)), t=a[k]; a[k]=a[j]; a[j]=t; } return a; }
+    function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    function start(){ order=sh(Q.map(function(_,k){return k})); i=0; score=0; fails=[]; show(); }
+    function show(){
+      if(i>=order.length) return end();
+      var q=Q[order[i]], opts=sh(q[1].map(function(t,k){return [t,k===q[2]]}));
+      root.innerHTML='<div class="qz-top"><span>Pregunta '+(i+1)+' de '+order.length+'</span><span>Aciertos: '+score+'</span></div><div class="qz-bar"><i style="width:'+(i/order.length*100)+'%"></i></div>'
+        +'<p class="qz-q">'+esc(q[0])+'</p><div class="qz-o">'+opts.map(function(o,k){return '<button type="button" data-k="'+k+'">'+esc(o[0])+'</button>'}).join('')+'</div><p class="qz-fb" hidden></p><div class="qz-nav"></div>';
+      var bs=root.querySelectorAll('.qz-o button'), fb=root.querySelector('.qz-fb'), nav=root.querySelector('.qz-nav');
+      bs.forEach(function(b,k){ b.addEventListener('click',function(){
+        var ok=opts[k][1]; bs.forEach(function(x,j){ x.disabled=true; if(opts[j][1]) x.classList.add('ok'); }); if(!ok) b.classList.add('ko');
+        if(ok) score++; else fails.push(q[0]);
+        fb.hidden=false; fb.innerHTML='<b>'+(ok?'Correcto.':'No es esa.')+'</b> '+esc(q[3]);
+        nav.innerHTML='<button class="btn pri" type="button">'+(i+1<order.length?'Siguiente':'Ver la nota')+'</button>';
+        var nx=nav.querySelector('button'); nx.addEventListener('click',function(){ i++; show(); }); nx.focus();
+      }); });
+    }
+    function end(){
+      var n=order.length, nota=(score/n*10).toFixed(1).replace('.',',');
+      var msg=score===n?'Perfecto. Pasa a los ejercicios de examen.':(score>=n*0.7?'Buen nivel. Repasa los fallos y vuelve a intentarlo.':'Repasa los temas antes de seguir con los exámenes.');
+      root.innerHTML='<div class="qz-bar"><i style="width:100%"></i></div><p class="qz-top"><span>Resultado</span></p><p class="qz-score">'+score+' / '+n+' · nota '+nota+'</p><p>'+msg+'</p>'
+        +(fails.length?'<p><b>Preguntas falladas:</b></p><ul>'+fails.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul>':'')
+        +'<div class="qz-nav"><button class="btn pri" type="button">Repetir el test</button></div>';
+      root.querySelector('button').addEventListener('click',start);
+    }
+    start();
+  })();
+  </script>
 </section>
 
 <!-- FORMULARIO -->
@@ -2323,6 +2400,63 @@ y = l₁ sen θ₁ + l₂ sen(θ₁ + θ₂)</div>
         +'</ol><p>Con el brazo horizontal (θ = 0°) el par gravitatorio es máximo. Con θ = ±90° es cero.</p>';
     }
     ['pn-m','pn-l','pn-t','pn-a'].forEach(function(id){ document.getElementById(id).addEventListener('input',draw); });
+    draw();
+  })();
+  </script>
+
+  <h3>8 · Robot en 3D: gíralo con el dedo</h3>
+  <div class="ix" id="v3-w">
+    <p>Brazo de tres articulaciones de giro. <b>Arrastra en horizontal</b> sobre el dibujo para girar la vista. La sombra gris es la proyección del brazo sobre el suelo.</p>
+    <div class="ix-ctl">
+      <label>θ₁ (°) giro de la base<input id="v3-1" type="range" min="-180" max="180" step="1" value="35"><span id="v3-1v">35</span></label>
+      <label>θ₂ (°) hombro<input id="v3-2" type="range" min="-30" max="120" step="1" value="50"><span id="v3-2v">50</span></label>
+      <label>θ₃ (°) codo<input id="v3-3" type="range" min="-150" max="150" step="1" value="-70"><span id="v3-3v">-70</span></label>
+      <label>Inclinación de la vista (°)<input id="v3-p" type="range" min="5" max="85" step="1" value="25"><span id="v3-pv">25</span></label>
+    </div>
+    <div class="ix-ctl"><button class="btn" id="v3-auto" type="button">Girar la vista sola</button></div>
+    <svg id="v3-svg" class="ix-svg" viewBox="-2.4 -2.6 4.8 4.4" style="touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none" role="img" aria-label="Brazo de tres articulaciones en perspectiva"></svg>
+    <div class="ix-out" id="v3-out"></div>
+  </div>
+  <script data-w="v3">
+  (function(){
+    var box=document.getElementById('v3-w'); if(!box) return;
+    var NS='http://www.w3.org/2000/svg', S=document.getElementById('v3-svg');
+    var L1=0.8, L2=1, L3=0.8, yaw=-0.6, auto=false, drag=null;
+    function f(v){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(3).replace('.',','); }
+    function g(id){ return parseFloat(document.getElementById(id).value); }
+    function el(tag,a,st){ var e=document.createElementNS(NS,tag); for(var k in a) e.setAttribute(k,a[k]); if(st) e.setAttribute('style',st); S.appendChild(e); return e; }
+    function draw(){
+      var t1=g('v3-1')*Math.PI/180, t2=g('v3-2')*Math.PI/180, t3=g('v3-3')*Math.PI/180, pit=g('v3-p')*Math.PI/180;
+      ['1','2','3','p'].forEach(function(k){ document.getElementById('v3-'+k+'v').textContent=g('v3-'+k); });
+      function P(p){ var x=p[0]*Math.cos(yaw)-p[1]*Math.sin(yaw), y=p[0]*Math.sin(yaw)+p[1]*Math.cos(yaw); return [x, -(p[2]*Math.cos(pit)+y*Math.sin(pit))]; }
+      function line(a,b,st){ var A=P(a),B=P(b); el('line',{x1:A[0],y1:A[1],x2:B[0],y2:B[1]},st); }
+      S.innerHTML='';
+      for(var k=-3;k<=3;k++){ line([k*0.5,-1.5,0],[k*0.5,1.5,0],'stroke:var(--line);stroke-width:0.012'); line([-1.5,k*0.5,0],[1.5,k*0.5,0],'stroke:var(--line);stroke-width:0.012'); }
+      var r=[Math.cos(t1),Math.sin(t1)], p0=[0,0,0], p1=[0,0,L1];
+      var p2=[L2*Math.cos(t2)*r[0], L2*Math.cos(t2)*r[1], L1+L2*Math.sin(t2)];
+      var p3=[p2[0]+L3*Math.cos(t2+t3)*r[0], p2[1]+L3*Math.cos(t2+t3)*r[1], p2[2]+L3*Math.sin(t2+t3)];
+      var pts=[p0,p1,p2,p3];
+      // sombra en el suelo
+      el('polyline',{points:pts.map(function(p){return P([p[0],p[1],0]).join(',')}).join(' ')},'fill:none;stroke:var(--muted);stroke-width:0.05;stroke-linecap:round;stroke-linejoin:round;opacity:.35');
+      line(p3,[p3[0],p3[1],0],'stroke:var(--muted);stroke-width:0.012;stroke-dasharray:0.05 0.04');
+      // ejes de la base
+      line([0,0,0],[0.6,0,0],'stroke:var(--accent);stroke-width:0.025'); line([0,0,0],[0,0.6,0],'stroke:var(--muted);stroke-width:0.025'); line([0,0,0],[0,0,0.45],'stroke:var(--fg);stroke-width:0.02;opacity:.5');
+      var lab=[['x',[0.7,0,0]],['y',[0,0.7,0]]]; lab.forEach(function(l){ var q=P(l[1]); el('text',{x:q[0],y:q[1],'font-size':0.16,'text-anchor':'middle'},'fill:var(--muted)').textContent=l[0]; });
+      el('polyline',{points:pts.map(function(p){return P(p).join(',')}).join(' ')},'fill:none;stroke:var(--fg);stroke-width:0.09;stroke-linecap:round;stroke-linejoin:round');
+      pts.forEach(function(p,i){ var q=P(p); el('circle',{cx:q[0],cy:q[1],r:i===3?0.11:0.08},i===3?'fill:var(--accent)':'fill:var(--surface);stroke:var(--fg);stroke-width:0.035'); });
+      document.getElementById('v3-out').innerHTML='<ol>'
+        +'<li><b>Alcance horizontal</b>: r = l₂ cos θ₂ + l₃ cos(θ₂ + θ₃) = '+f(L2*Math.cos(t2)+L3*Math.cos(t2+t3))+' m.</li>'
+        +'<li><b>x = r cos θ₁</b> = '+f(p3[0])+' m; <b>y = r sen θ₁</b> = '+f(p3[1])+' m.</li>'
+        +'<li><b>z = l₁ + l₂ sen θ₂ + l₃ sen(θ₂ + θ₃)</b> = '+f(p3[2])+' m.</li></ol>'
+        +'<p>Longitudes: l₁ = 0,8 m, l₂ = 1 m, l₃ = 0,8 m. θ₁ solo cambia la dirección en planta; θ₂ y θ₃ fijan el alcance y la altura, como un 2R en un plano vertical.</p>';
+    }
+    ['v3-1','v3-2','v3-3','v3-p'].forEach(function(id){ document.getElementById(id).addEventListener('input',draw); });
+    S.addEventListener('pointerdown',function(e){ drag={x:e.clientX,y:yaw}; S.style.cursor='grabbing'; try{S.setPointerCapture(e.pointerId);}catch(_){} });
+    S.addEventListener('pointermove',function(e){ if(!drag) return; yaw=drag.y+(e.clientX-drag.x)*0.012; draw(); });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(n){ S.addEventListener(n,function(){ drag=null; S.style.cursor='grab'; }); });
+    var btn=document.getElementById('v3-auto'), last=null;
+    btn.addEventListener('click',function(){ auto=!auto; btn.textContent=auto?'Parar el giro':'Girar la vista sola'; last=null; if(auto) requestAnimationFrame(spin); });
+    function spin(ts){ if(!auto) return; if(last===null) last=ts; yaw+=(ts-last)/1000*0.5; last=ts; draw(); requestAnimationFrame(spin); }
     draw();
   })();
   </script>
