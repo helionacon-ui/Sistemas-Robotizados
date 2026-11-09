@@ -398,6 +398,205 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
     draw();
   })();
   </script>
+  <h3>5 · Editor DH: monta tu robot eslabón a eslabón</h3>
+  <div class="ix" id="dh-w">
+    <div class="ix-ctl">
+      <label>Número de eslabones<select id="dh-n" style="font:inherit;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)"><option value="2">2</option><option value="3" selected>3</option></select></label>
+    </div>
+    <div style="overflow-x:auto;max-width:100%"><table class="dh-t" id="dh-tab" style="border-collapse:collapse;font-size:.9rem;margin:8px 0"></table></div>
+    <svg id="dh-svg" class="ix-svg" viewBox="-2.8 -2.8 5.6 5.6" role="img" aria-label="Posición de cada articulación del robot"></svg>
+    <div class="ix-out" id="dh-out"></div>
+  </div>
+
+  <h3>6 · Jacobiana: velocidad del extremo y elipse de manipulabilidad</h3>
+  <div class="ix" id="jx-w">
+    <div class="ix-ctl">
+      <label>θ₁ (°)<input id="jx-t1" type="range" min="-180" max="180" step="1" value="40"><span id="jx-t1v">40</span></label>
+      <label>θ₂ (°)<input id="jx-t2" type="range" min="-180" max="180" step="1" value="60"><span id="jx-t2v">60</span></label>
+      <label>q̇₁ (rad/s)<input id="jx-d1" type="range" min="-2" max="2" step="0.1" value="1"><span id="jx-d1v">1,0</span></label>
+      <label>q̇₂ (rad/s)<input id="jx-d2" type="range" min="-2" max="2" step="0.1" value="-0.5"><span id="jx-d2v">-0,5</span></label>
+    </div>
+    <svg id="jx-svg" class="ix-svg" viewBox="-2.4 -2.4 4.8 4.8" role="img" aria-label="Brazo 2R, vector de velocidad del extremo y elipse de manipulabilidad"></svg>
+    <div class="ix-out" id="jx-out"></div>
+  </div>
+
+  <h3>7 · Par gravitatorio de un brazo: qué par hace falta</h3>
+  <div class="ix" id="pn-w">
+    <div class="ix-ctl">
+      <label>m (kg)<input id="pn-m" type="range" min="0.5" max="5" step="0.1" value="2"><span id="pn-mv">2,0</span></label>
+      <label>l (m)<input id="pn-l" type="range" min="0.2" max="1.5" step="0.05" value="0.8"><span id="pn-lv">0,80</span></label>
+      <label>θ (°, desde la horizontal)<input id="pn-t" type="range" min="-90" max="90" step="1" value="30"><span id="pn-tv">30</span></label>
+      <label>θ̈ (rad/s²)<input id="pn-a" type="range" min="-5" max="5" step="0.1" value="0"><span id="pn-av">0,0</span></label>
+    </div>
+    <svg id="pn-svg" class="ix-svg" viewBox="-1.8 -1.8 3.6 3.6" role="img" aria-label="Brazo con masa en el extremo"></svg>
+    <svg id="pn-plot" viewBox="0 0 400 200" style="width:100%;max-width:420px;height:auto;display:block;margin:8px auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)" role="img" aria-label="Par necesario en función del ángulo"></svg>
+    <div class="ix-out" id="pn-out"></div>
+  </div>
+
+  <script data-w="dh">
+  (function(){
+    var box=document.getElementById('dh-w'); if(!box) return;
+    var N=document.getElementById('dh-n'), TAB=document.getElementById('dh-tab'), SVG=document.getElementById('dh-svg');
+    var NS='http://www.w3.org/2000/svg';
+    var DEF=[{th:30,d:0,a:1,al:0},{th:40,d:0,a:0.8,al:0},{th:-20,d:0,a:0.5,al:0}];
+    function fm(v){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(3).replace('.',','); }
+    function mul(A,B){ var C=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]; for(var i=0;i<4;i++)for(var j=0;j<4;j++){var s=0;for(var k=0;k<4;k++)s+=A[i][k]*B[k][j];C[i][j]=s;} return C; }
+    function A(th,d,a,al){
+      var ct=Math.cos(th), st=Math.sin(th), ca=Math.cos(al), sa=Math.sin(al);
+      // Rz(θ)·Tz(d)·Tx(a)·Rx(α)
+      var Rz=[[ct,-st,0,0],[st,ct,0,0],[0,0,1,0],[0,0,0,1]];
+      var Tz=[[1,0,0,0],[0,1,0,0],[0,0,1,d],[0,0,0,1]];
+      var Tx=[[1,0,0,a],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
+      var Rx=[[1,0,0,0],[0,ca,-sa,0],[0,sa,ca,0],[0,0,0,1]];
+      return mul(mul(mul(Rz,Tz),Tx),Rx);
+    }
+    function mat(M){ return '<table class="dh-m" style="border-collapse:collapse;margin:4px 0">'+M.slice(0,3).map(function(r){return '<tr>'+r.map(function(v){return '<td style="padding:2px 6px;text-align:right;font-family:var(--mono);font-size:.82rem">'+fm(v)+'</td>'}).join('')+'</tr>'}).join('')+'</table>'; }
+    function buildTable(){
+      var n=parseInt(N.value,10), h='<tr><th style="padding:4px 8px">Eslabón</th><th>θ (°)</th><th>d (m)</th><th>a (m)</th><th>α (°)</th></tr>';
+      for(var i=0;i<n;i++){
+        var D=DEF[i];
+        h+='<tr><td style="padding:4px 8px">'+(i+1)+'</td>'
+          +'<td><input data-k="th" data-i="'+i+'" type="number" step="1" value="'+D.th+'" style="width:6rem;font:inherit;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)"></td>'
+          +'<td><input data-k="d" data-i="'+i+'" type="number" step="0.1" value="'+D.d+'" style="width:5rem;font:inherit;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)"></td>'
+          +'<td><input data-k="a" data-i="'+i+'" type="number" step="0.1" value="'+D.a+'" style="width:5rem;font:inherit;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)"></td>'
+          +'<td><input data-k="al" data-i="'+i+'" type="number" step="1" value="'+D.al+'" style="width:6rem;font:inherit;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)"></td></tr>';
+      }
+      TAB.innerHTML=h;
+      TAB.querySelectorAll('input').forEach(function(e){ e.addEventListener('input',calc); });
+    }
+    function val(k,i){ var e=TAB.querySelector('input[data-k="'+k+'"][data-i="'+i+'"]'); var v=parseFloat(String(e.value).replace(',','.')); return isNaN(v)?0:v; }
+    function S(x,y){ return [x,-y]; }
+    function calc(){
+      var n=parseInt(N.value,10), T=[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
+      var pts=[[0,0]], steps='<ol>', frames=[];
+      for(var i=0;i<n;i++){
+        var th=val('th',i)*Math.PI/180, d=val('d',i), a=val('a',i), al=val('al',i)*Math.PI/180;
+        var Ai=A(th,d,a,al);
+        steps+='<li><b>A'+(i+1)+' = Rz(θ'+(i+1)+') · Tz(d'+(i+1)+') · Tx(a'+(i+1)+') · Rx(α'+(i+1)+')</b> con θ = '+fm(val('th',i))+'°, d = '+fm(d)+', a = '+fm(a)+', α = '+fm(val('al',i))+'°:'+mat(Ai)+'</li>';
+        T=mul(T,Ai);
+        pts.push([T[0][3],T[1][3]]);
+        steps+='<li><b>T'+(i+1)+' = T'+i+' · A'+(i+1)+'</b>: posición del eslabón '+(i+1)+' = ('+fm(T[0][3])+' ; '+fm(T[1][3])+') m.</li>';
+      }
+      steps+='</ol>';
+      SVG.innerHTML='';
+      var line=document.createElementNS(NS,'polyline');
+      line.setAttribute('points',pts.map(function(p){var s=S(p[0],p[1]);return s.join(',')}).join(' '));
+      line.setAttribute('style','fill:none;stroke:var(--fg);stroke-width:0.07;stroke-linecap:round');
+      SVG.appendChild(line);
+      pts.forEach(function(p,k){
+        var s=S(p[0],p[1]); var c=document.createElementNS(NS,'circle');
+        c.setAttribute('cx',s[0]); c.setAttribute('cy',s[1]); c.setAttribute('r',k===pts.length-1?0.1:0.07);
+        c.setAttribute('style',k===pts.length-1?'fill:var(--accent)':'fill:var(--fg)'); SVG.appendChild(c);
+      });
+      document.getElementById('dh-out').innerHTML='<p><b>Cada A_i se calcula así (parámetros DH de cada eslabón):</b></p>'+steps
+        +'<p><b>Posición del extremo</b> = ('+fm(T[0][3])+' ; '+fm(T[1][3])+' ; '+fm(T[2][3])+') m. El punto naranja es el extremo. Solo se dibuja la proyección en el plano XY.</p>'
+        +'<p>Prueba a poner α = 90° en un eslabón: el plano del brazo cambia y la proyección deja de representar bien el robot.</p>';
+    }
+    N.addEventListener('change',function(){ buildTable(); calc(); });
+    buildTable(); calc();
+  })();
+  </script>
+
+  <script data-w="jx">
+  (function(){
+    var box=document.getElementById('jx-w'); if(!box) return;
+    var NS='http://www.w3.org/2000/svg', SVG=document.getElementById('jx-svg');
+    var ids=['jx-t1','jx-t2','jx-d1','jx-d2'];
+    function f(v){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(3).replace('.',','); }
+    function g(id){ return parseFloat(document.getElementById(id).value); }
+    function el(tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); SVG.appendChild(e); return e; }
+    function S(x,y){ return [x,-y]; }
+    function draw(){
+      var t1=g('jx-t1')*Math.PI/180, t2=g('jx-t2')*Math.PI/180, d1=g('jx-d1'), d2=g('jx-d2');
+      document.getElementById('jx-t1v').textContent=g('jx-t1'); document.getElementById('jx-t2v').textContent=g('jx-t2');
+      document.getElementById('jx-d1v').textContent=f(d1); document.getElementById('jx-d2v').textContent=f(d2);
+      var l1=1, l2=0.8, s1=Math.sin(t1), c1=Math.cos(t1), s12=Math.sin(t1+t2), c12=Math.cos(t1+t2);
+      var J=[[-l1*s1-l2*s12, -l2*s12],[l1*c1+l2*c12, l2*c12]];
+      var v=[J[0][0]*d1+J[0][1]*d2, J[1][0]*d1+J[1][1]*d2];
+      var det=J[0][0]*J[1][1]-J[0][1]*J[1][0];
+      // J·Jᵀ simétrica
+      var a=J[0][0]*J[0][0]+J[0][1]*J[0][1], b=J[0][0]*J[1][0]+J[0][1]*J[1][1], dd=J[1][0]*J[1][0]+J[1][1]*J[1][1];
+      var tr=(a+dd)/2, rad=Math.sqrt(((a-dd)/2)*((a-dd)/2)+b*b);
+      var L1=Math.sqrt(Math.max(tr+rad,0)), L2=Math.sqrt(Math.max(tr-rad,0));
+      var phi=0.5*Math.atan2(2*b,a-dd);
+      SVG.innerHTML='';
+      el('circle',{cx:0,cy:0,r:l1+l2,fill:'none',stroke:'var(--line)','stroke-width':0.015,'stroke-dasharray':'0.05 0.05'});
+      var e1=[0,0], e2=[l1*c1,l1*s1], e3=[e2[0]+l2*c12, e2[1]+l2*s12];
+      var P=[S(e1[0],e1[1]),S(e2[0],e2[1]),S(e3[0],e3[1])];
+      el('polyline',{points:P.map(function(p){return p.join(',')}).join(' '),fill:'none','stroke-width':0.06,'stroke-linecap':'round'},'stroke:var(--fg)');
+      el('circle',{cx:P[0][0],cy:P[0][1],r:0.07},'fill:var(--fg)');
+      el('circle',{cx:P[1][0],cy:P[1][1],r:0.06},'fill:var(--fg)');
+      el('circle',{cx:P[2][0],cy:P[2][1],r:0.08},'fill:var(--accent)');
+      // elipse de manipulabilidad centrada en el extremo (escala 0,5)
+      var K=0.5, pts=[];
+      for(var k=0;k<=72;k++){ var th=2*Math.PI*k/72, u=L1*Math.cos(th), w=L2*Math.sin(th);
+        var x=u*Math.cos(phi)-w*Math.sin(phi), y=u*Math.sin(phi)+w*Math.cos(phi);
+        var s=S(e3[0]+K*x, e3[1]+K*y); pts.push(s.join(',')); }
+      el('polyline',{points:pts.join(' '),fill:'rgba(185,86,26,0.12)','stroke-width':0.02,'stroke-dasharray':'0.05 0.04'},'stroke:var(--accent)');
+      // vector velocidad del extremo (escala 0,5)
+      var v0=S(e3[0],e3[1]), v1=S(e3[0]+K*v[0], e3[1]+K*v[1]);
+      el('line',{x1:v0[0],y1:v0[1],x2:v1[0],y2:v1[1],'stroke-width':0.06,'stroke-linecap':'round'},'stroke:var(--accent)');
+      el('circle',{cx:v1[0],cy:v1[1],r:0.05},'fill:var(--accent)');
+      var sing=Math.abs(det)<1e-3;
+      document.getElementById('jx-out').innerHTML='<ol>'
+        +'<li><b>Jacobiana</b>: J = [[−l₁ sen θ₁ − l₂ sen θ₁₂, −l₂ sen θ₁₂], [l₁ cos θ₁ + l₂ cos θ₁₂, l₂ cos θ₁₂]], con θ₁₂ = θ₁ + θ₂ = '+f(t1*180/Math.PI+g('jx-t2'))+'°.<br>J = [[ '+f(J[0][0])+' , '+f(J[0][1])+' ], [ '+f(J[1][0])+' , '+f(J[1][1])+' ]].</li>'
+        +'<li><b>Velocidad del extremo</b>: v = J · q̇ = ('+f(v[0])+' ; '+f(v[1])+') m/s. Es la flecha naranja (dibujada a escala 0,5).</li>'
+        +'<li><b>Determinante</b>: det J = '+f(det)+'. '+(sing?'<b>Configuración singular</b>: la elipse se aplasta y se pierde una dirección.':'La configuración no es singular.')+'</li>'
+        +'<li><b>Elipse de manipulabilidad</b>: contiene las velocidades del extremo cuando |q̇| = 1. Semiejes: '+f(L1)+' y '+f(L2)+' m/s, con la dirección de la elipse dada por J·Jᵀ.</li>'
+        +'</ol><p>Pulsa θ₂ cerca de 0° o 180°: la elipse se hace muy estrecha. Cerca de esas posiciones, pequeños cambios de q̇ producen velocidades grandes en una dirección.</p>';
+    }
+    ids.forEach(function(id){ document.getElementById(id).addEventListener('input',draw); });
+    draw();
+  })();
+  </script>
+
+  <script data-w="pn">
+  (function(){
+    var box=document.getElementById('pn-w'); if(!box) return;
+    var NS='http://www.w3.org/2000/svg', SVG=document.getElementById('pn-svg'), PL=document.getElementById('pn-plot');
+    var g9=9.81;
+    function f(v){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(2).replace('.',','); }
+    function g(id){ return parseFloat(document.getElementById(id).value); }
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function draw(){
+      var m=g('pn-m'), l=g('pn-l'), th=g('pn-t')*Math.PI/180, acc=g('pn-a');
+      document.getElementById('pn-mv').textContent=f(m); document.getElementById('pn-lv').textContent=f(l);
+      document.getElementById('pn-tv').textContent=g('pn-t'); document.getElementById('pn-av').textContent=f(acc);
+      var tg=m*g9*l*Math.cos(th), ti=m*l*l*acc, tt=tg+ti;
+      // dibujo: pivote en el origen, brazo de longitud l, masa en el extremo
+      SVG.innerHTML='';
+      el(SVG,'line',{x1:-1.6,y1:0,x2:1.6,y2:0,'stroke-width':0.015},'stroke:var(--line)');
+      var ex=l*Math.cos(th), ey=l*Math.sin(th);
+      el(SVG,'line',{x1:0,y1:0,x2:ex,y2:-ey,'stroke-width':0.06,'stroke-linecap':'round'},'stroke:var(--fg)');
+      el(SVG,'circle',{cx:ex,cy:-ey,r:0.09},'fill:var(--accent)');
+      el(SVG,'circle',{cx:0,cy:0,r:0.07},'fill:var(--fg)');
+      el(SVG,'line',{x1:ex,y1:-ey,x2:ex,y2:-ey+0.45,'stroke-width':0.04},'stroke:var(--accent)');
+      el(SVG,'text',{x:ex+0.06,y:-ey+0.42,'font-size':0.14},'fill:var(--accent)').textContent='mg';
+      // gráfica τ(θ) para los parámetros actuales
+      PL.innerHTML='';
+      var X0=40,X1=380,Y0=170,Y1=20, pts=[], vmax=0;
+      var vals=[]; for(var k=0;k<=90;k++){ var t=(-90+k*2)*Math.PI/180; var v=m*g9*l*Math.cos(t)+ti; vals.push(v); vmax=Math.max(vmax,Math.abs(v)); }
+      vmax=vmax||1;
+      for(var k2=0;k2<=90;k2++){ var x=X0+(k2/90)*(X1-X0), y=(Y0+Y1)/2-(vals[k2]/vmax)*((Y0-Y1)/2); pts.push(x.toFixed(1)+','+y.toFixed(1)); }
+      el(PL,'line',{x1:X0,y1:(Y0+Y1)/2,x2:X1,y2:(Y0+Y1)/2},'stroke:var(--line)');
+      el(PL,'polyline',{points:pts.join(' '),fill:'none','stroke-width':2.5},'stroke:var(--accent)');
+      var mx=X0+((th*180/Math.PI+90)/180)*(X1-X0), my=(Y0+Y1)/2-(tt/vmax)*((Y0-Y1)/2);
+      el(PL,'circle',{cx:mx,cy:my,r:5},'fill:var(--fg)');
+      el(PL,'text',{x:X0,y:14,'font-size':12},'fill:var(--fg)').textContent='τ(θ) con los valores actuales';
+      el(PL,'text',{x:X0,y:Y0+14,'font-size':11},'fill:var(--muted)').textContent='−90°';
+      el(PL,'text',{x:X1-26,y:Y0+14,'font-size':11},'fill:var(--muted)').textContent='90°';
+      document.getElementById('pn-out').innerHTML='<ol>'
+        +'<li><b>Posición de la masa</b>: (l cos θ ; l sen θ) = ('+f(ex)+' ; '+f(ey)+') m.</li>'
+        +'<li><b>Brazo de palanca del peso</b>: l cos θ = '+f(l)+' · cos('+f(g('pn-t'))+'°) = '+f(l*Math.cos(th))+' m.</li>'
+        +'<li><b>Par gravitatorio</b>: m g l cos θ = '+f(m)+' · '+f(g9)+' · '+f(l*Math.cos(th))+' = '+f(tg)+' N·m.</li>'
+        +'<li><b>Par inercial</b>: m l² θ̈ = '+f(m)+' · '+f(l)+'² · '+f(acc)+' = '+f(ti)+' N·m.</li>'
+        +'<li><b>Par total</b>: τ = m l² θ̈ + m g l cos θ = '+f(tt)+' N·m. Es el par que el motor debe aplicar para mantener ese movimiento.</li>'
+        +'</ol><p>Con el brazo horizontal (θ = 0°) el par gravitatorio es máximo. Con θ = ±90° es cero.</p>';
+    }
+    ['pn-m','pn-l','pn-t','pn-a'].forEach(function(id){ document.getElementById(id).addEventListener('input',draw); });
+    draw();
+  })();
+  </script>
 </section>
 </main>
 </div>
