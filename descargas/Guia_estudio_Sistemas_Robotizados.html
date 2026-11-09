@@ -227,6 +227,7 @@ ul.start{padding-left:20px}ul.start li{margin:6px 0}
   <div class="grp">Interactivo</div>
   <a href="#diapositivas" style="--tc:var(--c0)">Diapositivas</a>
   <a href="#interactivos" style="--tc:var(--c4)">Diagramas interactivos</a>
+  <a href="#animaciones" style="--tc:var(--c5)">Animaciones</a>
   <a href="#resolver" style="--tc:var(--c8)">Resolver exámenes paso a paso</a>
   <a href="#figuras" style="--tc:var(--c3)">Figuras de los temas</a>
   <a href="#diapositivas-temario" style="--tc:var(--c1)">Diapositivas por tema</a>
@@ -2001,6 +2002,186 @@ y = l₁ sen θ₁ + l₂ sen(θ₁ + θ₂)</div>
     }
     ['pn-m','pn-l','pn-t','pn-a'].forEach(function(id){ document.getElementById(id).addEventListener('input',draw); });
     draw();
+  })();
+  </script>
+</section>
+
+<section class="sec" id="animaciones" style="--tc:var(--c5)">
+  <div class="sh"><span class="badge" aria-hidden="true">A</span><div class="shx"><p class="kick">Animaciones</p><h2>Ver el movimiento</h2></div></div>
+  <p>Cuatro animaciones originales. Cada una muestra un concepto en movimiento y lo escribe con números en cada instante. Pulsa <b>Pausa</b> o <b>Reproducir</b> y cambia la velocidad. Si tienes activada la opción de reducir movimiento, empiezan paradas.</p>
+  <style>
+  .an{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:14px 0;min-width:0}
+  .an-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0;font-size:.92rem}
+  .an-ctl label{display:flex;gap:6px;align-items:center}
+  .an-read{font-family:var(--mono);font-size:.88rem;color:var(--muted);overflow-wrap:anywhere}
+  .an svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  </style>
+
+  <div class="an" id="an1">
+    <h3>1 · Cinemática directa: el extremo traza su camino</h3>
+    <p>Las dos articulaciones cambian con el tiempo. El extremo deja una huella: en cada instante, la cinemática directa da su posición.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Velocidad <input type="range" min="0.2" max="2" step="0.1" value="1"></label></div>
+    <svg viewBox="-2.4 -2.4 4.8 4.8" role="img" aria-label="Brazo 2R moviéndose y dejando una huella del extremo"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+
+  <div class="an" id="an2">
+    <h3>2 · Cuaterniones: un vector que gira alrededor de z</h3>
+    <p>El ángulo θ avanza y el vector gira. A la vez, el cuaternión q = (cos θ/2, 0, 0, sen θ/2) cambia de forma continua.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Velocidad <input type="range" min="0.2" max="2" step="0.1" value="1"></label></div>
+    <svg viewBox="-1.6 -1.6 3.2 3.2" role="img" aria-label="Vector girando alrededor del eje z"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+
+  <div class="an" id="an3">
+    <h3>3 · Spline del ejercicio 4 de Trayectorias</h3>
+    <p>La articulación sigue q(t) = −0,8t + 0,72t² − 0,096t³ durante 5 s. La velocidad q̇ y la aceleración q̈ se leen en cada instante. Mira cómo la velocidad vale 1 rad/s en el punto medio, donde q̈ = 0.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Velocidad <input type="range" min="0.2" max="2" step="0.1" value="1"></label></div>
+    <svg viewBox="0 0 400 240" role="img" aria-label="Posición del spline en el tiempo con el punto que se mueve"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+
+  <div class="an" id="an4">
+    <h3>4 · Interpolación lineal frente a cúbica</h3>
+    <p>Los tres puntos de paso son (0 s, 0), (1 s, 2) y (2 s, 1). La interpolación lineal (discontinua) cambia de velocidad de golpe en el segundo punto. El spline cúbico cambia de velocidad de forma continua.</p>
+    <div class="an-ctl"><button class="btn" data-play type="button">Pausa</button><label>Velocidad <input type="range" min="0.2" max="2" step="0.1" value="1"></label></div>
+    <svg viewBox="0 0 400 300" role="img" aria-label="Posición y velocidad con interpolador lineal y spline cúbico"></svg>
+    <p class="an-read" data-read></p>
+  </div>
+
+  <script data-w="an">
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function el(svg,tag,attrs,style){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(style) e.setAttribute('style',style); svg.appendChild(e); return e; }
+    function f(v,d){ var x=Math.abs(v)<5e-10?0:v; return x.toFixed(d===undefined?2:d).replace('.',','); }
+    function loop(root, step){
+      var btn=root.querySelector('[data-play]'), sp=root.querySelector('input[type=range]');
+      var playing=!reduce, T=0, last=null;
+      btn.textContent=playing?'Pausa':'Reproducir';
+      btn.addEventListener('click',function(){ playing=!playing; btn.textContent=playing?'Pausa':'Reproducir'; last=null; });
+      function frame(ts){
+        if(last===null) last=ts;
+        var dt=(ts-last)/1000; last=ts;
+        if(playing) T+=dt*parseFloat(sp.value);
+        step(T);
+        requestAnimationFrame(frame);
+      }
+      step(0); requestAnimationFrame(frame);
+    }
+    // ---- 1. 2R con huella
+    var r1=document.getElementById('an1');
+    if(r1){
+      var s1=r1.querySelector('svg'), rd1=r1.querySelector('[data-read]');
+      var L1=1, L2=0.8, trail=[], G1=null, lk1,lk2,j0,j1,tip,hd;
+      s1.innerHTML='';
+      el(s1,'circle',{cx:0,cy:0,r:L1+L2,fill:'none',stroke:'var(--line)','stroke-width':0.015,'stroke-dasharray':'0.05 0.05'});
+      var trailEl=el(s1,'polyline',{fill:'none','stroke-width':0.03,'stroke-linecap':'round'},'stroke:var(--accent);opacity:.8');
+      lk1=el(s1,'line',{'stroke-width':0.07,'stroke-linecap':'round'},'stroke:var(--fg)');
+      lk2=el(s1,'line',{'stroke-width':0.06,'stroke-linecap':'round'},'stroke:var(--fg)');
+      j0=el(s1,'circle',{r:0.07},'fill:var(--fg)'); j1=el(s1,'circle',{r:0.06},'fill:var(--fg)');
+      tip=el(s1,'circle',{r:0.09},'fill:var(--accent)');
+      loop(r1,function(T){
+        var P=4, ph=2*Math.PI*((T%P)/P);
+        var th1=0.7+0.8*Math.sin(ph), th2=1.1+0.9*Math.sin(ph+1.2);
+        var ex=L1*Math.cos(th1), ey=L1*Math.sin(th1);
+        var tx=ex+L2*Math.cos(th1+th2), ty=ey+L2*Math.sin(th1+th2);
+        lk1.setAttribute('x1',0); lk1.setAttribute('y1',0); lk1.setAttribute('x2',ex); lk1.setAttribute('y2',-ey);
+        lk2.setAttribute('x1',ex); lk2.setAttribute('y1',-ey); lk2.setAttribute('x2',tx); lk2.setAttribute('y2',-ty);
+        j1.setAttribute('cx',ex); j1.setAttribute('cy',-ey);
+        tip.setAttribute('cx',tx); tip.setAttribute('cy',-ty);
+        trail.push([tx,-ty]); if(trail.length>160) trail.shift();
+        trailEl.setAttribute('points',trail.map(function(p){return p.join(',')}).join(' '));
+        rd1.textContent='θ₁ = '+f(th1*180/Math.PI,0)+'°, θ₂ = '+f(th2*180/Math.PI,0)+'°  →  extremo ('+f(tx)+' ; '+f(ty)+') m';
+      });
+    }
+    // ---- 2. cuaternión
+    var r2=document.getElementById('an2');
+    if(r2){
+      var s2=r2.querySelector('svg'), rd2=r2.querySelector('[data-read]');
+      s2.innerHTML='';
+      el(s2,'circle',{cx:0,cy:0,r:1,fill:'none',stroke:'var(--line)','stroke-width':0.02});
+      var arc=el(s2,'polyline',{fill:'none','stroke-width':0.04},'stroke:var(--accent);opacity:.7');
+      var vec=el(s2,'line',{'stroke-width':0.07,'stroke-linecap':'round'},'stroke:var(--fg)');
+      var head=el(s2,'circle',{r:0.08},'fill:var(--accent)');
+      el(s2,'circle',{cx:0,cy:0,r:0.06},'fill:var(--fg)');
+      var arcPts=[];
+      loop(r2,function(T){
+        var th=2*Math.PI*((T%6)/6);
+        var x=Math.cos(th), y=Math.sin(th);
+        vec.setAttribute('x1',0); vec.setAttribute('y1',0); vec.setAttribute('x2',x); vec.setAttribute('y2',-y);
+        head.setAttribute('cx',x); head.setAttribute('cy',-y);
+        arcPts.push([x,-y]); if(arcPts.length>200) arcPts.shift();
+        arc.setAttribute('points',arcPts.map(function(p){return p.join(',')}).join(' '));
+        rd2.textContent='θ = '+f(th*180/Math.PI,0)+'°  →  q = ('+f(Math.cos(th/2),3)+' ; 0 ; 0 ; '+f(Math.sin(th/2),3)+')   v′ = ('+f(x,3)+' ; '+f(y,3)+' ; 0)';
+      });
+    }
+    // ---- 3. spline del ejercicio 4
+    var r3=document.getElementById('an3');
+    if(r3){
+      var s3=r3.querySelector('svg'), rd3=r3.querySelector('[data-read]');
+      var q3=function(t){return -0.8*t+0.72*t*t-0.096*t*t*t}, v3=function(t){return -0.8+1.44*t-0.288*t*t}, a3=function(t){return 1.44-0.576*t};
+      var X0=50,X1=370,Y0=200,Y1=30, qmin=-0.4,qmax=2.4, tmax=5;
+      var PX=function(t){return X0+(t/tmax)*(X1-X0)}, PY=function(v){return Y0-(v-qmin)/(qmax-qmin)*(Y0-Y1)};
+      s3.innerHTML='';
+      el(s3,'line',{x1:X0,y1:PY(0),x2:X1,y2:PY(0),'stroke-width':1.5},'stroke:var(--line)');
+      el(s3,'line',{x1:X0,y1:Y1,x2:X0,y2:Y0,'stroke-width':1.5},'stroke:var(--line)');
+      var pts=[]; for(var k=0;k<=100;k++){ var t=tmax*k/100; pts.push(PX(t).toFixed(1)+','+PY(q3(t)).toFixed(1)); }
+      el(s3,'polyline',{points:pts.join(' '),fill:'none','stroke-width':3},'stroke:var(--accent)');
+      var dot=el(s3,'circle',{r:6},'fill:var(--fg)');
+      var mark=el(s3,'line',{'stroke-width':1.5,'stroke-dasharray':'4 3'},'stroke:var(--muted)');
+      el(s3,'text',{x:X0+4,y:Y1+12,'font-size':12},'fill:var(--fg)').textContent='q (rad)';
+      el(s3,'text',{x:X1-30,y:PY(0)+16,'font-size':12},'fill:var(--fg)').textContent='t (s)';
+      loop(r3,function(T){
+        var t=Math.min(T%6,tmax); var q=q3(t);
+        dot.setAttribute('cx',PX(t)); dot.setAttribute('cy',PY(q));
+        mark.setAttribute('x1',PX(t)); mark.setAttribute('x2',PX(t)); mark.setAttribute('y1',Y0); mark.setAttribute('y2',PY(q));
+        rd3.textContent='t = '+f(t)+' s   q = '+f(q,3)+' rad   q̇ = '+f(v3(t),3)+' rad/s   q̈ = '+f(a3(t),3)+' rad/s²';
+      });
+    }
+    // ---- 4. lineal frente a cúbica
+    var r4=document.getElementById('an4');
+    if(r4){
+      var s4=r4.querySelector('svg'), rd4=r4.querySelector('[data-read]');
+      var xs=[0,1,2], ys=[0,2,1];
+      // spline cúbico natural: resolver M (segundas derivadas) con M0 = M2 = 0
+      var h=[1,1];
+      var M=[0,-4.5,0]; // 4·M1 = 6·((y2−y1)/h1 − (y1−y0)/h0) = 6·(−1 − 2) = −18
+      var splQ=function(t){ var i=t>=1?1:0; var hh=h[i], xa=xs[i], xb=xs[i+1];
+        return M[i]*Math.pow(xb-t,3)/(6*hh)+M[i+1]*Math.pow(t-xa,3)/(6*hh)+(ys[i]/hh-M[i]*hh/6)*(xb-t)+(ys[i+1]/hh-M[i+1]*hh/6)*(t-xa); };
+      var splV=function(t){ var i=t>=1?1:0; var hh=h[i], xa=xs[i], xb=xs[i+1];
+        return -M[i]*Math.pow(xb-t,2)/(2*hh)+M[i+1]*Math.pow(t-xa,2)/(2*hh)+(ys[i+1]-ys[i])/hh-(M[i+1]-M[i])*hh/6; };
+      var linQ=function(t){ return t<1? 2*t : 2-(t-1); };
+      var linV=function(t){ return t<1? 2 : -1; };
+      var P1={x0:30,x1:380,y0:120,y1:20}, P2={x0:30,x1:380,y0:280,y1:170};
+      var qmn=-0.5,qmx=2.5, vmn=-2.5,vmx=3.5;
+      var tx=function(t){return P1.x0+(t/2)*(P1.x1-P1.x0)};
+      var yq=function(q){return P1.y0-(q-qmn)/(qmx-qmn)*(P1.y0-P1.y1)};
+      var yv=function(v){return P2.y0-(v-vmn)/(vmx-vmn)*(P2.y0-P2.y1)};
+      s4.innerHTML='';
+      el(s4,'line',{x1:30,y1:yq(0),x2:380,y2:yq(0),'stroke-width':1},'stroke:var(--line)');
+      el(s4,'line',{x1:30,y1:yv(0),x2:380,y2:yv(0),'stroke-width':1},'stroke:var(--line)');
+      var lq=[],sq=[],lv=[],sv=[];
+      for(var k=0;k<=200;k++){ var t=2*k/200; lq.push(tx(t).toFixed(1)+','+yq(linQ(t)).toFixed(1)); sq.push(tx(t).toFixed(1)+','+yq(splQ(t)).toFixed(1));
+        lv.push(tx(t).toFixed(1)+','+yv(linV(t)).toFixed(1)); sv.push(tx(t).toFixed(1)+','+yv(splV(t)).toFixed(1)); }
+      el(s4,'polyline',{points:lq.join(' '),fill:'none','stroke-width':2,'stroke-dasharray':'6 4'},'stroke:var(--muted)');
+      el(s4,'polyline',{points:sq.join(' '),fill:'none','stroke-width':3},'stroke:var(--accent)');
+      el(s4,'polyline',{points:lv.join(' '),fill:'none','stroke-width':2,'stroke-dasharray':'6 4'},'stroke:var(--muted)');
+      el(s4,'polyline',{points:sv.join(' '),fill:'none','stroke-width':3},'stroke:var(--accent)');
+      var dq1=el(s4,'circle',{r:5},'fill:var(--accent)'), dq2=el(s4,'circle',{r:5},'fill:var(--muted)');
+      var dv1=el(s4,'circle',{r:5},'fill:var(--accent)'), dv2=el(s4,'circle',{r:5},'fill:var(--muted)');
+      el(s4,'text',{x:34,y:14,'font-size':12},'fill:var(--fg)').textContent='q(t): spline (continuo) y lineal (discontinuo)';
+      el(s4,'text',{x:34,y:P2.y0-P2.y1+0+148,'font-size':12},'fill:var(--fg)').textContent='';
+      el(s4,'text',{x:34,y:162,'font-size':12},'fill:var(--fg)').textContent='velocidad';
+      loop(r4,function(T){
+        var t=(T%2.6)/2.6*2;
+        dq1.setAttribute('cx',tx(t)); dq1.setAttribute('cy',yq(splQ(t)));
+        dq2.setAttribute('cx',tx(t)); dq2.setAttribute('cy',yq(linQ(t)));
+        dv1.setAttribute('cx',tx(t)); dv1.setAttribute('cy',yv(splV(t)));
+        dv2.setAttribute('cx',tx(t)); dv2.setAttribute('cy',yv(linV(t)));
+        rd4.textContent='t = '+f(t)+' s   spline: q = '+f(splQ(t),3)+', q̇ = '+f(splV(t),3)+'   lineal: q = '+f(linQ(t),3)+', q̇ = '+f(linV(t),3);
+      });
+    }
   })();
   </script>
 </section>
