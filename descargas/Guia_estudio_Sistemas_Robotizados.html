@@ -764,6 +764,66 @@ print(np.round(T[:2, 3], 4))   # posición del extremo: [0.866 1.5]</pre>
     </div>
   </details>
 
+  <details>
+    <summary>Ejercicio L · Spline cúbico con velocidad máxima en el punto medio (solución de referencia 4 de Trayectorias)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> Una articulación pasa de q = 0 rad a q = 2 rad en t ∈ [0, 5] s, con un spline cúbico de una sola ecuación. La velocidad máxima debe alcanzarse a mitad del recorrido (t<sub>m</sub> = 2,5 s) y valer 1 rad/s.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> con a = q₀ = 0 quedan 3 incógnitas, b, c y d. Las condiciones son q(5) = 2, q̇(2,5) = 1 y q̈(2,5) = 0.</div>
+      <details><summary>Paso 1 · Relacionar c con d con la condición de q̈ = 0</summary>
+        <div class="inner"><p>q̈(t) = 2c + 6d·t. Hacerla cero en t<sub>m</sub> = 2,5 s da 2c + 15d = 0, luego <b>c = −7,5 d</b>.</p></div>
+      </details>
+      <details><summary>Paso 2 · Relacionar b con d con la condición de velocidad</summary>
+        <div class="inner"><p>q̇(t) = b + 2c·t + 3d·t². En t = 2,5: b + 5c + 18,75d = 1. Sustituyendo c = −7,5d: <b>b = 1 + 18,75 d</b>.</p></div>
+      </details>
+      <details><summary>Paso 3 · Calcular d con la condición de posición</summary>
+        <div class="inner"><p>q(5) = 5b + 25c + 125d = 2. Sustituyendo b y c: 5 + 93,75d − 187,5d + 125d = 2, es decir 5 + 31,25d = 2. Entonces <b>d = −3 / 31,25 = −0,096</b>.</p></div>
+      </details>
+      <details><summary>Paso 4 · Obtener c y b</summary>
+        <div class="inner"><p>c = −7,5 · (−0,096) = <b>0,72</b>. b = 1 + 18,75 · (−0,096) = <b>−0,8</b>.</p>
+        <p>Polinomio: <b>q(t) = −0,8 t + 0,72 t² − 0,096 t³</b>.</p></div>
+      </details>
+      <details><summary>Paso 5 · Comprobar las tres condiciones</summary>
+        <div class="inner"><p>q(5) = −4 + 18 − 12 = 2 ✓. q̇(2,5) = −0,8 + 3,6 − 1,8 = 1 ✓. q̈(2,5) = 1,44 − 1,44 = 0 ✓.</p></div>
+      </details>
+      <div class="box"><strong>Ojo:</strong> la velocidad inicial es q̇(0) = −0,8 rad/s. Por eso la articulación baja hasta q ≈ −0,242 rad hacia t ≈ 0,64 s, antes de subir. Cumple las condiciones del enunciado, pero si el robot no puede tomar valores negativos, habría que añadir una condición o cambiar el tiempo. La solución de referencia no lo comenta.</div>
+    </div>
+  </details>
+  <details>
+    <summary>Ejercicio M · Posición y velocidad del extremo de un robot con dinámica (solución de referencia de Dinámica)</summary>
+    <div class="inner">
+      <p><b>Enunciado.</b> El robot parte del reposo. Sus actuadores siguen Γ(t) = 3t² + 2t + 20 y F(t) = 5t + 10, con paso de muestreo Δt = 0,1 s. Calcula la posición y la velocidad lineal del extremo en t = 0,2 s. Modelo dinámico: [Γ; F] = [[m₁l₂² + m₂d², 0], [0, m₂]] · [θ̈; d̈] + [2 d m₂ θ̇ ḋ; −d m₂ θ̇²]. Datos: m₁ = m₂ = 1 kg, l₂ = l₃ = 1 m, θ(0) = 0 rad, d(0) = 0,25 m.</p>
+      <div class="box key"><strong>Antes de empezar:</strong> primero se obtienen las aceleraciones, luego se integran en el tiempo y al final se aplica la cinemática y la Jacobiana.</div>
+      <details><summary>Paso 1 · Despejar las aceleraciones</summary>
+        <div class="inner"><p>θ̈ = (Γ − 2 d m₂ θ̇ ḋ) / (m₁l₂² + m₂d²). Con los datos: <b>θ̈ = (Γ − 2dθ̇ḋ) / (1 + d²)</b>.</p>
+        <p>d̈ = (F + d m₂ θ̇²) / m₂. Con los datos: <b>d̈ = F + d θ̇²</b>.</p></div>
+      </details>
+      <details><summary>Paso 2 · Método de integración</summary>
+        <div class="inner"><p>Se usa Euler con Δt = 0,1 s: q̇ₖ = q̈ₖ₋₁·Δt + q̇ₖ₋₁ y qₖ = q̇ₖ₋₁·Δt + qₖ₋₁. Es el mismo método de la solución de referencia.</p></div>
+      </details>
+      <details><summary>Paso 3 · Condiciones iniciales (t = 0)</summary>
+        <div class="inner"><p>θ̇ = ḋ = 0, θ = 0 rad, d = 0,25 m. Entonces θ̈₀ = 20 / 1,0625 = 18,82 rad/s² y d̈₀ = 10 m/s².</p></div>
+      </details>
+      <details><summary>Paso 4 · Primer paso (t = 0,1 s)</summary>
+        <div class="inner"><p>θ̇₁ = 18,82 · 0,1 = 1,88 rad/s. ḋ₁ = 10 · 0,1 = 1 m/s. θ₁ = 0 rad. d₁ = 0,25 m.</p>
+        <p>θ̈₁ = (3·0,01 + 0,2 + 20 − 2·0,25·1,88·1) / 1,0625 = 19,29 / 1,0625 = 18,15 rad/s². d̈₁ = 5·0,1 + 10 + 0,25·1,88² = 11,38 m/s² (con 1,8824 rad/s en lugar de 1,88 sale 11,39).</p></div>
+      </details>
+      <details><summary>Paso 5 · Segundo paso (t = 0,2 s)</summary>
+        <div class="inner"><p>θ̇₂ = 18,15 · 0,1 + 1,88 = 3,70 rad/s. ḋ₂ = 11,38 · 0,1 + 1 = 2,14 m/s. θ₂ = 1,88 · 0,1 = 0,188 rad. d₂ = 1 · 0,1 + 0,25 = 0,35 m.</p></div>
+      </details>
+      <details><summary>Paso 6 · Cinemática directa y Jacobiana</summary>
+        <div class="inner"><p>x = −(d + l₃) sen θ, y = (d + l₃) cos θ.</p>
+        <p>J = [[−(d + l₃) cos θ, −sen θ], [−(d + l₃) sen θ, cos θ]].</p></div>
+      </details>
+      <details><summary>Paso 7 · Posición del extremo</summary>
+        <div class="inner"><p>x = −1,35 · sen(0,188) = <b>−0,252 m</b>. y = 1,35 · cos(0,188) = <b>1,326 m</b>.</p></div>
+      </details>
+      <details><summary>Paso 8 · Velocidad lineal del extremo</summary>
+        <div class="inner"><p>ẋ = −1,35 · cos(0,188) · 3,70 − sen(0,188) · 2,14 ≈ <b>−5,30 m/s</b>. ẏ = −1,35 · sen(0,188) · 3,70 + cos(0,188) · 2,14 ≈ <b>1,17 m/s</b>.</p>
+        <p>|v| = √(ẋ² + ẏ²) ≈ <b>5,43 m/s</b>.</p></div>
+      </details>
+      <div class="box"><strong>Ojo:</strong> la solución de referencia redondea a 3,69 rad/s y 2,13 m/s en el paso 5, cuando los valores sin redondear son 3,6978 y 2,1386. Con ese redondeo sale |v| = 5,42 m/s; sin él, 5,43 m/s. La diferencia es pequeña, pero conviene conservar decimales en cada paso. El resultado depende además del método numérico (Euler con Δt = 0,1 s).</div>
+    </div>
+  </details>
   <div class="box trap">
     <strong>Qué falta:</strong> hay 38 exámenes distintos de cursos anteriores. Aquí tienes resueltos siete ejercicios (de la E a la K), todos comprobados con código. El resto está listado en «Practicar por tema» y «Buscar un examen», pero sin resolver. Para resolver otro, usa la misma plantilla: primero la configuración, luego la cinemática o la Jacobiana, y al final sustituir para comprobar.
   </div>
