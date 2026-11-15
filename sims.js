@@ -613,5 +613,27 @@ SIMS.camara=el=>build(el,{w:680,h:268,
   a.html('La cámara no mide milímetros, mide <b>píxeles</b>. El puente es la escala <b>s = Z·p/f</b>, y depende de la distancia Z. Sube Z y el mismo objeto ocupa menos píxeles; baja f y el campo de visión se ensancha.<br>Fíjate en la última línea: si la pieza es más alta de lo previsto, el sistema la mide mal. Por eso en una célula real se trabaja a <b>altura conocida</b>, con cámara 3D o con una referencia de tamaño conocido en la escena.');
  }});
 
+
+
+
+/* ---- paso a paso declarativo ---- */
+SIMS.__paso=(el,D)=>build(el,{w:D.w||660,h:D.h||340,
+ sliders:[{k:'paso',v:0,min:0,max:D.steps.length,step:1,l:'paso de la resolución (0 = enunciado)',u:''}],
+ draw(a){a.clear();const g=a.g,p=a.st.paso;
+  const it=(x,col)=>{const k=x[0];
+   if(k==='t')a.txt(x[1],x[2],x[3],col,x[4]||13,x[5]||'left');
+   else if(k==='l')a.line(x[1],x[2],x[3],x[4],col,x[5]||1.5,x[6]);
+   else if(k==='a')a.arrow(x[1],x[2],x[3],x[4],col,x[5]);
+   else if(k==='c')a.circ(x[1],x[2],x[3],col,!!x[4]);
+   else if(k==='r'){g.strokeStyle=col;g.lineWidth=1.8;if(x[5]){g.fillStyle=col;g.globalAlpha=.18;g.fillRect(x[1],x[2],x[3],x[4]);g.globalAlpha=1;}g.strokeRect(x[1],x[2],x[3],x[4]);}
+   else if(k==='p'){g.strokeStyle=col;g.lineWidth=x[2]||2;g.beginPath();x[1].forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.stroke();}};
+  (D.base||[]).forEach(x=>it(x,C.muted));
+  D.steps.forEach((s,i)=>{if(i+1>p)return;const cur=(i+1===p);(s.add||[]).forEach(x=>it(x,cur?C.d:C.text));if(cur)(s.now||[]).forEach(x=>it(x,C.d));});
+  a.html('<div>'+(p===0?D.q:D.steps[p-1].text)+'</div>');}});
+/* ---- fin paso a paso declarativo ---- */
+
+/* ---- paso2 cubicaPaso ---- */
+SIMS.cubicaPaso=el=>SIMS.__paso(el,{"w":660,"h":300,"q":"Hay que mover una articulación <b>60° en 2 s</b> partiendo y acabando en reposo. ¿Qué polinomio cúbico lo hace y cuál es la velocidad máxima? Sube el paso.","base":[["l",320,250,620,250,1.5],["l",320,250,320,80,1.5],["t","t [s]",620,268,12,"right"],["t","q [°]",312,86,12,"right"],["t","0",320,268,12,"center"],["t","2",620,284,12,"center"],["t","60",312,102,12,"right"]],"steps":[{"text":"Una articulación debe ir de <b>q₀ = 0°</b> a <b>q_f = 60°</b> en <b>t_f = 2 s</b>, parando en los dos extremos (velocidad cero). Un polinomio cúbico <b>q(t) = a₂t² + a₃t³</b> (con a₀ = a₁ = 0 por salir del reposo) basta.","add":[["t","q(0)=0 · q(2)=60 · q̇(0)=q̇(2)=0",30,60,13,"left"]]},{"text":"Con q(t_f) = q_f y q̇(t_f) = 0 resultan <b>a₂ = 3q_f/t_f²</b> y <b>a₃ = −2q_f/t_f³</b>.","add":[["t","a₂ = 3·60/2² = 45 °/s²",30,100,14,"left"],["t","a₃ = −2·60/2³ = −15 °/s³",30,128,14,"left"]]},{"text":"Trayectoria: <b>q(t) = 45t² − 15t³</b> [°]. Comprobación en t = 2: 45·4 − 15·8 = 180 − 120 = <b>60°</b> ✓.","add":[["t","q(t) = 45t² − 15t³",30,162,15,"left"],["p",[[320.0,250.0],[327.5,249.6865625],[335.0,248.7675],[342.5,247.2746875],[350.0,245.24],[357.5,242.6953125],[365.0,239.6725],[372.5,236.2034375],[380.0,232.32],[387.5,228.0540625],[395.0,223.4375],[402.5,218.5021875],[410.0,213.28],[417.5,207.80281250000002],[425.0,202.10250000000002],[432.5,196.2109375],[440.0,190.16],[447.5,183.9815625],[455.0,177.70749999999998],[462.5,171.3696875],[470.0,165.0],[477.5,158.6303125],[485.0,152.29250000000002],[492.5,146.01843750000003],[500.0,139.83999999999997],[507.5,133.7890625],[515.0,127.89750000000001],[522.5,122.19718749999997],[530.0,116.72],[537.5,111.49781249999998],[545.0,106.5625],[552.5,101.94593750000004],[560.0,97.68],[567.5,93.79656250000002],[575.0,90.32750000000001],[582.5,87.3046875],[590.0,84.76000000000002],[597.5,82.7253125],[605.0,81.23250000000002],[612.5,80.31343750000002],[620.0,80.0]],2.5]]},{"text":"A mitad de tiempo (t = 1 s): q(1) = 45 − 15 = <b>30°</b>. Por simetría del perfil cúbico, justo la mitad del recorrido.","add":[["t","q(1) = 30°",30,196,14,"left"],["c",470.0,165.0,5,1]]},{"text":"Velocidad: <b>q̇(t) = 90t − 45t²</b>. Máximo cuando la aceleración se anula (t = 1 s): q̇ máx = 90 − 45 = <b>45 °/s</b>, 1,5 veces la velocidad media (60°/2 s = 30 °/s).","add":[["t","q̇(1) = 45 °/s = 1,5 · 30 °/s",30,230,14,"left"]]},{"text":"Pero la aceleración <b>q̈(t) = 90 − 90t</b> vale 90 °/s² en t = 0 y −90 °/s² en t = 2: salta de golpe. Para evitar ese «tirón» (el jerk) se usan polinomios de grado 5 o perfiles trapezoidales.","add":[["t","q̈(0) = 90 °/s²  ·  q̈(2) = −90 °/s²",30,264,13,"left"]]}]});
+/* ---- fin paso2 cubicaPaso ---- */
 document.querySelectorAll("[data-sim]").forEach(function(el){var k=el.getAttribute("data-sim");if(SIMS[k]){try{SIMS[k](el);}catch(e){console.error("sim "+k,e);}}else console.warn("sim no encontrada: "+k);});
 })();
