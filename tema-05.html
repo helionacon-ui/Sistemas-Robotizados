@@ -68,6 +68,59 @@
 <li>Olvidar el <b>offset</b> constante: muchos robots reales tienen \(\theta_2=q_2-90^\circ\) o \(\theta_6=q_6+180^\circ\) porque su posición de cero mecánico no coincide con la de D-H. Esos sumandos salen en la tabla de catálogo y hay que respetarlos.</li>
 <li>Multiplicar las matrices en orden inverso. La cadena va de la base al extremo: \({}^{0}A_1\,{}^{1}A_2\cdots\)</li>
 </ul></div>
+<h3 id="t5-dh-paso">Cinemática directa de un 2R, paso a paso</h3>
+<p>Con la tabla de Denavit-Hartenberg, cada eslabón aporta una matriz de transformación. Multiplicándolas se obtiene la posición del extremo en función de los ángulos.</p>
+<figure class="fig"><p class="ft">Figura interactiva · robot plano de 2 grados de libertad: l₁ = 1 m, l₂ = 0,5 m, θ₁ = 30°, θ₂ = 60°</p>
+<div id="dh-paso" style="font-family:system-ui,sans-serif"><input id="dh-paso-s" type="range" min="0" max="6" step="1" value="0" style="width:100%"><div id="dh-paso-l" style="font-size:13px;color:#56635e;margin:4px 0">paso de la resolución (0 = problema): 0</div><canvas id="dh-paso-c" width="640" height="300" style="width:100%;max-width:640px;height:auto;display:block"></canvas><div id="dh-paso-t" style="font-size:15px;line-height:1.5;margin-top:8px;min-height:90px"></div></div>
+<figcaption>Sube el paso: se escribe la tabla DH, se construyen A₁ y A₂, se multiplican y se comprueba la posición con la ley de cosenos.</figcaption></figure>
+<div class="box trap"><h4>Trampas típicas</h4><ul><li>Usar grados en unas funciones y radianes en otras.</li><li>Multiplicar las matrices en el orden contrario: T = A₁·A₂, no A₂·A₁.</li><li>Olvidar que el ángulo de la segunda articulación se mide respecto al primer eslabón.</li></ul></div>
+<script>
+(function(){
+  var T=[
+   'Robot plano de dos eslabones con l₁ = 1 m y l₂ = 0,5 m. Las articulaciones están en θ₁ = 30° y θ₂ = 60°. Se pide la posición del extremo.',
+   'Tabla DH: eslabón 1 → θ₁, d = 0, a₁ = 1 m, α = 0. Eslabón 2 → θ₂, d = 0, a₂ = 0,5 m, α = 0. En un 2R plano, d y α son cero en todos los eslabones.',
+   'Cada eslabón da A_i = Rot_z(θᵢ) · Trans_z(dᵢ) · Trans_x(aᵢ) · Rot_x(αᵢ). Con d = α = 0, la traslación de A_i es aᵢ(cos θᵢ, sen θᵢ).',
+   'A₁ con θ₁ = 30°: traslación (1 · cos 30°, 1 · sen 30°) = (0,866; 0,500) m, y la rotación es de 30° alrededor de z.',
+   'A₂ con θ₂ = 60°: traslación en su propio marco (0,5 · cos 60°, 0,5 · sen 60°) = (0,25; 0,433) m. Esa traslación se expresa en el marco base al multiplicar por A₁.',
+   'Producto T = A₁ · A₂: la posición final es (0,866; 0,500) + R₁ · (0,25; 0,433). Como R₁ · (0,25; 0,433) = (0; 0,5), se obtiene p = (0,866; 1,000) m.',
+   'Comprobación con la ley de cosenos: |p|² = l₁² + l₂² + 2 l₁ l₂ cos θ₂ = 1 + 0,25 + 0,5 = 1,75, y (0,866)² + 1² = 1,75 ✓. La orientación del extremo es θ₁ + θ₂ = 90°.'
+  ];
+  var cv=document.getElementById('dh-paso-c'), g=cv.getContext('2d'), sl=document.getElementById('dh-paso-s'),
+      lb=document.getElementById('dh-paso-l'), tx=document.getElementById('dh-paso-t');
+  var O={x:120,y:270}, S=150, D=Math.PI/180;
+  function txt(s,x,y,col,sz,al){g.fillStyle=col;g.font=(sz||12)+'px system-ui,sans-serif';g.textAlign=al||'left';g.fillText(s,x,y);}
+  function seg(a,b,col,w){g.strokeStyle=col;g.lineWidth=w||4;g.lineCap='round';g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();}
+  function draw(p){
+    g.clearRect(0,0,cv.width,cv.height);
+    // base y ejes de referencia
+    g.strokeStyle='#8a958f';g.lineWidth=1;g.beginPath();g.moveTo(O.x-30,O.y);g.lineTo(O.x+180,O.y);g.stroke();
+    g.beginPath();g.moveTo(O.x,O.y);g.lineTo(O.x,O.y-160);g.stroke();
+    txt('x₀',O.x+184,O.y+4,'#56635e',11,'left'); txt('y₀',O.x+4,O.y-164,'#56635e',11,'left');
+    var J1={x:O.x+S*Math.cos(30*D), y:O.y-S*Math.sin(30*D)};
+    var E={x:J1.x+0.5*S*Math.cos(90*D), y:J1.y-0.5*S*Math.sin(90*D)};
+    seg(O,J1,p>=2?'#3a63c4':'#16211d',6);
+    seg(J1,E,p>=2?'#b8730c':'#16211d',6);
+    g.fillStyle='#16211d';g.beginPath();g.arc(O.x,O.y,6,0,6.283);g.fill();
+    g.beginPath();g.arc(J1.x,J1.y,5,0,6.283);g.fill();
+    if(p>=2){ g.strokeStyle='#3a63c4';g.lineWidth=1.2;g.beginPath();g.arc(O.x,O.y,40,-30*D,0);g.stroke(); txt('θ₁ = 30°',O.x+46,O.y-14,'#3a63c4',12,'left');
+      g.strokeStyle='#b8730c';g.beginPath();g.arc(J1.x,J1.y,36,-90*D,-30*D,false);g.stroke(); txt('θ₂ = 60°',J1.x+12,J1.y-18,'#b8730c',12,'left'); }
+    if(p>=5){ g.fillStyle='#b4232f';g.beginPath();g.arc(E.x,E.y,6,0,6.283);g.fill();
+      txt('p = (0,866; 1,000) m',E.x+10,E.y-8,'#b4232f',12,'left'); }
+    var X=340;
+    if(p>=1){ txt('Eslabón   θ        d    a      α',X,50,'#16211d',12,'left');
+      txt('1         θ₁=30°    0    1 m    0',X,72,'#16211d',12,'left');
+      txt('2         θ₂=60°    0    0,5 m  0',X,94,'#16211d',12,'left'); }
+    if(p>=3)txt('A₁: traslación (0,866; 0,500) m',X,130,'#3a63c4',12,'left');
+    if(p>=4)txt('A₂: traslación (0,25; 0,433) m en su marco',X,160,'#b8730c',12,'left');
+    if(p>=5)txt('T = A₁·A₂  →  p = (0,866; 1,000) m',X,196,'#b4232f',13,'left');
+    if(p>=6)txt('|p|² = 1 + 0,25 + 2·0,5·0,5 = 1,75 ✓',X,230,'#2c8a52',12,'left');
+    lb.textContent='paso de la resolución (0 = problema): '+p;
+    tx.innerHTML='<div>'+T[p]+'</div>';
+  }
+  sl.addEventListener('input',function(){draw(+sl.value);});
+  draw(0);
+})();
+</script>
 <h3 id="t5-problema">Problema resuelto</h3>
 <div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Un robot antropomórfico de tres grados de libertad tiene \(l_1=0{,}5\) m (altura del hombro), \(l_2=0{,}6\) m y \(l_3=0{,}4\) m.</p>
 <ol><li>Escribe su tabla de Denavit-Hartenberg.</li>
