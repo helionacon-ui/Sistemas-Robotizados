@@ -295,12 +295,12 @@
     if(!fn) return;
     var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220"><g '+S+'>'+fn()+'</g></svg>';
     var url='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
-    var css='#an-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:var(--accent,#1f4fd1);opacity:.085;-webkit-mask:'+url+' 0 0/300px 300px;mask:'+url+' 0 0/300px 300px}'
-      +'#an-bg2{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(55% 45% at 100% 0%,color-mix(in srgb,var(--accent,#1f4fd1) 14%,transparent),transparent 72%),radial-gradient(45% 40% at 0% 100%,color-mix(in srgb,var(--accent,#1f4fd1) 10%,transparent),transparent 72%)}'
-      +'@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #an-bg{opacity:.14}}:root[data-theme="dark"] #an-bg{opacity:.14}'
-      +'@media print{#an-bg,#an-bg2{display:none!important}}';
+    var fade='radial-gradient(ellipse 80% 70% at 50% 45%,rgba(0,0,0,.25) 0%,rgba(0,0,0,.55) 55%,#000 100%)';
+    var css='#an-bg{position:fixed;inset:0;z-index:1;pointer-events:none;background:var(--accent,#1f4fd1);opacity:.13;-webkit-mask-image:'+url+','+fade+';-webkit-mask-size:300px 300px,100% 100%;-webkit-mask-repeat:repeat,no-repeat;-webkit-mask-composite:source-in;mask-image:'+url+','+fade+';mask-size:300px 300px,100% 100%;mask-repeat:repeat,no-repeat;mask-composite:intersect}'
+      +'@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #an-bg{opacity:.2}}:root[data-theme="dark"] #an-bg{opacity:.2}'
+      +'@media print{#an-bg{display:none!important}}';
     var st=document.createElement('style'); st.id='an-bg-css'; st.textContent=css; document.head.appendChild(st);
-    function add(){var a=document.createElement('div');a.id='an-bg2';a.setAttribute('aria-hidden','true');var b=document.createElement('div');b.id='an-bg';b.setAttribute('aria-hidden','true');document.body.insertBefore(b,document.body.firstChild);document.body.insertBefore(a,document.body.firstChild);}
+    function add(){var b=document.createElement('div');b.id='an-bg';b.setAttribute('aria-hidden','true');document.body.insertBefore(b,document.body.firstChild);}
     if(document.body) add(); else document.addEventListener('DOMContentLoaded',add);
   })();
 })();
