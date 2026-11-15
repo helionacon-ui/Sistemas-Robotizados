@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T1 El robot industrial · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 1, El robot industrial">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Herramientas matemáticas y cinemática directa</span><span class="sep">›</span><span>T1 · El robot industrial</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)" class="on" aria-current="page">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c2);--tcs:var(--c2s)">
+<div class="sh"><span aria-hidden="true" class="badge">1</span><div class="shx"><p class="kick">Herramientas matemáticas y cinemática directa · Tema 1</p><h2 id="t1">El robot industrial</h2><div class="tags"><span class="tag">Herramientas matemáticas y cinemática directa</span><span class="tag">1.er parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> saber qué es un robot industrial, contar sus grados de libertad, reconocer las configuraciones clásicas y distinguir precisión, repetibilidad y resolución.</p><ul>
+<li>Un <b>robot industrial</b> es, según la definición de la ISO, un manipulador <b>multifuncional</b> y <b>reprogramable</b> de varios grados de libertad, capaz de mover materiales, piezas o herramientas con movimientos programados. Las dos palabras clave son <i>reprogramable</i> (lo que lo separa de una máquina de ciclo fijo) y <i>multifuncional</i> (sirve para tareas distintas sin rehacerlo).</li>
+<li>Un robot es una <b>cadena cinemática abierta</b>: una sucesión de <b>eslabones</b> rígidos unidos por <b>articulaciones</b>. La base es el eslabón 0 y el último eslabón lleva la <b>herramienta</b> o efector final.</li>
+<li>Las articulaciones industriales son casi siempre de un solo grado de libertad: <b>rotación</b> (R, gira alrededor de un eje) o <b>prismática</b> o de traslación (P, desliza a lo largo de un eje). Un robot con seis articulaciones de rotación se escribe RRRRRR.</li>
+<li>Los <b>grados de libertad</b> (gdl) de un robot son el número de variables independientes que hay que fijar para determinar la posición de todos sus puntos. En una cadena abierta con articulaciones de 1 gdl, <b>gdl = número de articulaciones</b>. Para posicionar y orientar libremente un cuerpo en el espacio hacen falta <b>6 gdl</b>: tres de posición y tres de orientación.</li>
+<li>Las <b>configuraciones</b> clásicas se nombran por las tres primeras articulaciones, que son las que posicionan: <b>cartesiana</b> (PPP), <b>cilíndrica</b> (RPP), <b>esférica o polar</b> (RRP), <b>SCARA</b> (RRP con ejes verticales) y <b>angular o antropomórfica</b> (RRR). Cada una tiene un <b>volumen de trabajo</b> característico: un prisma, un cilindro hueco, una corona esférica, un cilindro achatado y una esfera hueca.</li>
+<li>La estructura típica de un robot de 6 gdl es <b>brazo + muñeca</b>: las tres primeras articulaciones posicionan la muñeca y las tres últimas, cuyos ejes se cortan en un punto, orientan la herramienta. Que los tres ejes de la muñeca se corten es lo que permite el <b>desacoplo cinemático</b> del tema 6.</li>
+<li><b>Precisión</b> (exactitud) es la distancia entre el punto que el robot alcanza y el punto que se le ordenó. <b>Repetibilidad</b> es la dispersión de los puntos alcanzados al repetir muchas veces la misma orden. <b>Resolución</b> es el incremento más pequeño que el robot puede medir o mover. Un robot industrial es muy repetible (décimas de milímetro) y bastante menos preciso, porque la precisión depende del modelo geométrico y la repetibilidad sólo de la mecánica.</li>
+<li>El <b>TCP</b> (<i>Tool Center Point</i>) es el punto de la herramienta cuya posición y orientación se programa. Cambiar de herramienta obliga a redefinir el TCP.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 1 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">gdl</td><td>grados de libertad</td><td class="u">n.º de articulaciones</td></tr><tr><td class="sym">R</td><td>articulación de rotación</td><td class="u"></td></tr><tr><td class="sym">P</td><td>articulación prismática</td><td class="u"></td></tr><tr><td class="sym">TCP</td><td>punto central de la herramienta</td><td class="u">Tool Center Point</td></tr><tr><td class="sym">precisión</td><td>distancia al punto ordenado</td><td class="u">mm</td></tr><tr><td class="sym">repetibilidad</td><td>dispersión al repetir</td><td class="u">R = d̄ + 3σ</td></tr><tr><td class="sym">resolución</td><td>incremento mínimo medible</td><td class="u"></td></tr><tr><td class="sym">volumen de trabajo</td><td>puntos alcanzables</td><td class="u"></td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Figura interactiva - configuraciones y volumen de trabajo</p><div data-sim="morfologia"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t1-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul>
+<li><b>Grados de libertad de una cadena abierta:</b> \(\text{gdl}=\sum_i \text{gdl}_i = n\) articulaciones de 1 gdl.</li>
+<li><b>Movilidad de un mecanismo (Grübler-Kutzbach, espacial):</b> \(M=6(N-1-J)+\sum_{i=1}^{J} f_i\), con \(N\) eslabones (base incluida), \(J\) articulaciones y \(f_i\) gdl de cada una. En el plano el 6 pasa a 3.</li>
+<li><b>Alcance de un brazo planar de dos eslabones:</b> \(|l_1-l_2|\le r \le l_1+l_2\).</li>
+<li><b>Repetibilidad</b> (estadística, ISO 9283): \(R=\bar d+3\sigma\), con \(\bar d\) la distancia media al baricentro de los puntos alcanzados y \(\sigma\) su desviación típica.</li>
+<li><b>Resolución de un encoder</b> de \(n\) bits con reductora de relación \(r\): \(\Delta q = \dfrac{360^\circ}{2^{n}\,r}\).</li>
+<li><b>Carga nominal</b>: se mide en el TCP y disminuye al alejar el centro de gravedad de la brida; por eso se especifica también el <b>momento de inercia</b> admisible.</li>
+</ul></div>
+<h3 id="t1-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Contar grados de libertad:</b> identifica cada articulación en el dibujo, mira si gira o desliza y cuenta. No confundas eslabones con articulaciones: un robot de 6 gdl tiene 7 eslabones contando la base.</li>
+<li><b>Nombrar la configuración:</b> fíjate sólo en las <b>tres primeras</b> articulaciones y escribe la secuencia R/P. Después comprueba el volumen de trabajo que dibuja.</li>
+<li><b>Identificar la muñeca:</b> busca tres ejes consecutivos que se corten en un punto. Ese punto es el <b>centro de muñeca</b> y será el que uses en la cinemática inversa.</li>
+<li><b>Decidir si un punto es alcanzable:</b> calcula la distancia del punto a la base y compárala con los límites de alcance. Si está fuera, no hay solución de cinemática inversa.</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Decir que un robot con 6 articulaciones tiene 6 eslabones. Tiene 6 articulaciones, 6 eslabones móviles y <b>7 cuerpos</b> contando la base.</li>
+<li>Confundir precisión con repetibilidad. El catálogo de un robot industrial da normalmente sólo la <b>repetibilidad</b>, que es un número mucho mejor que la precisión.</li>
+<li>Pensar que más grados de libertad siempre es mejor. Por encima de 6 el robot es <b>redundante</b>: hay infinitas soluciones de cinemática inversa, lo que da flexibilidad pero complica el control.</li>
+<li>Olvidar que el volumen de trabajo tiene <b>huecos</b>: la zona cercana a la base casi nunca es alcanzable, por eso las coronas y esferas son huecas.</li>
+</ul></div>
+<h3 id="t1-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Un brazo planar de dos eslabones tiene \(l_1=1\) m y \(l_2=1\) m. Su encoder de la primera articulación es de 12 bits y lleva una reductora de relación 100:1.</p>
+<ol><li>¿Cuántos grados de libertad tiene y qué configuración es?</li>
+<li>¿Qué forma tiene su volumen de trabajo?</li>
+<li>¿Es alcanzable el punto \((1{,}2,\ 0{,}9)\)? ¿Y el \((0{,}1,\ 0)\)?</li>
+<li>¿Cuál es la resolución angular de la primera articulación y a cuántos milímetros equivale en el extremo?</li></ol></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>1) Grados de libertad y configuración.</b> Dos articulaciones de rotación, dos gdl, configuración <b>RR</b> (brazo antropomórfico planar). Con dos gdl se puede alcanzar cualquier punto del plano dentro del alcance, pero <b>no</b> se puede elegir además la orientación: harían falta tres.</p>
+<p><b>2) Volumen de trabajo.</b> Como \(l_1=l_2\), el alcance va de \(|l_1-l_2|=0\) a \(l_1+l_2=2\) m: un <b>disco macizo</b> de 2 m de radio. Si los eslabones fueran distintos quedaría una <b>corona circular</b> con un agujero central de radio \(|l_1-l_2|\).</p>
+<p><b>3) Puntos alcanzables.</b></p>
+\[r=\sqrt{1{,}2^2+0{,}9^2}=\sqrt{1{,}44+0{,}81}=\sqrt{2{,}25}=1{,}5\ \text{m}\]
+<p>Como \(0\le 1{,}5\le 2\), el punto \((1{,}2,\ 0{,}9)\) <b>sí</b> es alcanzable. El punto \((0{,}1,\ 0)\) está a 0,1 m, que también está dentro del disco, así que también lo es: con eslabones iguales el robot puede plegarse por completo. Si fuese \(l_1=1\) y \(l_2=0{,}6\), el agujero central tendría radio 0,4 m y ese punto quedaría <b>fuera</b>.</p>
+<p><b>4) Resolución.</b> El encoder de 12 bits da \(2^{12}=4096\) cuentas por vuelta del motor, y la reductora multiplica por 100 la resolución vista desde la articulación:</p>
+\[\Delta q=\frac{360^\circ}{4096\cdot 100}=\frac{360}{409\,600}=8{,}79\cdot 10^{-4}\ \text{grados}=\boxed{0{,}879\ \text{milésimas de grado}}\]
+<p>En el extremo, a 2 m de la base, un giro de ese tamaño en la primera articulación se traduce en un arco</p>
+\[\Delta s=r\cdot\Delta q_{\text{rad}}=2\cdot\frac{8{,}79\cdot10^{-4}\cdot\pi}{180}=3{,}07\cdot10^{-5}\ \text{m}=\boxed{0{,}031\ \text{mm}}\]
+<div class="box key"><p>Fíjate en el efecto palanca: la resolución <b>angular</b> es fija, pero el error <b>lineal</b> que provoca crece con la distancia a la base. Un robot es siempre menos preciso con el brazo estirado que replegado, y esa es una de las razones por las que se evita trabajar en el borde del volumen de trabajo.</p></div></div></details></div>
+<h3 id="t1-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué dos palabras de la definición de robot lo separan de una máquina automática corriente?</summary><div class="inner"><p><b>Reprogramable</b> y <b>multifuncional</b>: puede cambiarse su tarea sin modificar su mecánica.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Cuántos grados de libertad hacen falta para posicionar y orientar un cuerpo libremente en el espacio?</summary><div class="inner"><p><b>Seis</b>: tres de posición y tres de orientación.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Qué configuración tiene un robot SCARA y para qué se usa?</summary><div class="inner"><p><b>RRP</b> con los dos ejes de rotación verticales. Es muy rígido en vertical y rápido en horizontal, por eso se usa en montaje e inserción de piezas.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Qué diferencia hay entre precisión y repetibilidad?</summary><div class="inner"><p>La <b>precisión</b> mide la distancia al punto ordenado (error sistemático, depende del modelo); la <b>repetibilidad</b> mide la dispersión al repetir la misma orden (error aleatorio, depende de la mecánica).</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Qué es el centro de muñeca y por qué importa?</summary><div class="inner"><p>El punto donde se cortan los tres últimos ejes. Permite el <b>desacoplo cinemático</b>: resolver primero la posición con las tres primeras articulaciones y después la orientación con las tres últimas.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Qué significa que un robot sea redundante?</summary><div class="inner"><p>Que tiene más de 6 gdl, así que existen <b>infinitas</b> configuraciones articulares para la misma posición y orientación de la herramienta.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="plan.html"><small>← Anterior</small>Cómo es la evaluación</a><a class="nx" href="tema-02.html"><small>Siguiente →</small>T2 · Sistemas de referencia y matrices de rotación</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>

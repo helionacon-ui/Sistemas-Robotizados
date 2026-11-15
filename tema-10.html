@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T10 Programación de robots y visión artificial · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 10, Programación de robots y visión artificial">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Cinemática inversa, velocidades y trayectorias</span><span class="sep">›</span><span>T10 · Programación de robots y visión artificial</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)" class="on" aria-current="page">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c3);--tcs:var(--c3s)">
+<div class="sh"><span aria-hidden="true" class="badge">10</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 10</p><h2 id="t10">Programación de robots y visión artificial</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> conocer los sistemas de coordenadas de un robot industrial, definir la herramienta y el objeto de trabajo, programar en RAPID y relacionar el sistema de la cámara con el del robot.</p><ul>
+<li>Un robot industrial se programa con varios <b>sistemas de coordenadas</b> encadenados: el de <b>mundo</b> (fijo en la célula), el de <b>base</b> (en el pie del robot), el de <b>herramienta</b> o <i>tool</i> (en el TCP) y el de <b>objeto de trabajo</b> o <i>wobj</i> (en la pieza). Un punto programado es siempre «esta posición del TCP respecto a este objeto de trabajo».</li>
+<li>Esa estructura es puro producto de MTH: \({}^{mundo}T_{TCP}={}^{mundo}T_{base}\,{}^{base}T_{brida}\,{}^{brida}T_{TCP}\). Definir bien la herramienta y el objeto de trabajo es lo que permite mover la pieza de sitio y reutilizar el programa cambiando sólo una matriz.</li>
+<li>La <b>definición del TCP</b> se hace en la práctica por el método de los <b>cuatro puntos</b>: se lleva el extremo de la herramienta a un mismo punto fijo con cuatro orientaciones distintas y el controlador resuelve el sistema de ecuaciones que da la posición del TCP respecto a la brida. Las orientaciones tienen que ser bien diferentes para que el sistema esté bien condicionado.</li>
+<li>Hay dos formas de programar: <b>guiado</b> (se lleva el robot a cada punto con la consola y se graba) y <b>textual</b> (se escribe el programa en un lenguaje, por ejemplo <b>RAPID</b> de ABB). Lo normal es mezclar: las posiciones se enseñan por guiado y la lógica se escribe.</li>
+<li>Las instrucciones de movimiento típicas de RAPID son <code>MoveJ</code> (movimiento articular, el camino del extremo no es recto pero es rápido y seguro), <code>MoveL</code> (lineal, el TCP describe una recta) y <code>MoveC</code> (circular por tres puntos). Se acompañan de la <b>velocidad</b> (<code>v100</code>), la <b>zona</b> (<code>fine</code> para parar exactamente en el punto, <code>z10</code> para redondear la esquina sin parar), la herramienta y el objeto de trabajo.</li>
+<li>Un <b>robtarget</b> guarda la posición en milímetros, la orientación como <b>cuaternio</b>, la configuración del robot (qué solución de las ocho de la cinemática inversa usar) y los ejes externos. El cuaternio no es un adorno teórico: es el formato real en que el robot guarda la orientación.</li>
+<li>La <b>visión artificial</b> aporta las coordenadas de la pieza. La cámara da la posición en su propio sistema y hay que llevarla al del robot con una MTH obtenida por <b>calibración</b> (<i>hand-eye calibration</i>). La cámara puede estar fija en la célula o montada en el brazo.</li>
+<li>El resto de los problemas de visión son de <b>escala</b>: la cámara mide en píxeles y hay que pasarlos a milímetros con un factor que depende de la distancia al objeto; de ahí que muchos montajes usen una distancia de trabajo fija o una referencia dimensional conocida en la escena.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 10 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">mundo / base</td><td>sistemas fijos de la célula</td><td class="u"></td></tr><tr><td class="sym">tool</td><td>sistema de la herramienta</td><td class="u">TCP</td></tr><tr><td class="sym">wobj</td><td>objeto de trabajo</td><td class="u"></td></tr><tr><td class="sym">MoveJ</td><td>movimiento articular</td><td class="u">rápido</td></tr><tr><td class="sym">MoveL</td><td>movimiento lineal</td><td class="u">recto</td></tr><tr><td class="sym">fine / zNN</td><td>zona de parada o redondeo</td><td class="u"></td></tr><tr><td class="sym">robtarget</td><td>punto programado</td><td class="u">posición + cuaternio</td></tr><tr><td class="sym">s = Z·p/f</td><td>escala de la cámara</td><td class="u">mm/px</td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Calculadora interactiva - camara: escala y campo de vision</p><div data-sim="camara"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t10-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul>
+<li><b>Cadena de la célula:</b> \({}^{W}T_{TCP}={}^{W}T_{B}\ {}^{B}T_{6}(q)\ {}^{6}T_{TCP}\), y el punto programado se expresa respecto al objeto: \({}^{obj}T_{TCP}=\left({}^{W}T_{obj}\right)^{-1}{}^{W}T_{TCP}\).</li>
+<li><b>Cámara:</b> \({}^{B}p_{\text{pieza}}={}^{B}T_{C}\ {}^{C}p_{\text{pieza}}\), con \({}^{B}T_{C}\) la matriz de calibración cámara-robot.</li>
+<li><b>Modelo de cámara estenopeica:</b> \(\dfrac{u}{f}=\dfrac{X}{Z}\), \(\dfrac{v}{f}=\dfrac{Y}{Z}\); la escala en milímetros por píxel vale \(s=\dfrac{Z\,p}{f}\), con \(p\) el tamaño del píxel.</li>
+<li><b>Instrucciones RAPID más usadas:</b> <code>MoveJ p10, v1000, z50, tool1\WObj:=wobj1;</code> · <code>MoveL p20, v200, fine, tool1;</code> · <code>MoveC p30, p40, v200, z10, tool1;</code> · <code>WaitDI</code>, <code>SetDO</code> para entradas y salidas digitales.</li>
+<li><b>robtarget:</b> <code>CONST robtarget p10 := [[x,y,z],[q1,q2,q3,q4],[cf1,cf4,cf6,cfx],[9E9,...]];</code></li>
+<li><b>Cuaternios de herramienta habituales:</b> herramienta apuntando hacia abajo (\(z_h\) según \(-z_0\)) → \((0,0,1,0)\) o \((0,1,0,0)\) según la convención de ejes; sin girar → \((1,0,0,0)\).</li>
+</ul></div>
+<h3 id="t10-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Para orientar una herramienta</b>, escribe primero la matriz de rotación: columna \(x_h\), columna \(y_h\), columna \(z_h\), leyendo del dibujo hacia dónde debe apuntar cada eje. Después pásala a cuaternio con las fórmulas del tema 4.</li>
+<li><b>Para relacionar cámara y robot</b>, escribe la cadena de transformaciones elementales desde el sistema de la cámara hasta la base, igual que en el tema 3, y multiplica.</li>
+<li><b>Para elegir la instrucción de movimiento:</b> \(\texttt{MoveJ}\) para aproximaciones rápidas sin obstáculos; \(\texttt{MoveL}\) cuando el camino importa (soldadura, pegado, inserción); \(\texttt{MoveC}\) para arcos.</li>
+<li><b>Para elegir la zona:</b> <code>fine</code> cuando hay que parar exactamente (coger, soltar); una zona <code>zNN</code> cuando sólo se pasa cerca, porque redondear la esquina ahorra mucho tiempo de ciclo.</li>
+<li><b>Para comprobar un programa:</b> ejecuta a velocidad reducida, verifica que ninguna posición da error de configuración y que no hay singularidades en los tramos lineales.</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Confundir el sistema de <b>herramienta</b> con el de la <b>brida</b>. Si no se define bien el TCP, los movimientos lineales y las reorientaciones salen mal, aunque los puntos enseñados por guiado parezcan correctos.</li>
+<li>Usar <code>MoveL</code> en un tramo que pasa cerca de una singularidad. El robot se detendrá con error aunque los dos extremos sean alcanzables.</li>
+<li>Olvidar el argumento <code>\WObj</code>: el punto se interpreta entonces respecto al objeto por defecto y el robot va a otro sitio.</li>
+<li>Definir el TCP con cuatro orientaciones demasiado parecidas: el sistema queda mal condicionado y la precisión del TCP es mala.</li>
+<li>Pasar las coordenadas de la cámara al robot sin la matriz de calibración o sin convertir píxeles a milímetros.</li>
+<li>Dar por hecho que un <i>robtarget</i> alcanzable se puede alcanzar con cualquier configuración. Los datos <code>cf</code> fijan la solución concreta de la cinemática inversa.</li>
+</ul></div>
+<h3 id="t10-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Una cámara fija observa una cinta transportadora desde arriba. El sistema de la cámara, \(S_C\), tiene su eje \(z_C\) apuntando <b>hacia la cinta</b> (hacia abajo) y su eje \(x_C\) en el sentido de avance de la cinta. La base del robot, \(S_B\), está desplazada \((1{,}5,\ 1{,}0,\ -1{,}5)\) m respecto a la cámara y sus ejes son los habituales (\(z_B\) vertical hacia arriba, \(x_B\) en el sentido de avance).</p>
+<ol><li>Escribe \({}^{B}T_{C}\).</li>
+<li>La cámara detecta una pieza en \({}^{C}p=(0{,}30,\ 0{,}10,\ 1{,}50)\) m. ¿Dónde está respecto a la base del robot?</li>
+<li>La cámara tiene \(f=8\) mm, píxel de 5 µm y trabaja a 1,5 m. ¿Qué tamaño real tiene un objeto que ocupa 240 píxeles?</li></ol></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>1) Matriz cámara-robot.</b> Los ejes de la cámara, vistos desde la base: \(x_C\) coincide con \(x_B\) → \((1,0,0)\); \(z_C\) apunta hacia abajo, es decir \(-z_B\) → \((0,0,-1)\); y para que la terna sea dextrógira, \(y_C=z_C\times x_C=(0,0,-1)\times(1,0,0)=(0,-1,0)\). Con la posición de la cámara vista desde la base —que es la opuesta de la dada, \(-(1{,}5,1{,}0,-1{,}5)=(-1{,}5,-1{,}0,1{,}5)\), expresada en los ejes de la base—:</p>
+\[{}^{B}T_{C}=\begin{pmatrix}1&0&0&-1{,}5\\ 0&-1&0&-1{,}0\\ 0&0&-1&1{,}5\\ 0&0&0&1\end{pmatrix}\]
+<p>Comprobación: \(\det R=1\cdot(-1)\cdot(-1)=1\) ✓ terna dextrógira.</p>
+<p><b>2) Posición de la pieza.</b></p>
+\[{}^{B}p={}^{B}T_{C}\begin{pmatrix}0{,}30\\0{,}10\\1{,}50\\1\end{pmatrix}
+=\begin{pmatrix}0{,}30-1{,}5\\ -0{,}10-1{,}0\\ -1{,}50+1{,}5\\ 1\end{pmatrix}
+=\boxed{(-1{,}20,\ -1{,}10,\ 0{,}00)\ \text{m}}\]
+<p>La \(z\) sale nula, que es justo lo esperable: la pieza está apoyada en la cinta, al nivel de la base del robot. Ese cero es la mejor comprobación de que la matriz de calibración está bien.</p>
+<p><b>3) Escala de la cámara.</b> Con el modelo estenopeico, el tamaño de un píxel proyectado sobre el plano de trabajo es</p>
+\[s=\frac{Z\,p}{f}=\frac{1500\ \text{mm}\cdot 0{,}005\ \text{mm}}{8\ \text{mm}}=0{,}9375\ \frac{\text{mm}}{\text{px}}\]
+\[L=240\ \text{px}\cdot0{,}9375\ \frac{\text{mm}}{\text{px}}=\boxed{225\ \text{mm}}\]
+<div class="box key"><p>El factor \(s\) depende de \(Z\): si la pieza es más alta, la cámara la ve más grande y el sistema la mide mal. Por eso en una célula real o se trabaja con altura conocida y constante, o se usa una cámara 3D, o se mete una referencia de tamaño conocido en el campo de visión. Es el mismo problema de escala que hay en cualquier foto.</p></div></div></details></div>
+<h3 id="t10-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué cuatro sistemas de coordenadas maneja un robot industrial?</summary><div class="inner"><p><b>Mundo</b>, <b>base</b>, <b>herramienta</b> (TCP) y <b>objeto de trabajo</b>.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿En qué consiste el método de los cuatro puntos?</summary><div class="inner"><p>En llevar el extremo de la herramienta a un mismo punto fijo con cuatro orientaciones distintas; con esas ecuaciones el controlador calcula la posición del TCP respecto a la brida.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Qué diferencia hay entre <code>MoveJ</code> y <code>MoveL</code>?</summary><div class="inner"><p><code>MoveJ</code> interpola en el <b>espacio articular</b> (rápido, camino no recto); <code>MoveL</code> interpola en el <b>cartesiano</b> y el TCP describe una recta.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Qué significa la zona <code>fine</code> frente a <code>z10</code>?</summary><div class="inner"><p><code>fine</code> obliga a <b>parar</b> exactamente en el punto; <code>z10</code> permite redondear la esquina pasando a 10 mm, lo que acorta el tiempo de ciclo.</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Cómo guarda la orientación un <i>robtarget</i> de RAPID?</summary><div class="inner"><p>Con un <b>cuaternio</b> de cuatro componentes, además de la posición en milímetros y los datos de configuración.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Por qué el factor de escala de una cámara depende de la distancia?</summary><div class="inner"><p>Porque en el modelo estenopeico \(s=Zp/f\): a mayor distancia \(Z\), cada píxel cubre más milímetros de la escena.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="tema-09.html"><small>← Anterior</small>T9 · Generación de trayectorias</a><a class="nx" href="cuestiones.html"><small>Siguiente →</small>Cuestiones de teoría</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>

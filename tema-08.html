@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T8 Estática y dinámica del robot · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 8, Estática y dinámica del robot">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Cinemática inversa, velocidades y trayectorias</span><span class="sep">›</span><span>T8 · Estática y dinámica del robot</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)" class="on" aria-current="page">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c1);--tcs:var(--c1s)">
+<div class="sh"><span aria-hidden="true" class="badge">8</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 8</p><h2 id="t8">Estática y dinámica del robot</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> calcular los pares que deben dar los motores para sostener una carga, aplicar la dualidad fuerza-par y entender de qué depende el modelo dinámico.</p><ul>
+<li>La <b>estática</b> contesta a una pregunta muy concreta: con el robot parado en una postura, ¿qué par tiene que hacer cada motor para que no se caiga? Es lo que dimensiona los motores y los frenos, y es un ejercicio clásico de examen.</li>
+<li>Se puede resolver de dos formas equivalentes. <b>Por momentos</b>, como un problema de Física I: el par de cada articulación es la suma de los momentos de todos los pesos y fuerzas que quedan «aguas abajo», tomados respecto al eje de esa articulación. O con la <b>dualidad fuerza-par</b>, \(\vec\tau=J^{T}\vec F\), que es más rápida cuando ya tienes la jacobiana.</li>
+<li>La clave del cálculo por momentos es el <b>brazo horizontal</b>: con la gravedad vertical, el momento de un peso respecto a un eje horizontal es \(mg\) multiplicado por la distancia <b>horizontal</b> del centro de gravedad al eje. Por eso un robot con el brazo estirado consume mucho más par que replegado.</li>
+<li>La <b>dinámica</b> añade los efectos del movimiento. El modelo general de un robot es</li>
+</ul>
+\[M(q)\ddot{\vec q}+C(q,\dot{\vec q})\dot{\vec q}+G(q)+F_v\dot{\vec q}=\vec\tau\]
+<ul>
+<li>donde \(M(q)\) es la <b>matriz de inercias</b> (depende de la postura: un brazo estirado tiene mucha más inercia que uno plegado), \(C\) recoge los términos <b>centrífugos y de Coriolis</b>, \(G(q)\) es el término de <b>gravedad</b> (justo el que calcula la estática) y \(F_v\) la fricción viscosa.</li>
+<li>Hay dos problemas dinámicos: el <b>directo</b> (dados los pares, calcular el movimiento; sirve para simular) y el <b>inverso</b> (dado el movimiento deseado, calcular los pares; sirve para controlar). El inverso es el que se usa en tiempo real.</li>
+<li>Dos métodos de obtención: <b>Lagrange</b> (energías cinética y potencial, cómodo para deducir el modelo) y <b>Newton-Euler</b> (recursivo, mucho más eficiente para calcularlo en el controlador).</li>
+<li>Consecuencias prácticas: los pares no son constantes, dependen de la postura y de la aceleración; la carga útil que admite un robot cae al alejar el centro de gravedad de la brida; y el control de un robot es <b>no lineal y acoplado</b>, porque mover una articulación genera pares sobre las demás.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 8 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">τᵢ</td><td>par de la articulación i</td><td class="u">N·m</td></tr><tr><td class="sym">brazo horizontal</td><td>distancia que hace momento</td><td class="u">m</td></tr><tr><td class="sym">M(q)</td><td>matriz de inercias</td><td class="u"></td></tr><tr><td class="sym">C(q,q̇)</td><td>Coriolis y centrífugos</td><td class="u"></td></tr><tr><td class="sym">G(q)</td><td>término de gravedad</td><td class="u"></td></tr><tr><td class="sym">F_v</td><td>fricción viscosa</td><td class="u"></td></tr><tr><td class="sym">Lagrange</td><td>método por energías</td><td class="u"></td></tr><tr><td class="sym">Newton-Euler</td><td>método recursivo</td><td class="u"></td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Calculadora interactiva - pares estaticos de los motores</p><div data-sim="estatica"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t8-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul>
+<li><b>Par estático por momentos</b> (gravedad según \(-y\), eje de giro horizontal):</li></ul>
+\[\tau_i=\sum_{j\ \ge\ i} m_j g\,\big(x_{cg,j}-x_i\big)\]
+<ul><li>donde \(x_{cg,j}\) es la coordenada horizontal del centro de gravedad del eslabón \(j\) y \(x_i\) la del eje \(i\).</li>
+<li><b>Brazo 2R vertical</b> con pesos \(P_1,P_2\) en los puntos medios y carga \(F\) en el extremo:</li></ul>
+\[\tau_1=P_1\frac{l_1c_1}{2}+P_2\Big(l_1c_1+\frac{l_2c_{12}}{2}\Big)+F\big(l_1c_1+l_2c_{12}\big)\]
+\[\tau_2=P_2\frac{l_2c_{12}}{2}+F\,l_2c_{12}\]
+<ul><li><b>Dualidad fuerza-par:</b> \(\vec\tau=J^{T}\vec F\) (sólo para la fuerza aplicada en el extremo; los pesos propios hay que añadirlos aparte o incluirlos en \(G(q)\)).</li>
+<li><b>Modelo dinámico:</b> \(M(q)\ddot q+C(q,\dot q)\dot q+G(q)=\tau\).</li>
+<li><b>Energía cinética de un eslabón:</b> \(T=\tfrac12 m v_{cg}^2+\tfrac12 I\omega^2\) · <b>Lagrangiano:</b> \(L=T-U\), con \(\dfrac{d}{dt}\dfrac{\partial L}{\partial\dot q_i}-\dfrac{\partial L}{\partial q_i}=\tau_i\).</li>
+<li><b>Reductora</b> de relación \(r\): \(\tau_{\text{motor}}=\dfrac{\tau_{\text{articulación}}}{r\,\eta}\), con \(\eta\) el rendimiento. La inercia vista por el motor se divide por \(r^2\).</li></ul></div>
+<h3 id="t8-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Dibuja la postura</b> a escala y marca los centros de gravedad y la carga.</li>
+<li><b>Empieza por la última articulación</b> y ve hacia la base: cada articulación soporta todo lo que hay por delante de ella.</li>
+<li><b>Calcula brazos horizontales</b>, no distancias totales: proyecta cada posición sobre la horizontal.</li>
+<li><b>Suma momentos</b> con su signo. Un par positivo es el que tiende a levantar el brazo.</li>
+<li><b>Si tienes ya la jacobiana</b>, comprueba con \(\vec\tau=J^{T}\vec F\): debe salir lo mismo para la parte de la carga en el extremo.</li>
+<li><b>Para dimensionar el motor</b>, divide por la relación de reducción y aplica un factor de seguridad; y no olvides el par dinámico de aceleración, que puede ser mayor que el estático.</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Usar la distancia total en vez del <b>brazo horizontal</b>. Con la gravedad vertical sólo cuenta la proyección horizontal.</li>
+<li>Olvidar que la articulación 1 soporta también el peso del eslabón 2 y de la carga, no sólo el suyo.</li>
+<li>Aplicar \(\tau=J^{T}F\) y creer que ya están incluidos los pesos propios de los eslabones. Esa fórmula sólo traslada la <b>fuerza del extremo</b>.</li>
+<li>Pensar que la postura de máximo par es la más estirada en diagonal. Para el eje 1, el máximo es con el brazo <b>horizontal</b>, donde el brazo de palanca es mayor.</li>
+<li>Confundir el par en la articulación con el par del motor: entre los dos está la <b>reductora</b>, que divide por \(r\).</li>
+<li>Despreciar la dinámica. En movimientos rápidos el término de aceleración puede duplicar el par estático.</li>
+</ul></div>
+<h3 id="t8-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Un brazo de dos eslabones se mueve en un <b>plano vertical</b>. Cada eslabón mide 1 m y pesa 1 N, con el centro de gravedad en su punto medio. La postura es \(q_1=q_2=30^\circ\).</p>
+<ol><li>Calcula los pares estáticos \(\tau_1\) y \(\tau_2\).</li>
+<li>Repite el cálculo con una carga de 2 N en el extremo y comprueba la parte de la carga con \(\vec\tau=J^{T}\vec F\).</li>
+<li>¿En qué postura es máximo \(\tau_1\)?</li></ol></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>1) Pares sin carga.</b> Con \(q_1=30^\circ\) y \(q_1+q_2=60^\circ\): \(c_1=0{,}8660\), \(c_{12}=0{,}5\).</p>
+<p>Posiciones horizontales: centro de gravedad del eslabón 1 en \(0{,}5c_1=0{,}4330\); extremo del eslabón 1 (eje 2) en \(c_1=0{,}8660\); centro de gravedad del eslabón 2 en \(c_1+0{,}5c_{12}=1{,}1160\); extremo en \(c_1+c_{12}=1{,}3660\) m.</p>
+\[\tau_1=1\cdot0{,}4330+1\cdot1{,}1160=\boxed{1{,}549\ \text{N·m}}\]
+\[\tau_2=1\cdot\big(1{,}1160-0{,}8660\big)=1\cdot0{,}25=\boxed{0{,}250\ \text{N·m}}\]
+<p><b>2) Con carga de 2 N en el extremo.</b></p>
+\[\tau_1=1{,}549+2\cdot1{,}3660=1{,}549+2{,}732=\boxed{4{,}281\ \text{N·m}}\]
+\[\tau_2=0{,}250+2\cdot\big(1{,}3660-0{,}8660\big)=0{,}250+1{,}000=\boxed{1{,}250\ \text{N·m}}\]
+<p><b>Comprobación con la jacobiana.</b> Con \(s_1=0{,}5\), \(s_{12}=0{,}8660\):</p>
+\[J=\begin{pmatrix}-l_1s_1-l_2s_{12} & -l_2s_{12}\\ l_1c_1+l_2c_{12} & l_2c_{12}\end{pmatrix}
+=\begin{pmatrix}-1{,}3660&-0{,}8660\\ 1{,}3660&0{,}5\end{pmatrix}\]
+<p>La carga es \(\vec F=(0,\ -2)\) N (hacia abajo):</p>
+\[\vec\tau=J^{T}\vec F=\begin{pmatrix}-1{,}3660&1{,}3660\\ -0{,}8660&0{,}5\end{pmatrix}\begin{pmatrix}0\\-2\end{pmatrix}=\begin{pmatrix}-2{,}732\\ -1{,}000\end{pmatrix}\ \text{N·m}\]
+<p>Los módulos coinciden con los sumandos de la carga del apartado anterior ✓ (el signo negativo indica que los motores tienen que hacer par <b>en contra</b> del sentido positivo, es decir, sosteniendo).</p>
+<p><b>3) Postura de par máximo.</b> \(\tau_1\) crece con el brazo horizontal del conjunto. Con \(q_2=0\) (brazo estirado) y \(q_1=0\) (horizontal), los centros de gravedad están en 0,5 y 1,5 m y la carga en 2 m:</p>
+\[\tau_{1,\max}=1\cdot0{,}5+1\cdot1{,}5+2\cdot2=\boxed{6{,}0\ \text{N·m}}\]
+<p>frente a los 4,28 N·m de la postura del enunciado. El caso de par <b>mínimo</b> es el brazo vertical, con \(\tau_1=0\): todos los pesos pasan por el eje y ninguno hace momento.</p>
+<div class="box key"><p>El motor se dimensiona para el <b>peor caso</b>, que es el brazo horizontal y estirado con la carga nominal, y además con un margen para el par de aceleración. Esa es la razón de que los catálogos den la carga útil junto con un <b>diagrama de carga</b>: a medida que el centro de gravedad se aleja de la brida, los kilos admisibles caen.</p></div></div></details></div>
+<h3 id="t8-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué calcula la estática de un robot?</summary><div class="inner"><p>Los <b>pares</b> que debe dar cada motor para mantener el robot en equilibrio en una postura dada, con su propio peso y la carga.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Qué distancia hay que usar para el momento de un peso?</summary><div class="inner"><p>El <b>brazo horizontal</b>: la distancia horizontal del centro de gravedad al eje, porque la gravedad es vertical.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Qué expresa \(\vec\tau=J^{T}\vec F\)?</summary><div class="inner"><p>La <b>dualidad fuerza-par</b>: cómo una fuerza aplicada en el extremo se reparte en pares articulares. Sale del principio de los trabajos virtuales.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Qué términos tiene el modelo dinámico de un robot?</summary><div class="inner"><p>Inercias \(M(q)\ddot q\), centrífugos y de Coriolis \(C(q,\dot q)\dot q\), gravedad \(G(q)\) y fricción.</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Qué diferencia hay entre el problema dinámico directo y el inverso?</summary><div class="inner"><p>El <b>directo</b> da el movimiento a partir de los pares (simulación); el <b>inverso</b> da los pares a partir del movimiento deseado (control).</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Por qué la carga útil de un robot cae al alejar el centro de gravedad de la brida?</summary><div class="inner"><p>Porque aumentan el <b>momento</b> sobre la muñeca y la <b>inercia</b>, y ambos están limitados por los motores y la estructura.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="tema-07.html"><small>← Anterior</small>T7 · Matriz jacobiana y singularidades</a><a class="nx" href="tema-09.html"><small>Siguiente →</small>T9 · Generación de trayectorias</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>

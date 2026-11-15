@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T7 Matriz jacobiana y singularidades · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 7, Matriz jacobiana y singularidades">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Cinemática inversa, velocidades y trayectorias</span><span class="sep">›</span><span>T7 · Matriz jacobiana y singularidades</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)" class="on" aria-current="page">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c8);--tcs:var(--c8s)">
+<div class="sh"><span aria-hidden="true" class="badge">7</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 7</p><h2 id="t7">Matriz jacobiana y singularidades</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> relacionar velocidades articulares y cartesianas, construir la jacobiana, detectar singularidades e interpretar el elipsoide de manipulabilidad.</p><ul>
+<li>La <b>jacobiana</b> es la matriz que relaciona las velocidades de las articulaciones con la velocidad del extremo: \(\dot{\vec x}=J(q)\,\dot{\vec q}\). Es la derivada de la cinemática directa respecto a las variables articulares y depende de la configuración \(q\), no es constante.</li>
+<li>Tiene dos bloques: \(J_v\) (3 filas) da la <b>velocidad lineal</b> del extremo y \(J_\omega\) (3 filas) da la <b>velocidad angular</b>. En los problemas suele pedirse sólo \(J_v\).</li>
+<li>Se puede calcular de dos maneras. <b>Derivando</b>: \(J_{ij}=\partial x_i/\partial q_j\), que es lo que se hace con cálculo simbólico en MATLAB. O <b>geométricamente</b>, columna a columna: cada articulación de rotación aporta \(\vec z_{i-1}\times(\vec p-\vec p_{i-1})\) a la velocidad lineal y \(\vec z_{i-1}\) a la angular; cada prismática aporta \(\vec z_{i-1}\) a la lineal y \(\vec 0\) a la angular.</li>
+<li>La <b>jacobiana inversa</b> resuelve el problema contrario: qué velocidades articulares hacen falta para una velocidad deseada del extremo, \(\dot{\vec q}=J^{-1}\dot{\vec x}\). Es la base del control de trayectorias cartesianas.</li>
+<li>Una <b>singularidad</b> es una configuración en la que \(\det J=0\). Allí la jacobiana pierde rango: el robot <b>no puede moverse</b> en alguna dirección del espacio, por mucho que giren sus articulaciones. Y al revés, al intentar moverse en esa dirección, \(J^{-1}\) se dispara y las velocidades articulares que pide el controlador tienden a infinito. En un robot real eso se traduce en un error de «singularidad» y una parada.</li>
+<li>Tipos de singularidad: de <b>contorno</b> (brazo totalmente estirado o plegado, en el borde del volumen de trabajo), <b>interiores</b> (dos ejes se alinean dentro del volumen, por ejemplo cuando el eje 4 se alinea con el 6) y de <b>muñeca</b> (\(q_5=0\), los ejes 4 y 6 colineales).</li>
+<li>El <b>elipsoide de manipulabilidad</b> (\(\dot{\vec x}^{T}(JJ^{T})^{-1}\dot{\vec x}\le1\)) dibuja qué velocidades puede alcanzar el extremo con velocidades articulares unitarias. Cerca de una singularidad el elipsoide se aplasta hasta ser un segmento: en la dirección del eje corto el robot ya casi no puede moverse.</li>
+<li>La jacobiana sirve también para <b>fuerzas</b>: \(\vec\tau=J^{T}\vec F\). Es el principio de los trabajos virtuales y es lo que conecta este tema con el siguiente.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 7 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">J(q)</td><td>matriz jacobiana</td><td class="u">ẋ = J q̇</td></tr><tr><td class="sym">J_v</td><td>bloque de velocidad lineal</td><td class="u">3×n</td></tr><tr><td class="sym">J_ω</td><td>bloque de velocidad angular</td><td class="u">3×n</td></tr><tr><td class="sym">det J = 0</td><td>singularidad</td><td class="u"></td></tr><tr><td class="sym">J⁻¹</td><td>problema inverso de velocidades</td><td class="u"></td></tr><tr><td class="sym">J⁺</td><td>pseudoinversa</td><td class="u">Jᵀ(JJᵀ)⁻¹</td></tr><tr><td class="sym">w</td><td>manipulabilidad</td><td class="u">√det(JJᵀ)</td></tr><tr><td class="sym">τ = Jᵀ F</td><td>dualidad fuerza-par</td><td class="u"></td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Figura interactiva - jacobiana, elipse de manipulabilidad y singularidades</p><div data-sim="jacobiana"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t7-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul><li><b>Relación de velocidades:</b></li></ul>
+\[\begin{pmatrix}\vec v\\ \vec\omega\end{pmatrix}=J(q)\,\dot{\vec q},
+\qquad J=\begin{pmatrix}J_v\\ J_\omega\end{pmatrix}\in\mathbb{R}^{6\times n}\]
+<ul><li><b>Construcción geométrica, columna \(i\):</b></li></ul>
+\[\text{rotación: }\begin{pmatrix}\vec z_{i-1}\times(\vec p_n-\vec p_{i-1})\\ \vec z_{i-1}\end{pmatrix}
+\qquad\text{prismática: }\begin{pmatrix}\vec z_{i-1}\\ \vec 0\end{pmatrix}\]
+<ul><li><b>Jacobiana del 2R planar:</b></li></ul>
+\[J_v=\begin{pmatrix}-l_1s_1-l_2s_{12} & -l_2s_{12}\\ l_1c_1+l_2c_{12} & l_2c_{12}\end{pmatrix},
+\qquad \det J_v=l_1l_2\sin q_2\]
+<ul>
+<li><b>Singularidades del 2R:</b> \(\sin q_2=0\Rightarrow q_2=0^\circ\) (estirado) o \(q_2=180^\circ\) (plegado).</li>
+<li><b>Problema inverso:</b> \(\dot{\vec q}=J^{-1}\dot{\vec x}\); si \(J\) no es cuadrada, pseudoinversa \(J^{+}=J^{T}(JJ^{T})^{-1}\).</li>
+<li><b>Cambio de sistema de una velocidad:</b> \({}^{e}\vec v=\left({}^{0}R_{e}\right)^{T}{}^{0}\vec v\). El módulo no cambia.</li>
+<li><b>Medida de manipulabilidad (Yoshikawa):</b> \(w=\sqrt{\det(JJ^{T})}\); si \(J\) es cuadrada, \(w=|\det J|\).</li>
+<li><b>Dualidad fuerza-par:</b> \(\vec\tau=J^{T}\vec F\).</li></ul></div>
+<h3 id="t7-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Para construir \(J\) derivando:</b> escribe \(x,y,z\) del extremo en función de \(q\) y deriva cada coordenada respecto a cada articulación. Ordena: filas = coordenadas, columnas = articulaciones.</li>
+<li><b>Para construir \(J\) geométricamente:</b> saca de las MTH los \(\vec z_{i-1}\) (tercera columna de \({}^{0}T_{i-1}\)) y los \(\vec p_{i-1}\) (cuarta columna), y aplica la fórmula de la columna.</li>
+<li><b>Para pasar una velocidad a otro sistema:</b> multiplica por la traspuesta de la rotación. Nunca uses la MTH completa: una velocidad es un <b>vector libre</b>, no se traslada.</li>
+<li><b>Para hallar singularidades:</b> calcula \(\det J\) simbólicamente e iguala a cero. Interpreta físicamente cada solución mirando el dibujo.</li>
+<li><b>Para problemas con interpolador lineal:</b> si las articulaciones se mueven con velocidad constante \(\dot q\), entonces \(q(t)=q(0)+\dot q\,t\), pero <b>\(J\) cambia</b>, así que hay que recalcularla en el instante pedido.</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Usar la jacobiana de una configuración para calcular la velocidad en otra. \(J\) depende de \(q\) y hay que reevaluarla.</li>
+<li>Trasladar una velocidad con una MTH completa. Sólo se gira: \({}^{e}\vec v=R^{T}\,{}^{0}\vec v\).</li>
+<li>Confundir «velocidad del extremo respecto al sistema 0» con «respecto al sistema del extremo». Es el <b>mismo vector</b> escrito en bases distintas: cambian las componentes, no el módulo.</li>
+<li>Pensar que en una singularidad el robot se para. Lo que ocurre es que <b>pierde una dirección de movimiento</b>; el controlador detecta velocidades articulares enormes y aborta.</li>
+<li>Invertir \(J\) sin comprobar el determinante. Cerca de cero, el resultado numérico no vale nada.</li>
+<li>Olvidar que con interpolador lineal \(\dot q\) es constante pero \(\dot{\vec x}\) <b>no</b> lo es.</li>
+</ul></div>
+<h3 id="t7-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>De un robot de 3 gdl se conoce, en un instante dado con \(q_1=q_2=q_3=1\) rad y \(l_1=l_2=l_3=1\) m:</p>
+\[{}^{0}A_e=\begin{pmatrix}-c_3s_{12} & s_3s_{12} & -c_{12} & p_x\\ c_3c_{12} & -s_3c_{12} & -s_{12} & p_y\\ -s_3 & -c_3 & 0 & p_z\\ 0&0&0&1\end{pmatrix}\]
+\[J_v=\begin{pmatrix}-(l_1c_1+l_2c_{12}+l_3c_{12}c_3) & -c_{12}(l_2+l_3c_3) & l_3s_3s_{12}\\
+-(l_1s_1+l_2s_{12}+l_3s_{12}c_3) & -s_{12}(l_2+l_3c_3) & -l_3s_3c_{12}\\
+0&0&-l_3c_3\end{pmatrix},\qquad {}^{0}\vec v=\begin{pmatrix}1\\2\\3\end{pmatrix}\]
+<ol><li>Calcula la velocidad del extremo expresada en el sistema del extremo, \({}^{e}\vec v\).</li>
+<li>Si las articulaciones se mueven con interpolador lineal, calcula el módulo de la velocidad del extremo un segundo después.</li></ol></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>1) Cambio de sistema.</b> Con \(q_1=q_2=q_3=1\) rad: \(c_1=0{,}5403\), \(s_1=0{,}8415\), \(c_{12}=\cos 2=-0{,}4161\), \(s_{12}=\sin 2=0{,}9093\), \(c_3=0{,}5403\), \(s_3=0{,}8415\). La rotación es</p>
+\[{}^{0}R_e=\begin{pmatrix}-0{,}4913&0{,}7651&0{,}4161\\ -0{,}2248&0{,}3502&-0{,}9093\\ -0{,}8415&-0{,}5403&0\end{pmatrix}\]
+<p>Una velocidad es un vector libre, así que basta girarla con la <b>traspuesta</b>:</p>
+\[{}^{e}\vec v=\left({}^{0}R_e\right)^{T}{}^{0}\vec v=\boxed{(-3{,}4654,\ -0{,}1554,\ -1{,}4024)\ \text{m/s}}\]
+<p>Comprobación: \(|{}^{e}\vec v|=\sqrt{3{,}4654^2+0{,}1554^2+1{,}4024^2}=3{,}7417=\sqrt{14}=|{}^{0}\vec v|\) ✓. El módulo tiene que conservarse.</p>
+<p><b>2) Velocidad un segundo después.</b> Primero sacamos las velocidades articulares del instante actual. Sustituyendo los valores en \(J_v\):</p>
+\[J_v=\begin{pmatrix}-0{,}3490&0{,}6410&0{,}7651\\ -1{,}5423&-1{,}4007&0{,}3502\\ 0&0&-0{,}5403\end{pmatrix},\qquad \det J_v=-0{,}7003\]
+<p>Como el determinante no es nulo, la jacobiana es invertible y</p>
+\[\dot{\vec q}=J_v^{-1}\,{}^{0}\vec v=\begin{pmatrix}-7{,}6221\\ 9{,}3853\\ -5{,}5524\end{pmatrix}\ \text{rad/s}\]
+<p>Con un <b>interpolador lineal</b> esas velocidades son <b>constantes</b>, así que al cabo de un segundo</p>
+\[\vec q(1)=\vec q(0)+\dot{\vec q}\cdot 1=(1-7{,}6221,\ 1+9{,}3853,\ 1-5{,}5524)=(-6{,}6221,\ 10{,}3853,\ -4{,}5524)\ \text{rad}\]
+<p>Pero la jacobiana <b>sí</b> ha cambiado, porque depende de \(q\). Recalculándola en la nueva configuración y multiplicando por las mismas \(\dot{\vec q}\):</p>
+\[{}^{0}\vec v(1\,\text{s})=J_v(\vec q(1))\,\dot{\vec q}=(11{,}586,\ -6{,}128,\ -0{,}884)\ \text{m/s}\]
+\[\left|{}^{0}\vec v(1\,\text{s})\right|=\sqrt{11{,}586^2+6{,}128^2+0{,}884^2}=\boxed{13{,}14\ \text{m/s}}\]
+<div class="box key"><p>La enseñanza del apartado 2: con interpolador lineal lo constante es \(\dot{\vec q}\), <b>no</b> \(\dot{\vec x}\). El extremo pasa de 3,74 a 13,14 m/s sin que las articulaciones cambien de velocidad, sólo por haberse movido a una configuración con mayor «ganancia» geométrica. Eso es exactamente lo que hace imprevisible una trayectoria programada en el espacio articular, y la razón por la que para movimientos rectos se programa en el espacio cartesiano.</p></div></div></details></div>
+<h3 id="t7-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué relaciona la matriz jacobiana?</summary><div class="inner"><p>Las velocidades articulares con las velocidades (lineal y angular) del extremo: \(\dot{\vec x}=J(q)\dot{\vec q}\).</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Qué aporta a la jacobiana una articulación de rotación?</summary><div class="inner"><p>\(\vec z_{i-1}\times(\vec p_n-\vec p_{i-1})\) en la parte lineal y \(\vec z_{i-1}\) en la angular.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Qué es una singularidad?</summary><div class="inner"><p>Una configuración con \(\det J=0\): el robot pierde la capacidad de moverse en alguna dirección y la jacobiana inversa se dispara.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Dónde están las singularidades de un brazo 2R?</summary><div class="inner"><p>Donde \(\sin q_2=0\): brazo totalmente <b>estirado</b> (\(q_2=0\)) o <b>plegado</b> (\(q_2=180^\circ\)).</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Cómo se pasa una velocidad del sistema 0 al del extremo?</summary><div class="inner"><p>Girándola con la traspuesta de la rotación: \({}^{e}\vec v=({}^{0}R_e)^{T}\,{}^{0}\vec v\). No se traslada porque es un vector libre.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Qué relación hay entre fuerzas en el extremo y pares articulares?</summary><div class="inner"><p>\(\vec\tau=J^{T}\vec F\), por el principio de los trabajos virtuales.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="tema-06.html"><small>← Anterior</small>T6 · Cinemática inversa</a><a class="nx" href="tema-08.html"><small>Siguiente →</small>T8 · Estática y dinámica del robot</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>

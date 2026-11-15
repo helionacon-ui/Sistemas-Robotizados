@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T4 Cuaternios · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 4, Cuaternios">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Herramientas matemáticas y cinemática directa</span><span class="sep">›</span><span>T4 · Cuaternios</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)" class="on" aria-current="page">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c5);--tcs:var(--c5s)">
+<div class="sh"><span aria-hidden="true" class="badge">4</span><div class="shx"><p class="kick">Herramientas matemáticas y cinemática directa · Tema 4</p><h2 id="t4">Cuaternios</h2><div class="tags"><span class="tag">Herramientas matemáticas y cinemática directa</span><span class="tag">1.er parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> representar una rotación con un cuaternio, multiplicar cuaternios, rotar vectores con ellos y encadenar transformaciones sin matrices.</p><ul>
+<li>Un <b>cuaternio</b> es un número de cuatro componentes \(Q=(q_0,q_1,q_2,q_3)=q_0+q_1 i+q_2 j+q_3 k\). Se suele escribir separando la <b>parte escalar</b> \(q_0\) de la <b>parte vectorial</b> \(\vec q=(q_1,q_2,q_3)\).</li>
+<li>Los cuaternios <b>unitarios</b> (\(|Q|=1\)) representan rotaciones. La relación con el par eje-ángulo es directa y es la fórmula que más se usa: media del ángulo en el escalar y media del ángulo por el eje en la parte vectorial.</li>
+<li>La gran ventaja frente a las matrices: cuatro números en vez de nueve, composición más barata, interpolación suave entre orientaciones (slerp) y, sobre todo, <b>ninguna singularidad</b>. Los ángulos de Euler pierden un grado de libertad en ciertas configuraciones (el <i>gimbal lock</i>); los cuaternios no.</li>
+<li>Los robots industriales los usan de verdad: en el lenguaje RAPID de ABB, un <i>robtarget</i> guarda la posición como tres coordenadas y la orientación como un cuaternio de cuatro componentes.</li>
+<li>Hay una <b>ambigüedad de signo</b>: \(Q\) y \(-Q\) representan exactamente la <b>misma</b> rotación, porque girar \(\theta\) alrededor de \(\vec k\) es girar \(-\theta\) alrededor de \(-\vec k\). Dos soluciones aparentemente distintas de un examen pueden ser la misma.</li>
+<li>El producto de cuaternios <b>no es conmutativo</b>, igual que el de matrices, y por el mismo motivo: las rotaciones no conmutan.</li>
+<li>Para encadenar transformaciones con traslación se trabaja con el par <b>(cuaternio, vector)</b>: el cuaternio acumula las rotaciones y el vector acumula las traslaciones ya rotadas. Es el mismo contenido de una MTH, escrito de otra forma.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 4 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">Q</td><td>cuaternio</td><td class="u">(q₀, q₁, q₂, q₃)</td></tr><tr><td class="sym">q₀</td><td>parte escalar</td><td class="u">cos(θ/2)</td></tr><tr><td class="sym">q⃗</td><td>parte vectorial</td><td class="u">k·sen(θ/2)</td></tr><tr><td class="sym">Q*</td><td>conjugado</td><td class="u">(q₀, −q⃗)</td></tr><tr><td class="sym">Q∗P</td><td>producto</td><td class="u">no conmutativo</td></tr><tr><td class="sym">|Q|</td><td>módulo</td><td class="u">1 si es rotación</td></tr><tr><td class="sym">−Q</td><td>misma rotación que Q</td><td class="u"></td></tr><tr><td class="sym">slerp</td><td>interpolación esférica</td><td class="u"></td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Figura interactiva - cuaternios: eje, angulo y rotacion de un vector</p><div data-sim="cuaternio"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t4-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul><li><b>De eje-ángulo a cuaternio:</b></li></ul>
+\[Q=\left(\cos\frac{\theta}{2},\ \vec k\,\sin\frac{\theta}{2}\right),\qquad |\vec k|=1\]
+<ul><li><b>Producto</b> (la fórmula que hay que saberse de memoria):</li></ul>
+\[Q\ast P=\left(q_0p_0-\vec q\cdot\vec p,\ \ q_0\vec p+p_0\vec q+\vec q\times\vec p\right)\]
+<ul>
+<li><b>Conjugado e inverso:</b> \(Q^{*}=(q_0,-\vec q)\); para un cuaternio unitario \(Q^{-1}=Q^{*}\).</li>
+<li><b>Rotación de un vector</b> (se escribe el vector como cuaternio puro \(V=(0,\vec v)\)):</li></ul>
+\[V'=Q\ast V\ast Q^{*}\]
+<ul><li><b>Composición de rotaciones:</b> \(Q_{\text{total}}=Q_1\ast Q_2\) (primero \(Q_1\) respecto a ejes fijos, o \(Q_2\) después respecto a móviles: el mismo criterio de siempre).</li>
+<li><b>Cadena con traslaciones</b> (equivalente a multiplicar MTH):</li></ul>
+\[Q_{0n}=Q_{01}\ast Q_{12}\ast\cdots,\qquad
+{}^{0}p_{n}={}^{0}p_{n-1}+Q_{0,n-1}\ast {}^{n-1}r_{n}\ast Q_{0,n-1}^{*}\]
+<ul><li><b>De cuaternio a matriz de rotación:</b></li></ul>
+\[R=\begin{pmatrix}
+q_0^2+q_1^2-q_2^2-q_3^2 & 2(q_1q_2-q_0q_3) & 2(q_1q_3+q_0q_2)\\
+2(q_1q_2+q_0q_3) & q_0^2-q_1^2+q_2^2-q_3^2 & 2(q_2q_3-q_0q_1)\\
+2(q_1q_3-q_0q_2) & 2(q_2q_3+q_0q_1) & q_0^2-q_1^2-q_2^2+q_3^2
+\end{pmatrix}\]
+<ul><li><b>De matriz a cuaternio:</b> \(q_0=\tfrac12\sqrt{1+\operatorname{tr}R}\), \(q_1=\dfrac{r_{32}-r_{23}}{4q_0}\), \(q_2=\dfrac{r_{13}-r_{31}}{4q_0}\), \(q_3=\dfrac{r_{21}-r_{12}}{4q_0}\).</li>
+<li><b>Cuaternios útiles:</b> 90° sobre \(z\) → \(\left(\tfrac{\sqrt2}{2},0,0,\tfrac{\sqrt2}{2}\right)\) · 180° sobre \(x\) → \((0,1,0,0)\) · identidad → \((1,0,0,0)\).</li></ul></div>
+<h3 id="t4-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Escribir cada rotación como cuaternio:</b> coge el ángulo, pártelo por dos, y monta \((\cos\frac\theta2,\ \vec k\sin\frac\theta2)\). Si el eje no es unitario, normalízalo <b>antes</b>.</li>
+<li><b>Componer:</b> multiplica en el mismo orden en que multiplicarías las matrices. El criterio de fijos y móviles no cambia.</li>
+<li><b>Encadenar posiciones:</b> la posición del nuevo origen es la anterior <b>más</b> el vector de traslación <b>rotado</b> por el cuaternio acumulado hasta ese eslabón. Es el único paso donde se suele fallar: la traslación se rota, no se suma tal cual.</li>
+<li><b>Rotar un vector:</b> \(Q\ast(0,\vec v)\ast Q^{*}\). El resultado tiene siempre parte escalar cero; si no te sale cero, hay un error de cuentas.</li>
+<li><b>Comprobar:</b> el módulo del cuaternio debe seguir siendo 1 después de cada producto y el módulo del vector rotado no debe cambiar.</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Olvidar la <b>mitad del ángulo</b>. Es el error más frecuente con diferencia: un giro de 90° lleva \(\cos 45^\circ\), no \(\cos 90^\circ\).</li>
+<li>Sumar las traslaciones sin rotarlas. Cada \({}^{i}r_{i+1}\) está expresado en el sistema \(i\) y hay que llevarlo al sistema 0.</li>
+<li>Multiplicar los cuaternios como si fueran vectores, componente a componente. El producto tiene un producto escalar, un producto vectorial y dos términos cruzados.</li>
+<li>Equivocarse con el signo del producto vectorial: \(\vec q\times\vec p\ne\vec p\times\vec q\), y ese es exactamente el motivo de que el producto no conmute.</li>
+<li>Dar por mala una solución porque el libro trae el cuaternio con todos los signos cambiados. \(Q\) y \(-Q\) son la <b>misma</b> rotación.</li>
+</ul></div>
+<h3 id="t4-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Los sistemas \(S_0\dots S_4\) se relacionan así:</p>
+<ul>
+<li>\(S_1\): traslación \(\vec r_1=(1,1,1)\) respecto a \(S_0\) y rotación de 90° respecto al eje \(z\) de \(S_0\).</li>
+<li>\(S_2\): rotación de 60° respecto al eje \(x\) de \(S_1\) y traslación \(\vec r_2=(1,2,3)\) respecto a \(S_1\).</li>
+<li>\(S_3\): rotación de 120° respecto al eje \(z\) de \(S_2\) y traslación \(\vec r_3=(2,2,2)\) respecto a \(S_3\).</li>
+<li>\(S_4\): traslación \(\vec r_4=(1,1,1)\) respecto a \(S_3\) y rotación de 90° respecto al eje \(y\) de \(S_4\).</li>
+</ul>
+<p>Calcula, usando cuaternios, la posición del origen de cada sistema respecto a \(S_0\).</p></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>Los cuaternios de cada paso.</b> Con la fórmula del medio ángulo:</p>
+\[Q_{01}=\left(\cos45^\circ,0,0,\sin45^\circ\right)=\left(\tfrac{\sqrt2}{2},0,0,\tfrac{\sqrt2}{2}\right)\]
+\[Q_{12}=\left(\cos30^\circ,\sin30^\circ,0,0\right)=\left(\tfrac{\sqrt3}{2},\tfrac12,0,0\right)\]
+\[Q_{23}=\left(\cos60^\circ,0,0,\sin60^\circ\right)=\left(\tfrac12,0,0,\tfrac{\sqrt3}{2}\right)\]
+\[Q_{34}=\left(\cos45^\circ,0,\sin45^\circ,0\right)=\left(\tfrac{\sqrt2}{2},0,\tfrac{\sqrt2}{2},0\right)\]
+<p><b>Origen de \(S_1\).</b> La traslación es respecto a \(S_0\) y la rotación viene después, así que el origen es directamente</p>
+\[{}^{0}p_1=\boxed{(1,\ 1,\ 1)}\]
+<p><b>Origen de \(S_2\).</b> Ahora la traslación \(\vec r_2=(1,2,3)\) está expresada <b>en \(S_1\)</b>, y \(S_1\) está girado 90° sobre \(z\) respecto a \(S_0\). Rotamos el vector:</p>
+\[{}^{0}\vec r_2=Q_{01}\ast(0,1,2,3)\ast Q_{01}^{*}=(0,\ -2,\ 1,\ 3)\]
+<p>(un giro de 90° sobre \(z\) lleva \((1,2,3)\) a \((-2,1,3)\): se comprueba de cabeza). Entonces</p>
+\[{}^{0}p_2={}^{0}p_1+{}^{0}\vec r_2=(1,1,1)+(-2,1,3)=\boxed{(-1,\ 2,\ 4)}\]
+<p><b>Origen de \(S_3\).</b> Aquí el enunciado dice que la traslación es respecto a \(S_3\), es decir, respecto al sistema <b>ya girado</b>: primero se aplica la rotación de 120° y luego se traslada. El cuaternio acumulado hasta \(S_3\) es</p>
+\[Q_{03}=Q_{01}\ast Q_{12}\ast Q_{23}\]
+<p>y la traslación \(\vec r_3=(2,2,2)\), expresada en \(S_3\), se lleva a \(S_0\) con \(Q_{03}\):</p>
+\[{}^{0}p_3={}^{0}p_2+Q_{03}\ast(0,2,2,2)\ast Q_{03}^{*}=\boxed{(0{,}366,\ -0{,}732,\ 5{,}634)}\]
+<p><b>Origen de \(S_4\).</b> La traslación \(\vec r_4=(1,1,1)\) es respecto a \(S_3\) (la rotación de 90° sobre \(y\) viene después y no afecta a la posición del origen), así que se rota con \(Q_{03}\):</p>
+\[{}^{0}p_4={}^{0}p_3+Q_{03}\ast(0,1,1,1)\ast Q_{03}^{*}=\boxed{(1{,}049,\ -2{,}098,\ 6{,}451)}\]
+<div class="box key"><p>Las dos decisiones que resuelven el problema son: <b>qué cuaternio acumulado</b> usar para rotar cada traslación (el del sistema <b>anterior</b> si la traslación se da respecto a él, el del sistema <b>nuevo</b> si se da respecto al propio) y <b>en qué orden</b> van rotación y traslación. Lo demás son cuentas. Si te lías, escribe la MTH equivalente: da el mismo resultado y sirve de comprobación.</p></div></div></details></div>
+<h3 id="t4-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Cómo se pasa de eje-ángulo a cuaternio?</summary><div class="inner"><p>\(Q=(\cos\frac{\theta}{2},\ \vec k\sin\frac{\theta}{2})\), con \(\vec k\) unitario. La clave es el <b>medio ángulo</b>.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Cómo se rota un vector con un cuaternio?</summary><div class="inner"><p>\(V'=Q\ast V\ast Q^{*}\), escribiendo el vector como cuaternio puro \(V=(0,\vec v)\).</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Por qué \(Q\) y \(-Q\) representan la misma rotación?</summary><div class="inner"><p>Porque girar \(\theta\) alrededor de \(\vec k\) equivale a girar \(-\theta\) alrededor de \(-\vec k\), y eso cambia el signo de las cuatro componentes.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Qué ventaja tienen los cuaternios sobre los ángulos de Euler?</summary><div class="inner"><p>No tienen <b>singularidades</b> (no hay <i>gimbal lock</i>), se interpolan suavemente y la composición es más barata.</p></div></details><details class="paso"><summary><span class="pn">5</span>Al encadenar traslaciones con cuaternios, ¿qué hay que hacer con cada vector de traslación?</summary><div class="inner"><p><b>Rotarlo</b> con el cuaternio acumulado hasta el sistema en que está expresado, antes de sumarlo a la posición anterior.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Qué cuaternio corresponde a un giro de 180° alrededor del eje \(x\)?</summary><div class="inner"><p>\((\cos90^\circ,\ \sin90^\circ,0,0)=(0,1,0,0)\): parte escalar nula.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="tema-03.html"><small>← Anterior</small>T3 · Matrices de transformación homogénea</a><a class="nx" href="tema-05.html"><small>Siguiente →</small>T5 · Cinemática directa: Denavit-Hartenberg</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>

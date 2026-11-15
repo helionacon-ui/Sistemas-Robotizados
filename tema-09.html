@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T9 Generación de trayectorias · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 9, Generación de trayectorias">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Cinemática inversa, velocidades y trayectorias</span><span class="sep">›</span><span>T9 · Generación de trayectorias</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)" class="on" aria-current="page">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c2);--tcs:var(--c2s)">
+<div class="sh"><span aria-hidden="true" class="badge">9</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 9</p><h2 id="t9">Generación de trayectorias</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> planificar el movimiento entre puntos con interpoladores lineales, trapezoidales, cúbicos y splines, y saber cuándo conviene cada uno.</p><ul>
+<li>Programar un punto no basta: hay que decidir <b>cómo</b> se llega a él. Eso es la <b>generación de trayectorias</b>: construir las funciones \(q_i(t)\) que llevan cada articulación de su valor inicial al final en el tiempo pedido.</li>
+<li>Primera decisión: <b>espacio articular o espacio cartesiano</b>. En el articular se interpolan las \(q_i\): es barato, no tiene problemas de singularidades y garantiza que se respetan los límites, pero el extremo describe una curva imprevisible. En el cartesiano se interpola la posición del TCP y se resuelve la cinemática inversa en cada paso: el camino es exactamente el que quieres (recto, circular), pero es caro y puede tropezar con singularidades o con puntos inalcanzables.</li>
+<li><b>Interpolador lineal</b>: \(q(t)\) es una recta. Velocidad constante, pero con saltos de velocidad al principio y al final, es decir, aceleraciones infinitas. No se usa solo, aunque sí es el modelo que asumen muchos ejercicios de examen.</li>
+<li><b>Trapezoidal</b> (lineal con ajustes parabólicos): acelera con rampa, va a velocidad constante y frena con rampa. Es el que usan de verdad los robots industriales porque respeta límites de velocidad y aceleración y es fácil de calcular.</li>
+<li><b>Cúbico</b> (polinomio de grado 3): permite imponer posición y velocidad en los dos extremos, que son cuatro condiciones, justo los cuatro coeficientes. La aceleración es lineal con el tiempo y ya no hay saltos de velocidad.</li>
+<li><b>Quíntico</b> (grado 5): añade las <b>aceleraciones</b> inicial y final a las condiciones. Es el más suave y se usa cuando importa el <i>jerk</i> (la derivada de la aceleración), por ejemplo para no excitar vibraciones.</li>
+<li><b>Spline</b>: varios polinomios cúbicos encadenados que pasan por una serie de puntos intermedios. Entre tramos se imponen continuidad de posición y de velocidad; si además se impone la de aceleración se habla de spline natural. Es lo que se usa cuando la trayectoria debe pasar por varios puntos de paso.</li>
+<li>Cuando el enunciado da la <b>velocidad de paso</b> por un punto intermedio, como ocurre en los exámenes, cada tramo se resuelve por separado con cuatro condiciones: posición y velocidad al principio y al final del tramo.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 9 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">T</td><td>tiempo del tramo</td><td class="u">s</td></tr><tr><td class="sym">t_b</td><td>tiempo de rampa</td><td class="u">trapezoidal</td></tr><tr><td class="sym">v_max</td><td>velocidad punta</td><td class="u"></td></tr><tr><td class="sym">cúbico</td><td>4 condiciones</td><td class="u">posición y velocidad</td></tr><tr><td class="sym">quíntico</td><td>6 condiciones</td><td class="u">+ aceleraciones</td></tr><tr><td class="sym">spline</td><td>cúbicos encadenados</td><td class="u"></td></tr><tr><td class="sym">espacio articular</td><td>se interpolan las qᵢ</td><td class="u"></td></tr><tr><td class="sym">espacio cartesiano</td><td>se interpola el TCP</td><td class="u"></td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Figura interactiva - interpoladores de trayectoria comparados</p><div data-sim="trayectoria"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t9-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul><li><b>Lineal:</b> \(q(t)=q_0+\dfrac{q_f-q_0}{T}\,t\), \(\dot q=\dfrac{q_f-q_0}{T}\) constante.</li>
+<li><b>Trapezoidal</b> con tramo de aceleración \(t_b\):</li></ul>
+\[v_{\max}=\frac{q_f-q_0}{T-t_b},\qquad a=\frac{v_{\max}}{t_b},\qquad t_b\le\frac{T}{2}\]
+<ul><li>El caso límite \(t_b=T/2\) es el perfil <b>triangular</b>, sin tramo de velocidad constante, con \(v_{\max}=2(q_f-q_0)/T\).</li>
+<li><b>Cúbico</b> \(q(t)=a_0+a_1t+a_2t^2+a_3t^3\) con \(q(0)=q_0,\ \dot q(0)=v_0,\ q(T)=q_f,\ \dot q(T)=v_f\):</li></ul>
+\[a_0=q_0,\quad a_1=v_0,\quad
+a_2=\frac{3(q_f-q_0)-(2v_0+v_f)T}{T^2},\quad
+a_3=\frac{-2(q_f-q_0)+(v_0+v_f)T}{T^3}\]
+<ul><li>Caso particular \(v_0=v_f=0\): \(a_2=\dfrac{3\Delta q}{T^2}\), \(a_3=-\dfrac{2\Delta q}{T^3}\), y la velocidad máxima, en \(t=T/2\), vale \(v_{\max}=\dfrac{3\Delta q}{2T}\).</li>
+<li><b>Quíntico:</b> \(q(t)=\sum_{k=0}^{5}a_kt^k\), con seis condiciones (posición, velocidad y aceleración en ambos extremos).</li>
+<li><b>Velocidad de paso en espacio cartesiano a articular:</b> \(\dot{\vec q}=J^{-1}\dot{\vec x}\). Si el enunciado da \(\vec v\) del extremo en un punto de paso, este es el puente para obtener las \(\dot q_i\) que se imponen al spline.</li></ul></div>
+<h3 id="t9-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Traduce los datos a condiciones articulares:</b> cada punto de paso, por cinemática inversa, da unos \(q_i\); cada velocidad cartesiana, por \(J^{-1}\), da unas \(\dot q_i\).</li>
+<li><b>Cuenta condiciones</b> para elegir el grado del polinomio: cuatro condiciones, cúbico; seis, quíntico.</li>
+<li><b>Resuelve cada tramo por separado</b>, tomando \(t=0\) al principio del tramo. Así los coeficientes salen directos y no hay que arrastrar potencias grandes.</li>
+<li><b>Comprueba continuidad</b> en los puntos de unión: la posición y la velocidad del final de un tramo deben coincidir con las del principio del siguiente.</li>
+<li><b>Verifica</b> que las velocidades y aceleraciones máximas no superan los límites del robot; si lo hacen, hay que alargar el tiempo.</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Usar un solo polinomio cúbico para toda la trayectoria cuando hay un punto de paso con velocidad impuesta. Hacen falta <b>dos tramos</b>, uno por intervalo.</li>
+<li>No reiniciar el tiempo en cada tramo y mezclar \(t\) global con \(t\) local. Elige un criterio y mantenlo.</li>
+<li>Olvidar que con interpolador lineal la <b>velocidad del extremo no es constante</b> aunque las articulares sí lo sean.</li>
+<li>Imponer una \(t_b>T/2\) en el trapezoidal: no hay tiempo para acelerar y frenar, el perfil es imposible.</li>
+<li>Interpolar en el espacio cartesiano sin comprobar que todos los puntos del camino son alcanzables y están libres de singularidades.</li>
+<li>Dar la trayectoria sólo de una articulación. Hay que dar \(q_i(t)\) de <b>todas</b>, y las tres deben tardar lo mismo.</li>
+</ul></div>
+<h3 id="t9-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Una articulación debe ir de \(q=0\) a \(q=1\) rad en 1 segundo, pasando por \(q_B=0{,}6\) rad en \(t=0{,}5\) s con velocidad \(\dot q_B=1\) rad/s. Empieza y termina con velocidad nula.</p>
+<ol><li>Calcula el spline cúbico de los dos tramos.</li>
+<li>Compara la velocidad máxima con la de un único cúbico de 0 a 1 rad en 1 s.</li>
+<li>¿Qué perfil trapezoidal con \(t_b=0{,}25\) s haría el mismo recorrido?</li></ol></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>1) Tramo 1</b> (\(0\le t\le0{,}5\)), con \(q(0)=0\), \(\dot q(0)=0\), \(q(0{,}5)=0{,}6\), \(\dot q(0{,}5)=1\). De las dos primeras condiciones \(a_0=a_1=0\), y quedan</p>
+\[0{,}25\,a_2+0{,}125\,a_3=0{,}6,\qquad 1{,}0\,a_2+0{,}75\,a_3=1\]
+<p>Resolviendo: \(a_2=5{,}2\), \(a_3=-5{,}6\), es decir</p>
+\[\boxed{q_1(t)=5{,}2\,t^{2}-5{,}6\,t^{3}}\qquad(0\le t\le 0{,}5\ \text{s})\]
+<p><b>Tramo 2</b> (\(0\le\tau\le0{,}5\), con \(\tau=t-0{,}5\)), con \(q(0)=0{,}6\), \(\dot q(0)=1\), \(q(0{,}5)=1\), \(\dot q(0{,}5)=0\):</p>
+\[b_0=0{,}6,\quad b_1=1,\quad 0{,}25\,b_2+0{,}125\,b_3=-0{,}1,\quad b_2+0{,}75\,b_3=-1\]
+\[b_2=0{,}8,\qquad b_3=-2{,}4\]
+\[\boxed{q_2(\tau)=0{,}6+\tau+0{,}8\,\tau^{2}-2{,}4\,\tau^{3}}\qquad(0\le\tau\le0{,}5\ \text{s})\]
+<p>Comprobación de continuidad: \(q_1(0{,}5)=5{,}2\cdot0{,}25-5{,}6\cdot0{,}125=1{,}3-0{,}7=0{,}6\) ✓ y \(\dot q_1(0{,}5)=10{,}4\cdot0{,}5-16{,}8\cdot0{,}25=5{,}2-4{,}2=1\) ✓</p>
+<p><b>2) Comparación con un cúbico único.</b> Con \(\Delta q=1\), \(T=1\) y velocidades nulas en los extremos:</p>
+\[q(t)=3t^2-2t^3,\qquad v_{\max}=\frac{3\cdot1}{2\cdot1}=1{,}5\ \text{rad/s en }t=0{,}5\]
+<p>En el spline, la velocidad en el punto de paso vale 1 rad/s, pero dentro del primer tramo llega más alto: \(\dot q_1(t)=10{,}4t-16{,}8t^2\) es máxima en \(t=0{,}3095\) s, donde vale <b>1,609 rad/s</b>. Imponer un paso lento por el punto intermedio obliga a correr más antes: es un efecto nada intuitivo que conviene tener presente.</p>
+<p><b>3) Perfil trapezoidal.</b> Con \(T=1\) s y \(t_b=0{,}25\) s:</p>
+\[v_{\max}=\frac{1-0}{1-0{,}25}=\boxed{1{,}333\ \text{rad/s}},\qquad a=\frac{1{,}333}{0{,}25}=\boxed{5{,}333\ \text{rad/s}^2}\]
+<p>Es decir: acelera 0,25 s hasta 1,333 rad/s, mantiene esa velocidad 0,5 s y frena los últimos 0,25 s. La velocidad punta es la <b>más baja</b> de las tres opciones, y por eso es la que eligen los robots reales: para un mismo tiempo de ciclo exige menos del motor.</p>
+<div class="box key"><p>Tres formas de hacer el mismo recorrido en el mismo tiempo con velocidades punta de 1,33, 1,50 y 1,61 rad/s. El trapezoidal gana porque reparte el esfuerzo; el spline con paso impuesto es el más exigente porque tiene que cumplir una condición extra. Cuando en un examen te pidan comparar, el argumento es siempre este: <b>misma distancia y mismo tiempo, distinta forma de repartir la velocidad</b>.</p></div></div></details></div>
+<h3 id="t9-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué diferencia hay entre planificar en el espacio articular y en el cartesiano?</summary><div class="inner"><p>En el <b>articular</b> se interpolan las \(q_i\): es barato y seguro, pero el camino del extremo es imprevisible. En el <b>cartesiano</b> el camino es el deseado, pero hay que resolver la cinemática inversa en cada paso y pueden aparecer singularidades.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Cuántas condiciones permite imponer un polinomio cúbico?</summary><div class="inner"><p><b>Cuatro</b>: posición y velocidad al principio y al final del tramo.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Por qué se usa el perfil trapezoidal en los robots industriales?</summary><div class="inner"><p>Porque respeta de forma directa los <b>límites de velocidad y aceleración</b> y, para un mismo tiempo, exige la velocidad punta más baja.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Cuál es la velocidad máxima de un cúbico que va de \(q_0\) a \(q_f\) en \(T\) con velocidades nulas?</summary><div class="inner"><p>\(v_{\max}=\dfrac{3(q_f-q_0)}{2T}\), alcanzada en \(t=T/2\).</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Cómo se pasa de una velocidad cartesiana de paso a condiciones del spline?</summary><div class="inner"><p>Con la jacobiana inversa: \(\dot{\vec q}=J^{-1}\dot{\vec x}\) evaluada en la configuración de ese punto.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Qué condición debe cumplir \(t_b\) en un perfil trapezoidal?</summary><div class="inner"><p>\(t_b\le T/2\). En el límite el perfil es <b>triangular</b>, sin tramo de velocidad constante.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="tema-08.html"><small>← Anterior</small>T8 · Estática y dinámica del robot</a><a class="nx" href="tema-10.html"><small>Siguiente →</small>T10 · Programación de robots y visión artificial</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T2 Sistemas de referencia y matrices de rotación · Sistemas Robotizados · Guía para aprobar</title>
+<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 2, Sistemas de referencia y matrices de rotación">
+<meta name="theme-color" content="#7b3fa6">
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="style.css">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="hub-bar" style="max-width:1180px;margin:0 auto;padding:10px 16px 0"><a href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none">← Todas las guías GIEyA</a><p class="fecha" style="margin:6px 0 0;max-width:none;font:13px/1.45 system-ui,sans-serif;color:var(--muted)">Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p></div>
+<div class="crumb"><a href="index.html">Sistemas Robotizados</a><span class="sep">›</span><span>Herramientas matemáticas y cinemática directa</span><span class="sep">›</span><span>T2 · Sistemas de referencia y matrices de rotación</span></div><a href="#top" class="totop" id="totop" aria-label="Volver arriba">↑</a>
+<div class="wrap" id="top">
+<nav aria-label="Índice" class="toc"><a href="index.html" style="--tc:var(--c0)">Portada</a><div class="grp">Empezar</div><a href="index.html#cero" style="--tc:var(--c0)">Empieza aquí desde cero</a><a href="plan.html" style="--tc:var(--c0)">Cómo es la evaluación</a><a href="index.html#progreso" style="--tc:var(--c0)">Tu progreso</a><div class="grp">Herramientas matemáticas y cinemática directa</div><a href="tema-01.html" style="--tc:var(--c2)">T1 El robot industrial</a><a href="tema-02.html" style="--tc:var(--c3)" class="on" aria-current="page">T2 Sistemas de referencia y matrices de rotación</a><a href="tema-03.html" style="--tc:var(--c4)">T3 Matrices de transformación homogénea</a><a href="tema-04.html" style="--tc:var(--c5)">T4 Cuaternios</a><a href="tema-05.html" style="--tc:var(--c6)">T5 Cinemática directa: Denavit-Hartenberg</a><div class="grp">Cinemática inversa, velocidades y trayectorias</div><a href="tema-06.html" style="--tc:var(--c7)">T6 Cinemática inversa</a><a href="tema-07.html" style="--tc:var(--c8)">T7 Matriz jacobiana y singularidades</a><a href="tema-08.html" style="--tc:var(--c1)">T8 Estática y dinámica del robot</a><a href="tema-09.html" style="--tc:var(--c2)">T9 Generación de trayectorias</a><a href="tema-10.html" style="--tc:var(--c3)">T10 Programación de robots y visión artificial</a><div class="grp">Practicar</div><a href="cuestiones.html" style="--tc:var(--c8)">Cuestiones de teoría respondidas</a><a href="examenes.html" style="--tc:var(--c8)">Problemas de examen resueltos</a><a href="problemas.html" style="--tc:var(--c8)">Qué cae en el examen</a><a href="laboratorio.html" style="--tc:var(--c7)">Prácticas y laboratorio</a><a href="formulario.html" style="--tc:var(--c8)">Formulario</a></nav>
+<main>
+<section class="sec tema" style="--tc:var(--c3);--tcs:var(--c3s)">
+<div class="sh"><span aria-hidden="true" class="badge">2</span><div class="shx"><p class="kick">Herramientas matemáticas y cinemática directa · Tema 2</p><h2 id="t2">Sistemas de referencia y matrices de rotación</h2><div class="tags"><span class="tag">Herramientas matemáticas y cinemática directa</span><span class="tag">1.er parcial</span></div></div></div>
+<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> representar la orientación de un sólido con una matriz de rotación, componer giros y pasar de una representación a otra.</p><ul>
+<li>Un <b>sistema de referencia</b> es una terna de ejes ortonormales dextrógiros \((x,y,z)\) con un origen. Toda la robótica consiste en relacionar sistemas: el de la base, el de cada eslabón, el de la herramienta, el de la pieza, el de la cámara.</li>
+<li>La <b>matriz de rotación</b> \({}^{A}R_{B}\) tiene por columnas los <b>vectores unitarios de los ejes de B expresados en A</b>. Es la respuesta a la pregunta «¿hacia dónde apuntan los ejes de B vistos desde A?».</li>
+<li>Esa misma matriz sirve para dos cosas distintas: <b>cambiar de base</b> un vector, \({}^{A}v={}^{A}R_{B}\,{}^{B}v\), y <b>rotar</b> un vector dentro del mismo sistema. Son interpretaciones distintas de la misma operación y conviene tenerlas separadas en la cabeza.</li>
+<li>Las matrices de rotación son <b>ortonormales</b>: sus columnas (y sus filas) son unitarias y perpendiculares entre sí, su determinante vale \(+1\) y, lo más útil de todo, su <b>inversa es su traspuesta</b>: \(R^{-1}=R^{T}\). Eso convierte un cambio de sistema en el sentido contrario en un simple trasponer.</li>
+<li>Una rotación tiene sólo <b>3 grados de libertad</b> aunque la matriz tenga 9 números: hay 6 ecuaciones de ortonormalidad que los ligan.</li>
+<li>Al <b>componer giros</b>, el orden importa: \(R_1R_2\ne R_2R_1\). La regla práctica es la de <b>premultiplicar o postmultiplicar</b>: si el giro es respecto a los ejes <b>fijos</b> (los del sistema de partida) se <b>premultiplica</b>; si es respecto a los ejes <b>móviles</b> (los que ya han girado) se <b>postmultiplica</b>.</li>
+<li>Hay otras formas de describir una orientación: <b>ángulos de Euler</b> (tres giros sucesivos sobre ejes móviles, por ejemplo ZYZ), <b>roll-pitch-yaw</b> (tres giros sobre ejes fijos XYZ), el <b>par eje-ángulo</b> (un eje \(\vec k\) y un ángulo \(\theta\)) y los <b>cuaternios</b> del tema siguiente. Todas describen lo mismo con ventajas distintas.</li>
+</ul></div>
+<details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 2 <span class="src">8 entradas</span></summary><div class="inner">
+<div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">ᴬR_B</td><td>matriz de rotación de B en A</td><td class="u">ortonormal</td></tr><tr><td class="sym">Rᵀ = R⁻¹</td><td>inversa de una rotación</td><td class="u"></td></tr><tr><td class="sym">det R</td><td>determinante</td><td class="u">+1</td></tr><tr><td class="sym">R(x,θ)</td><td>rotación elemental</td><td class="u"></td></tr><tr><td class="sym">k</td><td>eje de giro</td><td class="u">unitario</td></tr><tr><td class="sym">θ</td><td>ángulo de giro</td><td class="u">rad o grados</td></tr><tr><td class="sym">tr R</td><td>traza</td><td class="u">1 + 2cos θ</td></tr><tr><td class="sym">[k]×</td><td>matriz antisimétrica</td><td class="u">Rodrigues</td></tr></table></div></div></details>
+<figure class="fig"><p class="ft">Figura interactiva - composicion de giros y eje-angulo equivalente</p><div data-sim="rotacion"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
+<h3 id="t2-formulas">Fórmulas y conceptos que hay que saber</h3>
+<div class="box key"><ul>
+<li><b>Rotaciones básicas</b> (ángulo \(\theta\), sentido antihorario mirando el eje de frente):</li>
+</ul>
+\[R(x,\theta)=\begin{pmatrix}1&0&0\\ 0&\cos\theta&-\sin\theta\\ 0&\sin\theta&\cos\theta\end{pmatrix}\quad
+R(y,\theta)=\begin{pmatrix}\cos\theta&0&\sin\theta\\ 0&1&0\\ -\sin\theta&0&\cos\theta\end{pmatrix}\]
+\[R(z,\theta)=\begin{pmatrix}\cos\theta&-\sin\theta&0\\ \sin\theta&\cos\theta&0\\ 0&0&1\end{pmatrix}\]
+<ul>
+<li><b>Propiedades:</b> \(R^{-1}=R^{T}\) · \(\det R=+1\) · \({}^{A}R_{B}=\left({}^{B}R_{A}\right)^{T}\) · \({}^{A}R_{C}={}^{A}R_{B}\,{}^{B}R_{C}\).</li>
+<li><b>Cambio de base de un vector:</b> \({}^{A}v={}^{A}R_{B}\,{}^{B}v\).</li>
+<li><b>Composición:</b> ejes fijos → <b>premultiplicar</b> (\(R_{\text{nueva}}=R_{\text{giro}}R_{\text{vieja}}\)); ejes móviles → <b>postmultiplicar</b> (\(R_{\text{nueva}}=R_{\text{vieja}}R_{\text{giro}}\)).</li>
+<li><b>Eje y ángulo a partir de \(R\) (fórmula de Rodrigues inversa):</b></li>
+</ul>
+\[\cos\theta=\frac{\operatorname{tr}(R)-1}{2},\qquad
+\vec k=\frac{1}{2\sin\theta}\begin{pmatrix}r_{32}-r_{23}\\ r_{13}-r_{31}\\ r_{21}-r_{12}\end{pmatrix}\]
+<ul><li><b>Rodrigues directa</b> (eje unitario \(\vec k\), ángulo \(\theta\)): \(R=I+\sin\theta\,[\vec k]_\times+(1-\cos\theta)[\vec k]_\times^{2}\).</li></ul></div>
+<h3 id="t2-metodo">Método paso a paso</h3>
+<ol class="steps">
+<li><b>Para escribir \({}^{A}R_{B}\) a partir de un dibujo:</b> coge el eje \(x_B\), mira hacia dónde apunta en el dibujo y escribe sus componentes en el sistema A. Esa es la <b>primera columna</b>. Repite con \(y_B\) y \(z_B\). No hace falta ninguna fórmula: se lee del dibujo.</li>
+<li><b>Para comprobar que una matriz es de rotación:</b> columnas unitarias, perpendiculares dos a dos y determinante \(+1\). Si el determinante da \(-1\) has escrito un sistema levógiro, casi siempre por un signo mal copiado.</li>
+<li><b>Para componer:</b> pregúntate siempre «¿este giro es respecto a los ejes de partida o respecto a los ejes que ya giraron?». Fijos premultiplican, móviles postmultiplican.</li>
+<li><b>Para invertir un cambio de sistema:</b> traspón. Nunca calcules la inversa a mano.</li>
+<li><b>Para rellenar huecos de una matriz incompleta:</b> usa ortonormalidad. Si conoces dos columnas, la tercera es su <b>producto vectorial</b>, en el orden \(z=x\times y\).</li>
+</ol>
+<div class="box trap"><h4>Trampas típicas</h4><ul>
+<li>Confundir \({}^{A}R_{B}\) con \({}^{B}R_{A}\). Memoriza la frase: «las <b>columnas</b> de \({}^{A}R_{B}\) son los <b>ejes de B</b> vistos desde <b>A</b>».</li>
+<li>Multiplicar giros en el orden equivocado. Es el error que más puntos cuesta y se evita preguntándose cada vez si los ejes son fijos o móviles.</li>
+<li>Aplicar \(\arccos\) para sacar el ángulo de giro y quedarse con una sola solución. El \(\arccos\) devuelve \([0,\pi]\): el eje \(-\vec k\) con el ángulo \(-\theta\) representa la misma rotación.</li>
+<li>Usar \(\sin\theta=0\) en la fórmula del eje: si \(\theta=0\) el eje es indeterminado y si \(\theta=\pi\) hay que sacarlo de la diagonal, no de las diferencias.</li>
+<li>Olvidar que las rotaciones <b>no conmutan</b> y comprobar un resultado girando en otro orden.</li>
+</ul></div>
+<h3 id="t2-problema">Problema resuelto</h3>
+<div class="prob"><div class="enun"><p class="et">Enunciado</p><p>Un sistema \(S_1\) se obtiene girando el sistema \(S_0\) 90° alrededor de su eje \(z_0\) y, a continuación, 90° alrededor del <b>nuevo</b> eje \(x_1\).</p>
+<ol><li>Calcula \({}^{0}R_{1}\).</li>
+<li>Un vector vale \({}^{1}v=(1,\ 2,\ 3)\) en \(S_1\). ¿Cuánto vale en \(S_0\)?</li>
+<li>Comprueba el resultado y calcula el eje y el ángulo de giro equivalentes.</li></ol></div>
+<details class="paso"><summary><span class="pn">✓</span>Ver solución paso a paso</summary><div class="inner"><p><b>1) Composición.</b> El primer giro es respecto a los ejes de partida y el segundo respecto a los ejes <b>ya girados</b>, así que el segundo <b>postmultiplica</b>:</p>
+\[{}^{0}R_{1}=R(z,90^\circ)\,R(x,90^\circ)=
+\begin{pmatrix}0&-1&0\\ 1&0&0\\ 0&0&1\end{pmatrix}
+\begin{pmatrix}1&0&0\\ 0&0&-1\\ 0&1&0\end{pmatrix}
+=\boxed{\begin{pmatrix}0&0&1\\ 1&0&0\\ 0&1&0\end{pmatrix}}\]
+<p>Se lee directamente: el eje \(x_1\) apunta como \(+y_0\) (primera columna \((0,1,0)\)), el \(y_1\) como \(+z_0\) y el \(z_1\) como \(+x_0\). Es una permutación cíclica de los ejes.</p>
+<p><b>2) Cambio de base.</b></p>
+\[{}^{0}v={}^{0}R_{1}\,{}^{1}v=\begin{pmatrix}0&0&1\\ 1&0&0\\ 0&1&0\end{pmatrix}\begin{pmatrix}1\\2\\3\end{pmatrix}=\boxed{\begin{pmatrix}3\\1\\2\end{pmatrix}}\]
+<p>El módulo se conserva: \(\sqrt{1+4+9}=\sqrt{14}\) en los dos sistemas, como tiene que ser en toda rotación.</p>
+<p><b>3) Eje y ángulo.</b> La traza vale \(0+0+0=0\), luego</p>
+\[\cos\theta=\frac{0-1}{2}=-\frac12\ \Rightarrow\ \theta=\boxed{120^\circ}\]
+\[\vec k=\frac{1}{2\sin 120^\circ}\begin{pmatrix}r_{32}-r_{23}\\ r_{13}-r_{31}\\ r_{21}-r_{12}\end{pmatrix}
+=\frac{1}{\sqrt3}\begin{pmatrix}1\\1\\1\end{pmatrix}=\boxed{\tfrac{1}{\sqrt3}(1,1,1)}\]
+<div class="box key"><p>Un giro de 120° alrededor de la diagonal del cubo \((1,1,1)\) permuta cíclicamente los ejes: \(x\to y\to z\to x\). Repetido tres veces da 360°, es decir, la identidad, que es justamente lo que hace \(R^3=I\). Comprobaciones así de rápidas son la mejor manera de cazar errores de signo.</p></div></div></details></div>
+<h3 id="t2-auto">Autoevaluación</h3>
+<p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué son las columnas de \({}^{A}R_{B}\)?</summary><div class="inner"><p>Los <b>vectores unitarios de los ejes de B expresados en el sistema A</b>.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Por qué la inversa de una matriz de rotación es su traspuesta?</summary><div class="inner"><p>Porque es <b>ortonormal</b>: \(R^{T}R=I\). Las columnas son unitarias y perpendiculares entre sí.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Cuándo se premultiplica y cuándo se postmultiplica un giro?</summary><div class="inner"><p>Respecto a ejes <b>fijos</b> se premultiplica; respecto a ejes <b>móviles</b> (los ya girados) se postmultiplica.</p></div></details><details class="paso"><summary><span class="pn">4</span>Una matriz de rotación tiene 9 números. ¿Cuántos grados de libertad representa?</summary><div class="inner"><p><b>Tres</b>. Las seis condiciones de ortonormalidad ligan los nueve elementos.</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Cómo se completa una matriz de rotación de la que se conocen dos columnas?</summary><div class="inner"><p>Con el <b>producto vectorial</b>: la tercera columna es \(z=x\times y\) respetando el orden dextrógiro.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Qué indica que el determinante de una supuesta matriz de rotación salga \(-1\)?</summary><div class="inner"><p>Que el sistema es <b>levógiro</b> o que hay un signo mal puesto: no es una rotación pura sino una rotación con reflexión.</p></div></details>
+</section>
+<nav class="pager" aria-label="Páginas"><a href="tema-01.html"><small>← Anterior</small>T1 · El robot industrial</a><a class="nx" href="tema-03.html"><small>Siguiente →</small>T3 · Matrices de transformación homogénea</a></nav>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="sims.js"></script>
+</body>
+</html>
