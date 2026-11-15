@@ -1,6 +1,6 @@
 # Sistemas Robotizados · Guía para aprobar
 
-Guía de estudio no oficial de **Sistemas Robotizados** (UPCT, Grado en Ingeniería Electrónica Industrial y Automática, 3.er curso).
+Guía de estudio no oficial de **Sistemas Robotizados** (Grado en Ingeniería Electrónica Industrial y Automática, 3.er curso).
 
 **Web:** https://helionacon-ui.github.io/GIEIA-UPCT/sistemas-robotizados/
 

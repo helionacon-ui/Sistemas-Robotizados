@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>T8 Estática y dinámica del robot · Sistemas Robotizados · Guía para aprobar</title>
-<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 8, Estática y dinámica del robot">
+<meta name="description" content="Sistemas Robotizados (GIEyA): tema 8, Estática y dinámica del robot">
 <meta name="theme-color" content="#7b3fa6">
 <link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
 <p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué calcula la estática de un robot?</summary><div class="inner"><p>Los <b>pares</b> que debe dar cada motor para mantener el robot en equilibrio en una postura dada, con su propio peso y la carga.</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Qué distancia hay que usar para el momento de un peso?</summary><div class="inner"><p>El <b>brazo horizontal</b>: la distancia horizontal del centro de gravedad al eje, porque la gravedad es vertical.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Qué expresa \(\vec\tau=J^{T}\vec F\)?</summary><div class="inner"><p>La <b>dualidad fuerza-par</b>: cómo una fuerza aplicada en el extremo se reparte en pares articulares. Sale del principio de los trabajos virtuales.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Qué términos tiene el modelo dinámico de un robot?</summary><div class="inner"><p>Inercias \(M(q)\ddot q\), centrífugos y de Coriolis \(C(q,\dot q)\dot q\), gravedad \(G(q)\) y fricción.</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Qué diferencia hay entre el problema dinámico directo y el inverso?</summary><div class="inner"><p>El <b>directo</b> da el movimiento a partir de los pares (simulación); el <b>inverso</b> da los pares a partir del movimiento deseado (control).</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Por qué la carga útil de un robot cae al alejar el centro de gravedad de la brida?</summary><div class="inner"><p>Porque aumentan el <b>momento</b> sobre la muñeca y la <b>inercia</b>, y ambos están limitados por los motores y la estructura.</p></div></details>
 </section>
 <nav class="pager" aria-label="Páginas"><a href="tema-07.html"><small>← Anterior</small>T7 · Matriz jacobiana y singularidades</a><a class="nx" href="tema-09.html"><small>Siguiente →</small>T9 · Generación de trayectorias</a></nav>
-<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
 </main>
 </div>
 <script src="app.js"></script>

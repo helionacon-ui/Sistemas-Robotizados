@@ -90,7 +90,7 @@ for pg,title,ids in PAGES:
     nav_f=fix_links(nav)
     h=fix_links(hero) if pg=='index' else ''
     page=('<!doctype html>\n<html lang="es">\n'+head.replace('{TITLE}', 'Sistemas Robotizados · '+title)+'\n</head>\n<body>\n'
-          +'<div class="hub-bar" style="max-width:1100px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:12px"><a class="hub-link" href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);color:var(--fg);text-decoration:none;background:var(--surface)">← Guías para aprobar · GIEyA · UPCT</a></div>\n'
+          +'<div class="hub-bar" style="max-width:1100px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:12px"><a class="hub-link" href="https://helionacon-ui.github.io/GIEIA-UPCT/" style="display:inline-flex;align-items:center;gap:6px;font:600 13.5px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;border:1px solid var(--line);color:var(--fg);text-decoration:none;background:var(--surface)">← Guías para aprobar · GIEyA</a></div>\n'
           +h+'\n'+search_box()+'\n<div class="wrap">\n'+nav_f+'\n<main>\n'+body+'\n</main>\n</div>\n'
           +footer+'\n<script>\n'+script+'\n</script>\n</body>\n</html>\n')
     open(os.path.join(OUT,pg+'.html'),'w',encoding='utf-8').write(page)

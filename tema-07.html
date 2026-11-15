@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>T7 Matriz jacobiana y singularidades · Sistemas Robotizados · Guía para aprobar</title>
-<meta name="description" content="Sistemas Robotizados (UPCT, GIEyA): tema 7, Matriz jacobiana y singularidades">
+<meta name="description" content="Sistemas Robotizados (GIEyA): tema 7, Matriz jacobiana y singularidades">
 <meta name="theme-color" content="#7b3fa6">
 <link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -93,7 +93,7 @@
 <p class="muted">Responde antes de desplegar.</p><details class="paso"><summary><span class="pn">1</span>¿Qué relaciona la matriz jacobiana?</summary><div class="inner"><p>Las velocidades articulares con las velocidades (lineal y angular) del extremo: \(\dot{\vec x}=J(q)\dot{\vec q}\).</p></div></details><details class="paso"><summary><span class="pn">2</span>¿Qué aporta a la jacobiana una articulación de rotación?</summary><div class="inner"><p>\(\vec z_{i-1}\times(\vec p_n-\vec p_{i-1})\) en la parte lineal y \(\vec z_{i-1}\) en la angular.</p></div></details><details class="paso"><summary><span class="pn">3</span>¿Qué es una singularidad?</summary><div class="inner"><p>Una configuración con \(\det J=0\): el robot pierde la capacidad de moverse en alguna dirección y la jacobiana inversa se dispara.</p></div></details><details class="paso"><summary><span class="pn">4</span>¿Dónde están las singularidades de un brazo 2R?</summary><div class="inner"><p>Donde \(\sin q_2=0\): brazo totalmente <b>estirado</b> (\(q_2=0\)) o <b>plegado</b> (\(q_2=180^\circ\)).</p></div></details><details class="paso"><summary><span class="pn">5</span>¿Cómo se pasa una velocidad del sistema 0 al del extremo?</summary><div class="inner"><p>Girándola con la traspuesta de la rotación: \({}^{e}\vec v=({}^{0}R_e)^{T}\,{}^{0}\vec v\). No se traslada porque es un vector libre.</p></div></details><details class="paso"><summary><span class="pn">6</span>¿Qué relación hay entre fuerzas en el extremo y pares articulares?</summary><div class="inner"><p>\(\vec\tau=J^{T}\vec F\), por el principio de los trabajos virtuales.</p></div></details>
 </section>
 <nav class="pager" aria-label="Páginas"><a href="tema-06.html"><small>← Anterior</small>T6 · Cinemática inversa</a><a class="nx" href="tema-08.html"><small>Siguiente →</small>T8 · Estática y dinámica del robot</a></nav>
-<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (UPCT, GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
+<p class="inicio" style="margin:36px 0 8px;text-align:center;font-size:13px;color:var(--muted)">Guía no oficial de Sistemas Robotizados (GIEyA) · Datos tomados del curso <time datetime="2023-09">2023/24</time> (apuntes, prácticas de MATLAB y del robot ABB, scripts y exámenes de 2016 a 2024) · página creada en noviembre de 2026</p>
 </main>
 </div>
 <script src="app.js"></script>
