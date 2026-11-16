@@ -17,24 +17,64 @@
 <style id="lectura">
 @media screen{
 :root{--body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif}
-body{font-family:var(--body);font-size:20.5px;line-height:2.1;letter-spacing:.022em;word-spacing:.09em}
-p{margin:0 0 1.75em}
-li{margin:.8em 0}
-p,li{max-width:62ch}
+body{font-family:var(--body);font-size:20px;line-height:1.95;letter-spacing:.014em;word-spacing:.05em}
+p{margin:0 0 1.5em;max-width:64ch;hyphens:auto;-webkit-hyphens:auto}
+li{margin:.72em 0;max-width:64ch}
 .box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
-h2{margin-top:92px;margin-bottom:24px;line-height:1.3}
-h3{font-size:24px;margin:58px 0 18px;line-height:1.35}
-h4{margin-top:34px;margin-bottom:10px}
-.box{padding:24px 30px;margin:32px 0}
-table{font-size:18px;line-height:1.75}
-td,th{padding-top:.85em;padding-bottom:.85em}
-figure.fig figcaption{font-size:17px;line-height:1.8;margin-top:12px}
+h2{margin-top:92px;margin-bottom:22px;line-height:1.25}
+h3{font-size:25px;margin:66px 0 20px;line-height:1.3}
+h4{margin:38px 0 12px;line-height:1.4}
+/* ---- entradilla con capitular ---- */
+.zero .lede{font-size:1.05em;line-height:1.86;text-align:left}
+.zero .lede::first-letter{float:left;font-size:3.05em;line-height:.84;font-weight:700;padding:.06em .14em 0 0;color:var(--tc,var(--accent))}
+/* ---- sumario del tema ---- */
+p.obj{max-width:none;text-align:left;margin:0 0 1.7em;padding:14px 20px;border-radius:10px;
+ background:color-mix(in srgb,var(--surface) 62%,transparent);
+ border-left:3px solid var(--tc,var(--accent));font-size:.95em;line-height:1.75}
+p.obj>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);letter-spacing:.1em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- términos con entrada, al modo de un manual ---- */
+p.run{margin:0 0 1.38em}
+p.run>b:first-child{display:block;font:700 12px/1.7 var(--mono,monospace);letter-spacing:.09em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- rótulos internos ---- */
+.zero>.ft{font:700 11.5px/1.6 var(--mono,monospace);letter-spacing:.1em;text-transform:uppercase}
+.zero>.ft:not(:first-child){margin-top:2em;font-size:12.5px;color:var(--fg);opacity:.72}
+/* ---- desarrollo teórico ---- */
+.deep h4{position:relative;padding-left:2.35em;font-size:1.03em}
+.deep h4 .hn{position:absolute;left:0;top:.06em;font:700 .84em/1.7 var(--mono,monospace);
+ color:var(--tc,var(--accent));opacity:.8}
+.deep>h4:not(:first-child){border-top:1px solid var(--line);padding-top:30px;margin-top:42px}
+.eqd{margin:1.65em 0;text-align:center;overflow-x:auto;overflow-y:hidden}
+/* ---- notas al margen, sin duplicar el rótulo ---- */
+.box.deepnote{padding:15px 20px;margin:1.5em 0;border-radius:0 10px 10px 0;
+ background:color-mix(in srgb,var(--surface) 76%,transparent)}
+.box.key.deepnote::before,.box.trap.deepnote::before{content:none}
+.box.deepnote>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);
+ letter-spacing:.1em;text-transform:uppercase;color:var(--tc,var(--accent))}
+.box.trap.deepnote>b:first-child{color:var(--warn)}
+/* ---- resto ---- */
+.box{padding:22px 28px;margin:30px 0}
+table{font-size:18px;line-height:1.7}
+td,th{padding-top:.8em;padding-bottom:.8em}
+figure.fig figcaption{font-size:17px;line-height:1.78;margin-top:12px}
 figure.fig{margin-block:34px}
-.lede{line-height:1.85}
 .toc a{font-size:15.5px;padding:8px 0 8px 10px}
 svg,svg text,canvas,.katex,mjx-container{letter-spacing:normal;word-spacing:normal}
+mjx-container[display]{margin:0!important}
 details>summary{line-height:1.7;padding-block:.5em}
-@media (max-width:600px){body{font-size:19px;line-height:2}}
+.enun p,.inner p{text-align:left}
+@media (min-width:1040px){
+p,li{text-align:justify}
+.zero .lede,.enun p,.inner p,figcaption,.ft{text-align:left}
+}
+@media (max-width:600px){
+body{font-size:18.5px;line-height:1.9}
+p{text-align:left}
+.zero .lede::first-letter{font-size:2.6em}
+.deep h4{padding-left:0}
+.deep h4 .hn{position:static;margin-right:.5em}
+}
 }
 </style>
 </head>
@@ -46,7 +86,7 @@ details>summary{line-height:1.7;padding-block:.5em}
 <main>
 <section class="sec tema" style="--tc:var(--c3);--tcs:var(--c3s)">
 <div class="sh"><span aria-hidden="true" class="badge">10</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 10</p><h2 id="t10">Programación de robots y visión artificial</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
-<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> conocer los sistemas de coordenadas de un robot industrial, definir la herramienta y el objeto de trabajo, programar en RAPID y relacionar el sistema de la cámara con el del robot.</p><ul>
+<div class="zero"><p class="ft">Desde cero</p><p class="obj"><b>Objetivo:</b> conocer los sistemas de coordenadas de un robot industrial, definir la herramienta y el objeto de trabajo, programar en RAPID y relacionar el sistema de la cámara con el del robot.</p><ul>
 <li>Un robot industrial se programa con varios <b>sistemas de coordenadas</b> encadenados: el de <b>mundo</b> (fijo en la célula), el de <b>base</b> (en el pie del robot), el de <b>herramienta</b> o <i>tool</i> (en el TCP) y el de <b>objeto de trabajo</b> o <i>wobj</i> (en la pieza). Un punto programado es siempre «esta posición del TCP respecto a este objeto de trabajo».</li>
 <li>Esa estructura es puro producto de MTH: \({}^{mundo}T_{TCP}={}^{mundo}T_{base}\,{}^{base}T_{brida}\,{}^{brida}T_{TCP}\). Definir bien la herramienta y el objeto de trabajo es lo que permite mover la pieza de sitio y reutilizar el programa cambiando sólo una matriz.</li>
 <li>La <b>definición del TCP</b> se hace en la práctica por el método de los <b>cuatro puntos</b>: se lleva el extremo de la herramienta a un mismo punto fijo con cuatro orientaciones distintas y el controlador resuelve el sistema de ecuaciones que da la posición del TCP respecto a la brida. Las orientaciones tienen que ser bien diferentes para que el sistema esté bien condicionado.</li>
@@ -59,11 +99,11 @@ details>summary{line-height:1.7;padding-block:.5em}
 <details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 10 <span class="src">8 entradas</span></summary><div class="inner">
 <div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">mundo / base</td><td>sistemas fijos de la célula</td><td class="u"></td></tr><tr><td class="sym">tool</td><td>sistema de la herramienta</td><td class="u">TCP</td></tr><tr><td class="sym">wobj</td><td>objeto de trabajo</td><td class="u"></td></tr><tr><td class="sym">MoveJ</td><td>movimiento articular</td><td class="u">rápido</td></tr><tr><td class="sym">MoveL</td><td>movimiento lineal</td><td class="u">recto</td></tr><tr><td class="sym">fine / zNN</td><td>zona de parada o redondeo</td><td class="u"></td></tr><tr><td class="sym">robtarget</td><td>punto programado</td><td class="u">posición + cuaternio</td></tr><tr><td class="sym">s = Z·p/f</td><td>escala de la cámara</td><td class="u">mm/px</td></tr></table></div></div></details>
 <figure class="fig"><p class="ft">Calculadora interactiva - camara: escala y campo de vision</p><div data-sim="camara"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
-<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">La cadena de la célula y los sistemas de referencia</p><p>Una célula robotizada tiene muchos sistemas de referencia: mundo \(W\), base del robot \(B\), herramienta (TCP) y objeto o pieza. La posición de la herramienta en el mundo es una cadena: \({}^WT_{TCP}={}^WT_B\ {}^BT_6(q)\ {}^6T_{TCP}\). Los puntos se programan <b>respecto al objeto</b> (\(wobj\)) para que, si la pieza se mueve, basta re-medir el objeto y no reprogramar: \({}^{obj}T_{TCP}=({}^WT_{obj})^{-1}\,{}^WT_{TCP}\). Es el mismo cálculo con matrices homogéneas del tema 3, aplicado a un caso real.</p><p class="ft">Visión artificial: de píxeles a milímetros</p><p>Una cámara convierte un punto 3D en un píxel con el <b>modelo estenopeico</b>: \(\dfrac uf=\dfrac XZ\), \(\dfrac vf=\dfrac YZ\) (\(f\) = distancia focal, \(Z\) = distancia al objeto). La <b>escala</b>, en mm por píxel, es \(s=\dfrac{Z\,p}{f}\) (con \(p\) el tamaño del píxel): a más distancia, cada píxel abarca más milímetros y menos precisión. Para que el robot agarre lo que ve la cámara, hay que conocer la matriz de <b>calibración</b> cámara-robot: \({}^Bp_{pieza}={}^BT_C\,{}^Cp_{pieza}\). La programación (en RAPID: <code>MoveJ</code>, <code>MoveL</code> con velocidad y zona) usa todo esto en cada punto.</p></div><!--/amp1--><!--deep--><h3 id="t10-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
-<h4>1. Programación de robots</h4>
+<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">La cadena de la célula y los sistemas de referencia</p><p class="lede">Una célula robotizada tiene muchos sistemas de referencia: mundo \(W\), base del robot \(B\), herramienta (TCP) y objeto o pieza. La posición de la herramienta en el mundo es una cadena: \({}^WT_{TCP}={}^WT_B\ {}^BT_6(q)\ {}^6T_{TCP}\). Los puntos se programan <b>respecto al objeto</b> (\(wobj\)) para que, si la pieza se mueve, basta re-medir el objeto y no reprogramar: \({}^{obj}T_{TCP}=({}^WT_{obj})^{-1}\,{}^WT_{TCP}\). Es el mismo cálculo con matrices homogéneas del tema 3, aplicado a un caso real.</p><p class="ft">Visión artificial: de píxeles a milímetros</p><p>Una cámara convierte un punto 3D en un píxel con el <b>modelo estenopeico</b>: \(\dfrac uf=\dfrac XZ\), \(\dfrac vf=\dfrac YZ\) (\(f\) = distancia focal, \(Z\) = distancia al objeto). La <b>escala</b>, en mm por píxel, es \(s=\dfrac{Z\,p}{f}\) (con \(p\) el tamaño del píxel): a más distancia, cada píxel abarca más milímetros y menos precisión. Para que el robot agarre lo que ve la cámara, hay que conocer la matriz de <b>calibración</b> cámara-robot: \({}^Bp_{pieza}={}^BT_C\,{}^Cp_{pieza}\). La programación (en RAPID: <code>MoveJ</code>, <code>MoveL</code> con velocidad y zona) usa todo esto en cada punto.</p></div><!--/amp1--><!--deep--><h3 id="t10-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
+<h4><span class="hn">1</span>Programación de robots</h4>
 <ul><li><b>Enseñanza por guiado</b> (teach pendant): el operario mueve el robot y se guardan los puntos.</li><li><b>Programación fuera de línea</b>: se simula la celda en ordenador y se genera el programa.</li><li><b>Programación por lenguaje</b>: texto con instrucciones de movimiento, lógica y E/S.</li></ul>
 <div class="box trap deepnote"><b>Cuidado.</b> Un programa probado solo en simulación puede chocar en la celda real si el modelo no tiene las medidas exactas. Verifica con calibración.</div>
-<h4>2. Visión artificial</h4>
+<h4><span class="hn">2</span>Visión artificial</h4>
 <div class="box key deepnote"><b>Idea clave.</b> la visión artificial permite al robot detectar la posición de las piezas con una cámara. Así el robot no depende de posiciones fijas.</div>
 <ul><li><b>Calibración</b> de la cámara: relaciona píxeles con coordenadas reales.</li><li><b>Calibración mano-ojo</b>: relaciona la cámara con el sistema del robot.</li></ul>
 </div><!--/deep--><h3 id="t10-formulas">Fórmulas y conceptos que hay que saber</h3>

@@ -17,24 +17,64 @@
 <style id="lectura">
 @media screen{
 :root{--body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif}
-body{font-family:var(--body);font-size:20.5px;line-height:2.1;letter-spacing:.022em;word-spacing:.09em}
-p{margin:0 0 1.75em}
-li{margin:.8em 0}
-p,li{max-width:62ch}
+body{font-family:var(--body);font-size:20px;line-height:1.95;letter-spacing:.014em;word-spacing:.05em}
+p{margin:0 0 1.5em;max-width:64ch;hyphens:auto;-webkit-hyphens:auto}
+li{margin:.72em 0;max-width:64ch}
 .box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
-h2{margin-top:92px;margin-bottom:24px;line-height:1.3}
-h3{font-size:24px;margin:58px 0 18px;line-height:1.35}
-h4{margin-top:34px;margin-bottom:10px}
-.box{padding:24px 30px;margin:32px 0}
-table{font-size:18px;line-height:1.75}
-td,th{padding-top:.85em;padding-bottom:.85em}
-figure.fig figcaption{font-size:17px;line-height:1.8;margin-top:12px}
+h2{margin-top:92px;margin-bottom:22px;line-height:1.25}
+h3{font-size:25px;margin:66px 0 20px;line-height:1.3}
+h4{margin:38px 0 12px;line-height:1.4}
+/* ---- entradilla con capitular ---- */
+.zero .lede{font-size:1.05em;line-height:1.86;text-align:left}
+.zero .lede::first-letter{float:left;font-size:3.05em;line-height:.84;font-weight:700;padding:.06em .14em 0 0;color:var(--tc,var(--accent))}
+/* ---- sumario del tema ---- */
+p.obj{max-width:none;text-align:left;margin:0 0 1.7em;padding:14px 20px;border-radius:10px;
+ background:color-mix(in srgb,var(--surface) 62%,transparent);
+ border-left:3px solid var(--tc,var(--accent));font-size:.95em;line-height:1.75}
+p.obj>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);letter-spacing:.1em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- términos con entrada, al modo de un manual ---- */
+p.run{margin:0 0 1.38em}
+p.run>b:first-child{display:block;font:700 12px/1.7 var(--mono,monospace);letter-spacing:.09em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- rótulos internos ---- */
+.zero>.ft{font:700 11.5px/1.6 var(--mono,monospace);letter-spacing:.1em;text-transform:uppercase}
+.zero>.ft:not(:first-child){margin-top:2em;font-size:12.5px;color:var(--fg);opacity:.72}
+/* ---- desarrollo teórico ---- */
+.deep h4{position:relative;padding-left:2.35em;font-size:1.03em}
+.deep h4 .hn{position:absolute;left:0;top:.06em;font:700 .84em/1.7 var(--mono,monospace);
+ color:var(--tc,var(--accent));opacity:.8}
+.deep>h4:not(:first-child){border-top:1px solid var(--line);padding-top:30px;margin-top:42px}
+.eqd{margin:1.65em 0;text-align:center;overflow-x:auto;overflow-y:hidden}
+/* ---- notas al margen, sin duplicar el rótulo ---- */
+.box.deepnote{padding:15px 20px;margin:1.5em 0;border-radius:0 10px 10px 0;
+ background:color-mix(in srgb,var(--surface) 76%,transparent)}
+.box.key.deepnote::before,.box.trap.deepnote::before{content:none}
+.box.deepnote>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);
+ letter-spacing:.1em;text-transform:uppercase;color:var(--tc,var(--accent))}
+.box.trap.deepnote>b:first-child{color:var(--warn)}
+/* ---- resto ---- */
+.box{padding:22px 28px;margin:30px 0}
+table{font-size:18px;line-height:1.7}
+td,th{padding-top:.8em;padding-bottom:.8em}
+figure.fig figcaption{font-size:17px;line-height:1.78;margin-top:12px}
 figure.fig{margin-block:34px}
-.lede{line-height:1.85}
 .toc a{font-size:15.5px;padding:8px 0 8px 10px}
 svg,svg text,canvas,.katex,mjx-container{letter-spacing:normal;word-spacing:normal}
+mjx-container[display]{margin:0!important}
 details>summary{line-height:1.7;padding-block:.5em}
-@media (max-width:600px){body{font-size:19px;line-height:2}}
+.enun p,.inner p{text-align:left}
+@media (min-width:1040px){
+p,li{text-align:justify}
+.zero .lede,.enun p,.inner p,figcaption,.ft{text-align:left}
+}
+@media (max-width:600px){
+body{font-size:18.5px;line-height:1.9}
+p{text-align:left}
+.zero .lede::first-letter{font-size:2.6em}
+.deep h4{padding-left:0}
+.deep h4 .hn{position:static;margin-right:.5em}
+}
 }
 </style>
 </head>
@@ -46,7 +86,7 @@ details>summary{line-height:1.7;padding-block:.5em}
 <main>
 <section class="sec tema" style="--tc:var(--c8);--tcs:var(--c8s)">
 <div class="sh"><span aria-hidden="true" class="badge">7</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 7</p><h2 id="t7">Matriz jacobiana y singularidades</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
-<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> relacionar velocidades articulares y cartesianas, construir la jacobiana, detectar singularidades e interpretar el elipsoide de manipulabilidad.</p><ul>
+<div class="zero"><p class="ft">Desde cero</p><p class="obj"><b>Objetivo:</b> relacionar velocidades articulares y cartesianas, construir la jacobiana, detectar singularidades e interpretar el elipsoide de manipulabilidad.</p><ul>
 <li>La <b>jacobiana</b> es la matriz que relaciona las velocidades de las articulaciones con la velocidad del extremo: \(\dot{\vec x}=J(q)\,\dot{\vec q}\). Es la derivada de la cinemática directa respecto a las variables articulares y depende de la configuración \(q\), no es constante.</li>
 <li>Tiene dos bloques: \(J_v\) (3 filas) da la <b>velocidad lineal</b> del extremo y \(J_\omega\) (3 filas) da la <b>velocidad angular</b>. En los problemas suele pedirse sólo \(J_v\).</li>
 <li>Se puede calcular de dos maneras. <b>Derivando</b>: \(J_{ij}=\partial x_i/\partial q_j\), que es lo que se hace con cálculo simbólico en MATLAB. O <b>geométricamente</b>, columna a columna: cada articulación de rotación aporta \(\vec z_{i-1}\times(\vec p-\vec p_{i-1})\) a la velocidad lineal y \(\vec z_{i-1}\) a la angular; cada prismática aporta \(\vec z_{i-1}\) a la lineal y \(\vec 0\) a la angular.</li>
@@ -59,8 +99,8 @@ details>summary{line-height:1.7;padding-block:.5em}
 <details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 7 <span class="src">8 entradas</span></summary><div class="inner">
 <div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">J(q)</td><td>matriz jacobiana</td><td class="u">ẋ = J q̇</td></tr><tr><td class="sym">J_v</td><td>bloque de velocidad lineal</td><td class="u">3×n</td></tr><tr><td class="sym">J_ω</td><td>bloque de velocidad angular</td><td class="u">3×n</td></tr><tr><td class="sym">det J = 0</td><td>singularidad</td><td class="u"></td></tr><tr><td class="sym">J⁻¹</td><td>problema inverso de velocidades</td><td class="u"></td></tr><tr><td class="sym">J⁺</td><td>pseudoinversa</td><td class="u">Jᵀ(JJᵀ)⁻¹</td></tr><tr><td class="sym">w</td><td>manipulabilidad</td><td class="u">√det(JJᵀ)</td></tr><tr><td class="sym">τ = Jᵀ F</td><td>dualidad fuerza-par</td><td class="u"></td></tr></table></div></div></details>
 <figure class="fig"><p class="ft">Figura interactiva - jacobiana, elipse de manipulabilidad y singularidades</p><div data-sim="jacobiana"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
-<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">La jacobiana: relaciona velocidades</p><p>La <b>jacobiana</b> \(J(q)\) es la matriz que convierte las velocidades de las articulaciones \(\dot q\) en la velocidad del extremo: \(\begin{pmatrix}\vec v\\\vec\omega\end{pmatrix}=J(q)\dot{q}\). Cada columna \(i\) dice cuánto se mueve el extremo si solo gira la articulación \(i\) a 1 rad/s: para un giro, \(\vec z_{i-1}\times(\vec p_n-\vec p_{i-1})\) en velocidad lineal y \(\vec z_{i-1}\) en velocidad angular; para una prismática, \(\vec z_{i-1}\) y 0. Para el 2R plano, \(J_v=\begin{pmatrix}-l_1s_1-l_2s_{12}&-l_2s_{12}\\l_1c_1+l_2c_{12}&l_2c_{12}\end{pmatrix}\) y \(\det J_v=l_1l_2\sin q_2\).</p><p class="ft">Singularidades y la dualidad fuerza-par</p><p>Una <b>singularidad</b> es una postura en la que la jacobiana pierde rango (\(\det J=0\)): el robot pierde la capacidad de moverse en alguna dirección (y las velocidades articulares necesarias para moverse hacia ella tienden a infinito). Para el 2R, ocurre cuando \(\sin q_2=0\), es decir, brazo <b>extendido</b> (\(q_2=0\)) o <b>plegado</b> (\(q_2=180^\circ\)), justo en los límites del alcance. La misma matriz sirve para la estática: <b>dualidad fuerza-par</b>, \(\vec\tau=J^T\vec F\): los pares que hacen falta en los motores para que el extremo ejerza o aguante una fuerza \(\vec F\). Cerca de una singularidad, pocos pares bastan para sostener enormes fuerzas en la dirección «perdida».</p></div><!--/amp1--><!--deep--><h3 id="t7-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
-<h4>1. Matriz jacobiana</h4>
+<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">La jacobiana: relaciona velocidades</p><p class="lede">La <b>jacobiana</b> \(J(q)\) es la matriz que convierte las velocidades de las articulaciones \(\dot q\) en la velocidad del extremo: \(\begin{pmatrix}\vec v\\\vec\omega\end{pmatrix}=J(q)\dot{q}\). Cada columna \(i\) dice cuánto se mueve el extremo si solo gira la articulación \(i\) a 1 rad/s: para un giro, \(\vec z_{i-1}\times(\vec p_n-\vec p_{i-1})\) en velocidad lineal y \(\vec z_{i-1}\) en velocidad angular; para una prismática, \(\vec z_{i-1}\) y 0. Para el 2R plano, \(J_v=\begin{pmatrix}-l_1s_1-l_2s_{12}&-l_2s_{12}\\l_1c_1+l_2c_{12}&l_2c_{12}\end{pmatrix}\) y \(\det J_v=l_1l_2\sin q_2\).</p><p class="ft">Singularidades y la dualidad fuerza-par</p><p>Una <b>singularidad</b> es una postura en la que la jacobiana pierde rango (\(\det J=0\)): el robot pierde la capacidad de moverse en alguna dirección (y las velocidades articulares necesarias para moverse hacia ella tienden a infinito). Para el 2R, ocurre cuando \(\sin q_2=0\), es decir, brazo <b>extendido</b> (\(q_2=0\)) o <b>plegado</b> (\(q_2=180^\circ\)), justo en los límites del alcance. La misma matriz sirve para la estática: <b>dualidad fuerza-par</b>, \(\vec\tau=J^T\vec F\): los pares que hacen falta en los motores para que el extremo ejerza o aguante una fuerza \(\vec F\). Cerca de una singularidad, pocos pares bastan para sostener enormes fuerzas en la dirección «perdida».</p></div><!--/amp1--><!--deep--><h3 id="t7-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
+<h4><span class="hn">1</span>Matriz jacobiana</h4>
 <div class="box key deepnote"><b>Idea clave.</b> la jacobiana relaciona las velocidades de las articulaciones con la velocidad del extremo. Con ella se pasa de velocidades articulares a cartesianas.</div>
 <div class="eqd">\[\dot x=J(q)\,\dot q\]</div>
 <ul><li>Es una matriz de tamaño \(m\times n\), con \(m\) las coordenadas de la tarea y \(n\) las articulaciones.</li><li>Su columna \(i\) depende de cómo se mueve el extremo al mover la articulación \(i\).</li></ul>

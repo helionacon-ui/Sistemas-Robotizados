@@ -17,24 +17,64 @@
 <style id="lectura">
 @media screen{
 :root{--body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif}
-body{font-family:var(--body);font-size:20.5px;line-height:2.1;letter-spacing:.022em;word-spacing:.09em}
-p{margin:0 0 1.75em}
-li{margin:.8em 0}
-p,li{max-width:62ch}
+body{font-family:var(--body);font-size:20px;line-height:1.95;letter-spacing:.014em;word-spacing:.05em}
+p{margin:0 0 1.5em;max-width:64ch;hyphens:auto;-webkit-hyphens:auto}
+li{margin:.72em 0;max-width:64ch}
 .box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
-h2{margin-top:92px;margin-bottom:24px;line-height:1.3}
-h3{font-size:24px;margin:58px 0 18px;line-height:1.35}
-h4{margin-top:34px;margin-bottom:10px}
-.box{padding:24px 30px;margin:32px 0}
-table{font-size:18px;line-height:1.75}
-td,th{padding-top:.85em;padding-bottom:.85em}
-figure.fig figcaption{font-size:17px;line-height:1.8;margin-top:12px}
+h2{margin-top:92px;margin-bottom:22px;line-height:1.25}
+h3{font-size:25px;margin:66px 0 20px;line-height:1.3}
+h4{margin:38px 0 12px;line-height:1.4}
+/* ---- entradilla con capitular ---- */
+.zero .lede{font-size:1.05em;line-height:1.86;text-align:left}
+.zero .lede::first-letter{float:left;font-size:3.05em;line-height:.84;font-weight:700;padding:.06em .14em 0 0;color:var(--tc,var(--accent))}
+/* ---- sumario del tema ---- */
+p.obj{max-width:none;text-align:left;margin:0 0 1.7em;padding:14px 20px;border-radius:10px;
+ background:color-mix(in srgb,var(--surface) 62%,transparent);
+ border-left:3px solid var(--tc,var(--accent));font-size:.95em;line-height:1.75}
+p.obj>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);letter-spacing:.1em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- términos con entrada, al modo de un manual ---- */
+p.run{margin:0 0 1.38em}
+p.run>b:first-child{display:block;font:700 12px/1.7 var(--mono,monospace);letter-spacing:.09em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- rótulos internos ---- */
+.zero>.ft{font:700 11.5px/1.6 var(--mono,monospace);letter-spacing:.1em;text-transform:uppercase}
+.zero>.ft:not(:first-child){margin-top:2em;font-size:12.5px;color:var(--fg);opacity:.72}
+/* ---- desarrollo teórico ---- */
+.deep h4{position:relative;padding-left:2.35em;font-size:1.03em}
+.deep h4 .hn{position:absolute;left:0;top:.06em;font:700 .84em/1.7 var(--mono,monospace);
+ color:var(--tc,var(--accent));opacity:.8}
+.deep>h4:not(:first-child){border-top:1px solid var(--line);padding-top:30px;margin-top:42px}
+.eqd{margin:1.65em 0;text-align:center;overflow-x:auto;overflow-y:hidden}
+/* ---- notas al margen, sin duplicar el rótulo ---- */
+.box.deepnote{padding:15px 20px;margin:1.5em 0;border-radius:0 10px 10px 0;
+ background:color-mix(in srgb,var(--surface) 76%,transparent)}
+.box.key.deepnote::before,.box.trap.deepnote::before{content:none}
+.box.deepnote>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);
+ letter-spacing:.1em;text-transform:uppercase;color:var(--tc,var(--accent))}
+.box.trap.deepnote>b:first-child{color:var(--warn)}
+/* ---- resto ---- */
+.box{padding:22px 28px;margin:30px 0}
+table{font-size:18px;line-height:1.7}
+td,th{padding-top:.8em;padding-bottom:.8em}
+figure.fig figcaption{font-size:17px;line-height:1.78;margin-top:12px}
 figure.fig{margin-block:34px}
-.lede{line-height:1.85}
 .toc a{font-size:15.5px;padding:8px 0 8px 10px}
 svg,svg text,canvas,.katex,mjx-container{letter-spacing:normal;word-spacing:normal}
+mjx-container[display]{margin:0!important}
 details>summary{line-height:1.7;padding-block:.5em}
-@media (max-width:600px){body{font-size:19px;line-height:2}}
+.enun p,.inner p{text-align:left}
+@media (min-width:1040px){
+p,li{text-align:justify}
+.zero .lede,.enun p,.inner p,figcaption,.ft{text-align:left}
+}
+@media (max-width:600px){
+body{font-size:18.5px;line-height:1.9}
+p{text-align:left}
+.zero .lede::first-letter{font-size:2.6em}
+.deep h4{padding-left:0}
+.deep h4 .hn{position:static;margin-right:.5em}
+}
 }
 </style>
 </head>
@@ -46,7 +86,7 @@ details>summary{line-height:1.7;padding-block:.5em}
 <main>
 <section class="sec tema" style="--tc:var(--c7);--tcs:var(--c7s)">
 <div class="sh"><span aria-hidden="true" class="badge">6</span><div class="shx"><p class="kick">Cinemática inversa, velocidades y trayectorias · Tema 6</p><h2 id="t6">Cinemática inversa</h2><div class="tags"><span class="tag">Cinemática inversa, velocidades y trayectorias</span><span class="tag">2.º parcial</span></div></div></div>
-<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> resolver las articulaciones a partir de la posición y la orientación del extremo, por el método geométrico y por desacoplo cinemático, y contar las soluciones.</p><ul>
+<div class="zero"><p class="ft">Desde cero</p><p class="obj"><b>Objetivo:</b> resolver las articulaciones a partir de la posición y la orientación del extremo, por el método geométrico y por desacoplo cinemático, y contar las soluciones.</p><ul>
 <li>La <b>cinemática inversa</b> es el problema contrario al anterior: dada la posición y la orientación del extremo, ¿qué valores deben tomar las articulaciones? Es el que resuelve de verdad el controlador cada vez que programas un punto.</li>
 <li>A diferencia de la directa, la inversa <b>no tiene solución única</b>. Puede tener:
 <ul><li><b>ninguna</b> solución, si el punto está fuera del volumen de trabajo;</li>
@@ -61,14 +101,14 @@ details>summary{line-height:1.7;padding-block:.5em}
 <details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 6 <span class="src">8 entradas</span></summary><div class="inner">
 <div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">atan2(y,x)</td><td>arcotangente de 4 cuadrantes</td><td class="u"></td></tr><tr><td class="sym">codo arriba/abajo</td><td>las dos soluciones del 2R</td><td class="u"></td></tr><tr><td class="sym">p_m</td><td>centro de muñeca</td><td class="u">p − d₆·a</td></tr><tr><td class="sym">desacoplo</td><td>posición y orientación por separado</td><td class="u"></td></tr><tr><td class="sym">|cos q₂| ≤ 1</td><td>condición de alcance</td><td class="u"></td></tr><tr><td class="sym">8 soluciones</td><td>robot de 6 gdl con muñeca esférica</td><td class="u"></td></tr><tr><td class="sym">límites articulares</td><td>restringen las soluciones</td><td class="u"></td></tr><tr><td class="sym">configuración</td><td>qué solución usa el robot</td><td class="u">cf1, cf4, cf6</td></tr></table></div></div></details>
 <figure class="fig"><p class="ft">Calculadora interactiva - cinematica inversa y soluciones multiples</p><div data-sim="cinversa"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
-<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">Cinemática inversa: de la posición a los ángulos</p><p>La cinemática directa responde «dados los ángulos, ¿dónde está el extremo?»; la <b>inversa</b>, «dado el punto, ¿qué ángulos pongo?», y es lo que hace falta para mandar el robot a un punto. Es más difícil: puede haber <b>varias soluciones</b> (dos para un brazo 2R: «codo arriba» y «codo abajo»), una o ninguna (si el punto está fuera del alcance). Para el 2R plano, con el teorema del coseno: \(\cos q_2=\dfrac{x^2+y^2-l_1^2-l_2^2}{2l_1l_2}\), y \(q_2=\pm\arccos(\cdot)\) da las dos soluciones; después \(q_1=\operatorname{atan2}(y,x)-\operatorname{atan2}(l_2\sin q_2,\ l_1+l_2\cos q_2)\).</p><p class="ft">Alcanzabilidad y brazos de 6 gdl</p><p>Un punto es alcanzable solo si \(|l_1-l_2|\le\sqrt{x^2+y^2}\le l_1+l_2\), equivalente a \(|\cos q_2|\le1\): si sale un coseno fuera de \([-1,1]\), no hay solución real. Usa <code>atan2(y,x)</code> y no <code>atan(y/x)</code>: la primera distingue el cuadrante. Para robots de 6 gdl con la muñeca esférica (los tres últimos ejes se cortan en un punto) se <b>desacopla</b>: los tres primeros ejes colocan el centro de la muñeca (posición, un problema como el del 2R/3R) y los tres últimos dan la orientación. Esto da hasta 8 soluciones, de las que se elige la más cercana a la postura actual.</p></div><!--/amp1--><!--deep--><h3 id="t6-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
-<h4>1. El problema inverso</h4>
+<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">Cinemática inversa: de la posición a los ángulos</p><p class="lede">La cinemática directa responde «dados los ángulos, ¿dónde está el extremo?»; la <b>inversa</b>, «dado el punto, ¿qué ángulos pongo?», y es lo que hace falta para mandar el robot a un punto. Es más difícil: puede haber <b>varias soluciones</b> (dos para un brazo 2R: «codo arriba» y «codo abajo»), una o ninguna (si el punto está fuera del alcance). Para el 2R plano, con el teorema del coseno: \(\cos q_2=\dfrac{x^2+y^2-l_1^2-l_2^2}{2l_1l_2}\), y \(q_2=\pm\arccos(\cdot)\) da las dos soluciones; después \(q_1=\operatorname{atan2}(y,x)-\operatorname{atan2}(l_2\sin q_2,\ l_1+l_2\cos q_2)\).</p><p class="ft">Alcanzabilidad y brazos de 6 gdl</p><p>Un punto es alcanzable solo si \(|l_1-l_2|\le\sqrt{x^2+y^2}\le l_1+l_2\), equivalente a \(|\cos q_2|\le1\): si sale un coseno fuera de \([-1,1]\), no hay solución real. Usa <code>atan2(y,x)</code> y no <code>atan(y/x)</code>: la primera distingue el cuadrante. Para robots de 6 gdl con la muñeca esférica (los tres últimos ejes se cortan en un punto) se <b>desacopla</b>: los tres primeros ejes colocan el centro de la muñeca (posición, un problema como el del 2R/3R) y los tres últimos dan la orientación. Esto da hasta 8 soluciones, de las que se elige la más cercana a la postura actual.</p></div><!--/amp1--><!--deep--><h3 id="t6-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
+<h4><span class="hn">1</span>El problema inverso</h4>
 <div class="box key deepnote"><b>Idea clave.</b> la cinemática inversa pide las articulaciones que llevan el extremo a una posición y orientación dadas. Puede tener varias soluciones, ninguna o infinitas.</div>
 <ul><li>Un brazo de tres GDL en el plano tiene, en general, dos soluciones (codo arriba y codo abajo).</li><li>Puede haber soluciones fuera del alcance del robot, que no son factibles.</li></ul>
 <details class="dem"><summary><span class="pn">∴</span>Solución geométrica para dos eslabones</summary><div class="inner"><div class="eqd">\[\cos\theta_2=\frac{x^2+y^2-l_1^2-l_2^2}{2\,l_1\,l_2}\]</div>
 <p>Con \(\theta_2\) conocido, \(\theta_1\) sale de la geometría del triángulo formado por los eslabones y el punto objetivo. El signo de \(\theta_2\) decide la configuración codo arriba o abajo.</p>
 <div class="box trap deepnote"><b>Cuidado.</b> Si el valor del coseno sale fuera de \([-1,1]\), el punto está fuera del alcance del robot.</div></div></details>
-<h4>2. Métodos numéricos</h4>
+<h4><span class="hn">2</span>Métodos numéricos</h4>
 <p>Cuando no hay solución cerrada, se usa iteración: el método de Newton con la jacobiana, o la pseudoinversa. Converge desde una estimación inicial, que debe elegirse con cuidado.</p>
 </div><!--/deep--><h3 id="t6-formulas">Fórmulas y conceptos que hay que saber</h3>
 <div class="box key"><ul><li><b>Brazo planar 2R</b> (\(l_1\), \(l_2\), extremo en \((x,y)\)):</li></ul>

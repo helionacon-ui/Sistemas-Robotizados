@@ -17,24 +17,64 @@
 <style id="lectura">
 @media screen{
 :root{--body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif}
-body{font-family:var(--body);font-size:20.5px;line-height:2.1;letter-spacing:.022em;word-spacing:.09em}
-p{margin:0 0 1.75em}
-li{margin:.8em 0}
-p,li{max-width:62ch}
+body{font-family:var(--body);font-size:20px;line-height:1.95;letter-spacing:.014em;word-spacing:.05em}
+p{margin:0 0 1.5em;max-width:64ch;hyphens:auto;-webkit-hyphens:auto}
+li{margin:.72em 0;max-width:64ch}
 .box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
-h2{margin-top:92px;margin-bottom:24px;line-height:1.3}
-h3{font-size:24px;margin:58px 0 18px;line-height:1.35}
-h4{margin-top:34px;margin-bottom:10px}
-.box{padding:24px 30px;margin:32px 0}
-table{font-size:18px;line-height:1.75}
-td,th{padding-top:.85em;padding-bottom:.85em}
-figure.fig figcaption{font-size:17px;line-height:1.8;margin-top:12px}
+h2{margin-top:92px;margin-bottom:22px;line-height:1.25}
+h3{font-size:25px;margin:66px 0 20px;line-height:1.3}
+h4{margin:38px 0 12px;line-height:1.4}
+/* ---- entradilla con capitular ---- */
+.zero .lede{font-size:1.05em;line-height:1.86;text-align:left}
+.zero .lede::first-letter{float:left;font-size:3.05em;line-height:.84;font-weight:700;padding:.06em .14em 0 0;color:var(--tc,var(--accent))}
+/* ---- sumario del tema ---- */
+p.obj{max-width:none;text-align:left;margin:0 0 1.7em;padding:14px 20px;border-radius:10px;
+ background:color-mix(in srgb,var(--surface) 62%,transparent);
+ border-left:3px solid var(--tc,var(--accent));font-size:.95em;line-height:1.75}
+p.obj>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);letter-spacing:.1em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- términos con entrada, al modo de un manual ---- */
+p.run{margin:0 0 1.38em}
+p.run>b:first-child{display:block;font:700 12px/1.7 var(--mono,monospace);letter-spacing:.09em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- rótulos internos ---- */
+.zero>.ft{font:700 11.5px/1.6 var(--mono,monospace);letter-spacing:.1em;text-transform:uppercase}
+.zero>.ft:not(:first-child){margin-top:2em;font-size:12.5px;color:var(--fg);opacity:.72}
+/* ---- desarrollo teórico ---- */
+.deep h4{position:relative;padding-left:2.35em;font-size:1.03em}
+.deep h4 .hn{position:absolute;left:0;top:.06em;font:700 .84em/1.7 var(--mono,monospace);
+ color:var(--tc,var(--accent));opacity:.8}
+.deep>h4:not(:first-child){border-top:1px solid var(--line);padding-top:30px;margin-top:42px}
+.eqd{margin:1.65em 0;text-align:center;overflow-x:auto;overflow-y:hidden}
+/* ---- notas al margen, sin duplicar el rótulo ---- */
+.box.deepnote{padding:15px 20px;margin:1.5em 0;border-radius:0 10px 10px 0;
+ background:color-mix(in srgb,var(--surface) 76%,transparent)}
+.box.key.deepnote::before,.box.trap.deepnote::before{content:none}
+.box.deepnote>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);
+ letter-spacing:.1em;text-transform:uppercase;color:var(--tc,var(--accent))}
+.box.trap.deepnote>b:first-child{color:var(--warn)}
+/* ---- resto ---- */
+.box{padding:22px 28px;margin:30px 0}
+table{font-size:18px;line-height:1.7}
+td,th{padding-top:.8em;padding-bottom:.8em}
+figure.fig figcaption{font-size:17px;line-height:1.78;margin-top:12px}
 figure.fig{margin-block:34px}
-.lede{line-height:1.85}
 .toc a{font-size:15.5px;padding:8px 0 8px 10px}
 svg,svg text,canvas,.katex,mjx-container{letter-spacing:normal;word-spacing:normal}
+mjx-container[display]{margin:0!important}
 details>summary{line-height:1.7;padding-block:.5em}
-@media (max-width:600px){body{font-size:19px;line-height:2}}
+.enun p,.inner p{text-align:left}
+@media (min-width:1040px){
+p,li{text-align:justify}
+.zero .lede,.enun p,.inner p,figcaption,.ft{text-align:left}
+}
+@media (max-width:600px){
+body{font-size:18.5px;line-height:1.9}
+p{text-align:left}
+.zero .lede::first-letter{font-size:2.6em}
+.deep h4{padding-left:0}
+.deep h4 .hn{position:static;margin-right:.5em}
+}
 }
 </style>
 </head>
@@ -46,7 +86,7 @@ details>summary{line-height:1.7;padding-block:.5em}
 <main>
 <section class="sec tema" style="--tc:var(--c3);--tcs:var(--c3s)">
 <div class="sh"><span aria-hidden="true" class="badge">2</span><div class="shx"><p class="kick">Herramientas matemáticas y cinemática directa · Tema 2</p><h2 id="t2">Sistemas de referencia y matrices de rotación</h2><div class="tags"><span class="tag">Herramientas matemáticas y cinemática directa</span><span class="tag">1.er parcial</span></div></div></div>
-<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> representar la orientación de un sólido con una matriz de rotación, componer giros y pasar de una representación a otra.</p><ul>
+<div class="zero"><p class="ft">Desde cero</p><p class="obj"><b>Objetivo:</b> representar la orientación de un sólido con una matriz de rotación, componer giros y pasar de una representación a otra.</p><ul>
 <li>Un <b>sistema de referencia</b> es una terna de ejes ortonormales dextrógiros \((x,y,z)\) con un origen. Toda la robótica consiste en relacionar sistemas: el de la base, el de cada eslabón, el de la herramienta, el de la pieza, el de la cámara.</li>
 <li>La <b>matriz de rotación</b> \({}^{A}R_{B}\) tiene por columnas los <b>vectores unitarios de los ejes de B expresados en A</b>. Es la respuesta a la pregunta «¿hacia dónde apuntan los ejes de B vistos desde A?».</li>
 <li>Esa misma matriz sirve para dos cosas distintas: <b>cambiar de base</b> un vector, \({}^{A}v={}^{A}R_{B}\,{}^{B}v\), y <b>rotar</b> un vector dentro del mismo sistema. Son interpretaciones distintas de la misma operación y conviene tenerlas separadas en la cabeza.</li>
@@ -58,8 +98,8 @@ details>summary{line-height:1.7;padding-block:.5em}
 <details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 2 <span class="src">8 entradas</span></summary><div class="inner">
 <div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">ᴬR_B</td><td>matriz de rotación de B en A</td><td class="u">ortonormal</td></tr><tr><td class="sym">Rᵀ = R⁻¹</td><td>inversa de una rotación</td><td class="u"></td></tr><tr><td class="sym">det R</td><td>determinante</td><td class="u">+1</td></tr><tr><td class="sym">R(x,θ)</td><td>rotación elemental</td><td class="u"></td></tr><tr><td class="sym">k</td><td>eje de giro</td><td class="u">unitario</td></tr><tr><td class="sym">θ</td><td>ángulo de giro</td><td class="u">rad o grados</td></tr><tr><td class="sym">tr R</td><td>traza</td><td class="u">1 + 2cos θ</td></tr><tr><td class="sym">[k]×</td><td>matriz antisimétrica</td><td class="u">Rodrigues</td></tr></table></div></div></details>
 <figure class="fig"><p class="ft">Figura interactiva - composicion de giros y eje-angulo equivalente</p><div data-sim="rotacion"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
-<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">Qué es una matriz de rotación</p><p>Una matriz de rotación \(3\times3\) dice cómo está girado un sistema de ejes respecto a otro; también sirve para girar un vector. Sus columnas son los ejes del sistema nuevo escritos en el viejo, y por eso son perpendiculares y de módulo 1. Tiene propiedades muy cómodas: \(R^{-1}=R^T\) (invertir es trasponer), \(\det R=+1\) y \({}^AR_C={}^AR_B\,{}^BR_C\) (las rotaciones consecutivas se multiplican en ese orden cuando cada giro se hace respecto a los ejes <em>móviles</em>). Las tres rotaciones básicas son giros alrededor de \(x\), \(y\) o \(z\), con \(\cos\theta\) en la diagonal y \(\pm\sin\theta\) fuera de ella.</p><p class="ft">Orden de las rotaciones y eje-ángulo</p><p>Las rotaciones <b>no conmutan</b>: girar 90° alrededor de \(x\) y luego 90° alrededor de \(z\) no da lo mismo que al revés. Por eso hay que fijarse en si cada giro es respecto a ejes <b>fijos</b> (se premultiplica: \(R=R_nR_{n-1}\cdots R_1\)) o <b>móviles</b> (se postmultiplica: \(R=R_1R_2\cdots R_n\)). Toda composición de giros equivale a un único giro \(\theta\) alrededor de un eje \(\vec k\) (<b>eje-ángulo</b>): el ángulo sale de la traza, \(\cos\theta=\dfrac{\operatorname{tr}R-1}{2}\), y el eje, de la parte antisimétrica: \(\vec k\propto(r_{32}-r_{23},\,r_{13}-r_{31},\,r_{21}-r_{12})\).</p></div><!--/amp1--><!--deep--><h3 id="t2-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
-<h4>1. Matriz de rotación</h4>
+<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">Qué es una matriz de rotación</p><p class="lede">Una matriz de rotación \(3\times3\) dice cómo está girado un sistema de ejes respecto a otro; también sirve para girar un vector. Sus columnas son los ejes del sistema nuevo escritos en el viejo, y por eso son perpendiculares y de módulo 1. Tiene propiedades muy cómodas: \(R^{-1}=R^T\) (invertir es trasponer), \(\det R=+1\) y \({}^AR_C={}^AR_B\,{}^BR_C\) (las rotaciones consecutivas se multiplican en ese orden cuando cada giro se hace respecto a los ejes <em>móviles</em>). Las tres rotaciones básicas son giros alrededor de \(x\), \(y\) o \(z\), con \(\cos\theta\) en la diagonal y \(\pm\sin\theta\) fuera de ella.</p><p class="ft">Orden de las rotaciones y eje-ángulo</p><p>Las rotaciones <b>no conmutan</b>: girar 90° alrededor de \(x\) y luego 90° alrededor de \(z\) no da lo mismo que al revés. Por eso hay que fijarse en si cada giro es respecto a ejes <b>fijos</b> (se premultiplica: \(R=R_nR_{n-1}\cdots R_1\)) o <b>móviles</b> (se postmultiplica: \(R=R_1R_2\cdots R_n\)). Toda composición de giros equivale a un único giro \(\theta\) alrededor de un eje \(\vec k\) (<b>eje-ángulo</b>): el ángulo sale de la traza, \(\cos\theta=\dfrac{\operatorname{tr}R-1}{2}\), y el eje, de la parte antisimétrica: \(\vec k\propto(r_{32}-r_{23},\,r_{13}-r_{31},\,r_{21}-r_{12})\).</p></div><!--/amp1--><!--deep--><h3 id="t2-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
+<h4><span class="hn">1</span>Matriz de rotación</h4>
 <div class="box key deepnote"><b>Idea clave.</b> una matriz de rotación \(R\) describe la orientación de un sistema de referencia respecto a otro. Sus columnas son los vectores unitarios del nuevo sistema expresados en el antiguo.</div>
 <div class="eqd">\[R^{T}R=I\qquad\det R=1\]</div>
 <ul><li>Rotación alrededor del eje \(z\) un ángulo \(\theta\): \(R_z(\theta)=\begin{pmatrix}\cos\theta&-\sin\theta&0\\\sin\theta&\cos\theta&0\\0&0&1\end{pmatrix}\).</li><li>Las matrices de rotación <b>no conmutan</b>: el orden de las rotaciones importa.</li></ul>

@@ -17,24 +17,64 @@
 <style id="lectura">
 @media screen{
 :root{--body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif}
-body{font-family:var(--body);font-size:20.5px;line-height:2.1;letter-spacing:.022em;word-spacing:.09em}
-p{margin:0 0 1.75em}
-li{margin:.8em 0}
-p,li{max-width:62ch}
+body{font-family:var(--body);font-size:20px;line-height:1.95;letter-spacing:.014em;word-spacing:.05em}
+p{margin:0 0 1.5em;max-width:64ch;hyphens:auto;-webkit-hyphens:auto}
+li{margin:.72em 0;max-width:64ch}
 .box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
-h2{margin-top:92px;margin-bottom:24px;line-height:1.3}
-h3{font-size:24px;margin:58px 0 18px;line-height:1.35}
-h4{margin-top:34px;margin-bottom:10px}
-.box{padding:24px 30px;margin:32px 0}
-table{font-size:18px;line-height:1.75}
-td,th{padding-top:.85em;padding-bottom:.85em}
-figure.fig figcaption{font-size:17px;line-height:1.8;margin-top:12px}
+h2{margin-top:92px;margin-bottom:22px;line-height:1.25}
+h3{font-size:25px;margin:66px 0 20px;line-height:1.3}
+h4{margin:38px 0 12px;line-height:1.4}
+/* ---- entradilla con capitular ---- */
+.zero .lede{font-size:1.05em;line-height:1.86;text-align:left}
+.zero .lede::first-letter{float:left;font-size:3.05em;line-height:.84;font-weight:700;padding:.06em .14em 0 0;color:var(--tc,var(--accent))}
+/* ---- sumario del tema ---- */
+p.obj{max-width:none;text-align:left;margin:0 0 1.7em;padding:14px 20px;border-radius:10px;
+ background:color-mix(in srgb,var(--surface) 62%,transparent);
+ border-left:3px solid var(--tc,var(--accent));font-size:.95em;line-height:1.75}
+p.obj>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);letter-spacing:.1em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- términos con entrada, al modo de un manual ---- */
+p.run{margin:0 0 1.38em}
+p.run>b:first-child{display:block;font:700 12px/1.7 var(--mono,monospace);letter-spacing:.09em;
+ text-transform:uppercase;color:var(--tc,var(--accent))}
+/* ---- rótulos internos ---- */
+.zero>.ft{font:700 11.5px/1.6 var(--mono,monospace);letter-spacing:.1em;text-transform:uppercase}
+.zero>.ft:not(:first-child){margin-top:2em;font-size:12.5px;color:var(--fg);opacity:.72}
+/* ---- desarrollo teórico ---- */
+.deep h4{position:relative;padding-left:2.35em;font-size:1.03em}
+.deep h4 .hn{position:absolute;left:0;top:.06em;font:700 .84em/1.7 var(--mono,monospace);
+ color:var(--tc,var(--accent));opacity:.8}
+.deep>h4:not(:first-child){border-top:1px solid var(--line);padding-top:30px;margin-top:42px}
+.eqd{margin:1.65em 0;text-align:center;overflow-x:auto;overflow-y:hidden}
+/* ---- notas al margen, sin duplicar el rótulo ---- */
+.box.deepnote{padding:15px 20px;margin:1.5em 0;border-radius:0 10px 10px 0;
+ background:color-mix(in srgb,var(--surface) 76%,transparent)}
+.box.key.deepnote::before,.box.trap.deepnote::before{content:none}
+.box.deepnote>b:first-child{display:block;font:700 11.5px/1.7 var(--mono,monospace);
+ letter-spacing:.1em;text-transform:uppercase;color:var(--tc,var(--accent))}
+.box.trap.deepnote>b:first-child{color:var(--warn)}
+/* ---- resto ---- */
+.box{padding:22px 28px;margin:30px 0}
+table{font-size:18px;line-height:1.7}
+td,th{padding-top:.8em;padding-bottom:.8em}
+figure.fig figcaption{font-size:17px;line-height:1.78;margin-top:12px}
 figure.fig{margin-block:34px}
-.lede{line-height:1.85}
 .toc a{font-size:15.5px;padding:8px 0 8px 10px}
 svg,svg text,canvas,.katex,mjx-container{letter-spacing:normal;word-spacing:normal}
+mjx-container[display]{margin:0!important}
 details>summary{line-height:1.7;padding-block:.5em}
-@media (max-width:600px){body{font-size:19px;line-height:2}}
+.enun p,.inner p{text-align:left}
+@media (min-width:1040px){
+p,li{text-align:justify}
+.zero .lede,.enun p,.inner p,figcaption,.ft{text-align:left}
+}
+@media (max-width:600px){
+body{font-size:18.5px;line-height:1.9}
+p{text-align:left}
+.zero .lede::first-letter{font-size:2.6em}
+.deep h4{padding-left:0}
+.deep h4 .hn{position:static;margin-right:.5em}
+}
 }
 </style>
 </head>
@@ -46,7 +86,7 @@ details>summary{line-height:1.7;padding-block:.5em}
 <main>
 <section class="sec tema" style="--tc:var(--c2);--tcs:var(--c2s)">
 <div class="sh"><span aria-hidden="true" class="badge">1</span><div class="shx"><p class="kick">Herramientas matemáticas y cinemática directa · Tema 1</p><h2 id="t1">El robot industrial</h2><div class="tags"><span class="tag">Herramientas matemáticas y cinemática directa</span><span class="tag">1.er parcial</span></div></div></div>
-<div class="zero"><p class="ft">Desde cero</p><p><b>Objetivo:</b> saber qué es un robot industrial, contar sus grados de libertad, reconocer las configuraciones clásicas y distinguir precisión, repetibilidad y resolución.</p><ul>
+<div class="zero"><p class="ft">Desde cero</p><p class="obj"><b>Objetivo:</b> saber qué es un robot industrial, contar sus grados de libertad, reconocer las configuraciones clásicas y distinguir precisión, repetibilidad y resolución.</p><ul>
 <li>Un <b>robot industrial</b> es, según la definición de la ISO, un manipulador <b>multifuncional</b> y <b>reprogramable</b> de varios grados de libertad, capaz de mover materiales, piezas o herramientas con movimientos programados. Las dos palabras clave son <i>reprogramable</i> (lo que lo separa de una máquina de ciclo fijo) y <i>multifuncional</i> (sirve para tareas distintas sin rehacerlo).</li>
 <li>Un robot es una <b>cadena cinemática abierta</b>: una sucesión de <b>eslabones</b> rígidos unidos por <b>articulaciones</b>. La base es el eslabón 0 y el último eslabón lleva la <b>herramienta</b> o efector final.</li>
 <li>Las articulaciones industriales son casi siempre de un solo grado de libertad: <b>rotación</b> (R, gira alrededor de un eje) o <b>prismática</b> o de traslación (P, desliza a lo largo de un eje). Un robot con seis articulaciones de rotación se escribe RRRRRR.</li>
@@ -59,8 +99,8 @@ details>summary{line-height:1.7;padding-block:.5em}
 <details class="nom"><summary><span aria-hidden="true" class="nom-ic">Aa</span>Nomenclatura del tema 1 <span class="src">8 entradas</span></summary><div class="inner">
 <div class="tw"><table><tr><th>Símbolo</th><th>Significado</th><th>Unidad · nota</th></tr><tr><td class="sym">gdl</td><td>grados de libertad</td><td class="u">n.º de articulaciones</td></tr><tr><td class="sym">R</td><td>articulación de rotación</td><td class="u"></td></tr><tr><td class="sym">P</td><td>articulación prismática</td><td class="u"></td></tr><tr><td class="sym">TCP</td><td>punto central de la herramienta</td><td class="u">Tool Center Point</td></tr><tr><td class="sym">precisión</td><td>distancia al punto ordenado</td><td class="u">mm</td></tr><tr><td class="sym">repetibilidad</td><td>dispersión al repetir</td><td class="u">R = d̄ + 3σ</td></tr><tr><td class="sym">resolución</td><td>incremento mínimo medible</td><td class="u"></td></tr><tr><td class="sym">volumen de trabajo</td><td>puntos alcanzables</td><td class="u"></td></tr></table></div></div></details>
 <figure class="fig"><p class="ft">Figura interactiva - configuraciones y volumen de trabajo</p><div data-sim="morfologia"></div><figcaption>Mueve los controles y observa cómo cambia el resultado: es el mismo cálculo que hay que saber hacer a mano en el examen.</figcaption></figure>
-<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">Grados de libertad y tipos de robot</p><p>Un robot industrial es una cadena de eslabones rígidos unidos por articulaciones; cada articulación (de giro <b>R</b> o deslizante <b>P</b>) aporta 1 grado de libertad (gdl) y el robot tiene tantos gdl como articulaciones. Para colocar una herramienta en cualquier posición y orientación del espacio hacen falta <b>6</b> (3 de posición + 3 de orientación). Las configuraciones se nombran con las articulaciones desde la base: <b>RRR</b> (antropomórfico), <b>RRP</b> (SCARA con eje vertical), <b>PPP</b> (cartesiano)… y la forma de la zona que el robot puede alcanzar, el <b>volumen de trabajo</b>, depende de ellas: esfera hueca para el antropomórfico, cilindro para el de coordenadas cilíndricas, caja para el cartesiano.</p><p class="ft">Mecanismos, alcance y especificaciones</p><p>Para mecanismos con lazos cerrados (como un cuadrilátero articulado) se usa la fórmula de Grübler: \(M=6(N-1-J)+\sum f_i\) en el espacio, y con 3 en lugar de 6 en el plano; \(N\) cuenta los eslabones incluida la base y \(J\) las articulaciones. El alcance de un brazo plano de dos eslabones es una corona circular: \(|l_1-l_2|\le r\le l_1+l_2\) (no llega al centro si los eslabones son distintos). Entre las especificaciones de un robot, la <b>resolución</b> es el menor movimiento que puede mandarse: con un encoder de \(n\) bits y una reductora \(k\):1 vale \(360^\circ/(2^n\cdot k)\); la <b>precisión</b> es cuánto se aproxima a un punto pedido, y la <b>repetibilidad</b>, cuánto se repite al volver al mismo punto (casi siempre mejor que la precisión).</p></div><!--/amp1--><!--deep--><h3 id="t1-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
-<h4>1. Qué es un robot industrial</h4>
+<!--amp1--><div class="zero" style="margin-top:14px"><p class="ft">Explicación ampliada</p><p class="ft">Grados de libertad y tipos de robot</p><p class="lede">Un robot industrial es una cadena de eslabones rígidos unidos por articulaciones; cada articulación (de giro <b>R</b> o deslizante <b>P</b>) aporta 1 grado de libertad (gdl) y el robot tiene tantos gdl como articulaciones. Para colocar una herramienta en cualquier posición y orientación del espacio hacen falta <b>6</b> (3 de posición + 3 de orientación). Las configuraciones se nombran con las articulaciones desde la base: <b>RRR</b> (antropomórfico), <b>RRP</b> (SCARA con eje vertical), <b>PPP</b> (cartesiano)… y la forma de la zona que el robot puede alcanzar, el <b>volumen de trabajo</b>, depende de ellas: esfera hueca para el antropomórfico, cilindro para el de coordenadas cilíndricas, caja para el cartesiano.</p><p class="ft">Mecanismos, alcance y especificaciones</p><p>Para mecanismos con lazos cerrados (como un cuadrilátero articulado) se usa la fórmula de Grübler: \(M=6(N-1-J)+\sum f_i\) en el espacio, y con 3 en lugar de 6 en el plano; \(N\) cuenta los eslabones incluida la base y \(J\) las articulaciones. El alcance de un brazo plano de dos eslabones es una corona circular: \(|l_1-l_2|\le r\le l_1+l_2\) (no llega al centro si los eslabones son distintos). Entre las especificaciones de un robot, la <b>resolución</b> es el menor movimiento que puede mandarse: con un encoder de \(n\) bits y una reductora \(k\):1 vale \(360^\circ/(2^n\cdot k)\); la <b>precisión</b> es cuánto se aproxima a un punto pedido, y la <b>repetibilidad</b>, cuánto se repite al volver al mismo punto (casi siempre mejor que la precisión).</p></div><!--/amp1--><!--deep--><h3 id="t1-profundiza">Desarrollo teórico a fondo</h3><div class="deep">
+<h4><span class="hn">1</span>Qué es un robot industrial</h4>
 <div class="box key deepnote"><b>Idea clave.</b> un robot manipulador es una cadena cinemática de eslabones unidos por articulaciones. Cada articulación se mueve con un actuador y el extremo (efector final) realiza la tarea.</div>
 <ul><li><b>Grados de libertad</b>: número de movimientos independientes. Un brazo de 6 articulaciones tiene 6 GDL.</li><li><b>Espacio de trabajo</b>: volumen que el extremo puede alcanzar.</li><li><b>Configuraciones</b>: cartesiano, cilíndrico, esférico, SCARA y antropomórfico.</li></ul>
 <details class="dem"><summary><span class="pn">∴</span>Precisión y repetibilidad</summary><div class="inner"><p>La <b>precisión</b> es la diferencia entre la posición pedida y la real. La <b>repetibilidad</b> es la dispersión al volver a la misma posición. Un robot puede repetir bien y ser poco preciso, por errores de modelo.</p>
