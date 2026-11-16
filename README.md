@@ -1,4 +1,4 @@
-# Sistemas Robotizados · Guía para aprobar
+# Sistemas Robotizados · Apuntes
 
 Guía de estudio no oficial de **Sistemas Robotizados** (Grado en Ingeniería Electrónica Industrial y Automática, 3.er curso).
 
